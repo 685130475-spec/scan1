@@ -62,7 +62,7 @@
     </div>
     <div id="student-page" class="hidden flex-grow flex items-center justify-center p-4">
         <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-lg text-center border border-blue-50">
-            <h3 class="text-xl font-bold text-gray-800 mb-2" id="student-welcome">สวัสดี, นักเรียน</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-2" id="student-welcome">สวัสดี</h3>
             <p class="text-gray-500 text-sm mb-6">กรุณากดปุ่มด้านล่างเพื่อทำการสแกนใบหน้าเข้าเรียน</p>
 
             <button id="start-scan-btn" onclick="openCamera()"
@@ -178,7 +178,7 @@
 
     <script>
         // เปลี่ยนไอดีตรงนี้เป็น URL Web App ที่ได้จากการ Deploy Google Apps Script (Code.gs)
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyYRqN9TFTLtwj34uwO9OXp6AhLrsXOEsd7D-xPI-DYlPNVHOW9P3qzSq3gunXJoKtB6g/exec"; 
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybQ6-bPBrOQSdhPK5bncQEIWk14Uj4lc-2lSwyFEJdj8h5ABAUHOF9BQ-KoNfCUb9e/exec"; 
         
         let currentUser = null;
         let chartInstance = null;
@@ -392,6 +392,76 @@
             document.getElementById('start-scan-btn').classList.remove('hidden');
             document.getElementById('camera-container').classList.add('hidden');
         }
+        // 1. สร้างตัวแปรไว้เก็บข้อมูลสตรีมของกล้อง
+let videoStream = null;
+
+// 2. ฟังก์ชันสั่งเปิดกล้องเมื่อนักเรียนกดปุ่ม (รองรับคอมพิวเตอร์, ไอแพด, มือถือ)
+async function openCamera() {
+    const video = document.getElementById('webcam');
+    
+    // แสดงกล่องกล้องถ่ายรูปขึ้นมาบนหน้าจอ
+    document.getElementById('camera-container').classList.remove('hidden');
+    if(document.getElementById('start-scan-btn')) {
+        document.getElementById('start-scan-btn').classList.add('hidden');
+    }
+
+    // ตั้งค่ากล้องให้รองรับระบบความปลอดภัยของ iOS (ไอแพด) และ Android
+    const constraints = {
+        video: {
+            facingMode: "user", // บังคับเปิดกล้องหน้าเท่านั้น
+            width: { ideal: 640 },
+            height: { ideal: 480 }
+        },
+        audio: false // ไม่เอาเสียง เพื่อป้องกันเบราว์เซอร์บล็อก
+    };
+
+    try {
+        // ขออนุญาตตัวเครื่องเพื่อเปิดกล้อง
+        videoStream = await navigator.mediaDevices.getUserMedia(constraints);
+        video.srcObject = videoStream;
+        
+        // ล็อกสเปกให้เล่นบนหน้าเว็บทันที ไม่เด้งไปเปิดแอปเล่นวิดีโอของไอแพด
+        video.setAttribute('playsinline', true);
+        video.setAttribute('webkit-playsinline', true);
+        
+        video.onloadedmetadata = function() {
+            video.play().catch(err => console.log("กล้องถูกบล็อกการ Auto Play:", err));
+        };
+
+    } catch (err) {
+        console.error("เปิดกล้องไม่ได้: ", error);
+        Swal.fire({
+            icon: 'error',
+            title: 'กล้องไม่ทำงาน',
+            text: 'กรุณาเปิดลิงก์นี้บน Safari หรือ Chrome และกดยอมรับการ "อนุญาตเข้าถึงกล้อง" ของตัวเครื่องด้วยนะครับ',
+            confirmButtonColor: '#2563eb'
+        });
+    }
+}
+
+// 3. ฟังก์ชันสแกนใบหน้าจำลอง (เมื่อกดปุ่มยืนยันใบหน้า)
+function processFaceRecognition() {
+    Swal.fire({
+        title: 'กำลังสแกนใบหน้า...',
+        text: 'AI กำลังตรวจสอบความถูกต้องกับระบบวิทยาลัย',
+        allowOutsideClick: false,
+        timer: 2000,
+        didOpen: () => Swal.showLoading()
+    }).then(() => {
+        // ปิดกล้องเมื่อสแกนเสร็จเพื่อประหยัดแบตเตอรี่
+        if (videoStream) {
+            videoStream.getTracks().forEach(track => track.stop());
+        }
+        
+        // แสดงกล่องสำเร็จตามโจทย์
+        Swal.fire({
+            icon: 'success',
+            title: 'สำเร็จ',
+            text: 'บันทึกเวลาเรียนและส่งข้อมูลให้คุณครูเรียบร้อยแล้ว!',
+            confirmButtonColor: '#2563eb'
+        });
+    });
+}
     </script>
 </body>
 </html>
