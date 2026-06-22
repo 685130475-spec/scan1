@@ -24,7 +24,7 @@
     <div id="login-page" class="flex-grow flex items-center justify-center p-4">
         <div class="bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-xl w-full max-w-md border border-white text-center">
             <header class="mb-8">
-                <h1 class="text-2xl md:text-3xl font-bold text-blue-900 mb-1">ระบบเช็คชื่อนด้วยเทคโนโลยีใบหน้า</h1>
+                <h1 class="text-2xl md:text-3xl font-bold text-blue-900 mb-1">ระบบเช็คชื่อด้วยเทคโนโลยีใบหน้า</h1>
                 <h2 class="text-sm md:text-base text-blue-600 font-medium">วิทยาลัยเทคโนโลยีอุตรดิตถ์</h2>
             </header>
 
@@ -60,6 +60,7 @@
             </form>
         </div>
     </div>
+
     <div id="student-page" class="hidden flex-grow flex items-center justify-center p-4">
         <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-lg text-center border border-blue-50">
             <h3 class="text-xl font-bold text-gray-800 mb-2" id="student-welcome">สวัสดี</h3>
@@ -87,7 +88,6 @@
             <button onclick="logout()" class="mt-8 text-sm text-gray-400 hover:text-gray-600 underline">ออกจากระบบ</button>
         </div>
     </div>
-
 
     <div id="teacher-page" class="hidden p-4 md:p-8 max-w-7xl mx-auto w-full space-y-6">
         <div class="bg-white p-6 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -161,7 +161,7 @@
                         </tr>
                     </thead>
                     <tbody id="student-table-body" class="divide-y divide-gray-50 text-gray-700">
-                        </tbody>
+                    </tbody>
                 </table>
             </div>
             <div class="p-4 bg-gray-50 border-t border-gray-100 flex justify-end">
@@ -175,19 +175,16 @@
     <footer class="p-4 text-center text-xs text-gray-400">
     </footer>
 
-
     <script>
-        // เปลี่ยนไอดีตรงนี้เป็น URL Web App ที่ได้จากการ Deploy Google Apps Script (Code.gs)
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybQ6-bPBrOQSdhPK5bncQEIWk14Uj4lc-2lSwyFEJdj8h5ABAUHOF9BQ-KoNfCUb9e/exec"; 
         
         let currentUser = null;
         let chartInstance = null;
-        let localStudentData = []; // บันทึกข้อมูลถาวรในแอปฝั่งครูเบื้องต้น
+        let localStudentData = [];
+        let videoStream = null;
 
-        // ตั้งค่าวันที่ปัจจุบันในช่อง Filter
         document.getElementById('filter-date').valueAsDate = new Date();
 
-        // ฟังก์ชันส่งคำขอแบบ JSONP เพื่อเลี่ยงปัญหา Cross-Origin (CORS)
         function sendJSONP(params, callbackName) {
             Swal.fire({
                 title: 'กำลังประมวลผล...',
@@ -200,22 +197,17 @@
             const script = document.createElement('script');
             script.src = `${SCRIPT_URL}?${queryString}`;
             document.body.appendChild(script);
-            
-            // ลบแท็กสคริปต์ออกหลังจากทำงานเสร็จ
             script.onload = () => script.remove();
         }
 
-        // 1. ตรรกะฝั่งเข้าสู่ระบบ (Login)
+        // 1. ตรรกะการล็อกอิน
         function handleLogin(e) {
             e.preventDefault();
             const user = document.getElementById('username').value;
             const pass = document.getElementById('password').value;
-
-            // ส่งข้อมูลเช็คสิทธิ์แบบ JSONP
             sendJSONP({ action: 'login', username: user, password: pass }, 'loginCallback');
         }
 
-        // คอลแบ็คเมื่อล็อกอินผ่าน
         window.loginCallback = function(response) {
             Swal.close();
             if (response.status === 'success') {
@@ -225,7 +217,7 @@
                 if (response.role === 'Teacher') {
                     document.getElementById('teacher-page').classList.remove('hidden');
                     initChart();
-                    fetchDataFromSheet(); // ดึงข้อมูลนักเรียนมาแสดงบนตารางครูทันที
+                    fetchDataFromSheet();
                 } else {
                     document.getElementById('student-page').classList.remove('hidden');
                     document.getElementById('student-welcome').innerText = `สวัสดี, ${response.name}`;
@@ -235,42 +227,54 @@
             }
         };
 
-        // 2. ตรรกะฝั่งนักเรียน (กล้องและการสแกนใบหน้า)
-        let videoStream = null;
+        // 2. ตรรกะฝั่งกล้องเว็บแคม (ปรับปรุงเพื่อ iPad / มือถือ และคอมพิวเตอร์)
         async function openCamera() {
             const video = document.getElementById('webcam');
             document.getElementById('start-scan-btn').classList.add('hidden');
             document.getElementById('camera-container').classList.remove('hidden');
 
+            const constraints = {
+                video: { 
+                    facingMode: "user",
+                    width: { ideal: 640 },
+                    height: { ideal: 480 }
+                },
+                audio: false
+            };
+
             try {
-                videoStream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: "user" } 
-                });
+                videoStream = await navigator.mediaDevices.getUserMedia(constraints);
                 video.srcObject = videoStream;
+                
+                // สำหรับแก้ปัญหาหน้าจอดำ ค้าง หรือเด้งกลับหน้าล็อกอิน บน iOS / iPadOS
+                video.setAttribute('playsinline', true);
+                video.setAttribute('webkit-playsinline', true);
+                
+                video.onloadedmetadata = function() {
+                    video.play().catch(err => console.log("Auto Play ถูกบล็อก:", err));
+                };
             } catch (err) {
-                Swal.fire('ผิดพลาด', 'ไม่สามารถเข้าถึงกล้องถ่ายภาพของคุณได้', 'error');
+                console.error("เปิดกล้องล้มเหลว: ", err);
+                Swal.fire('ผิดพลาด', 'ไม่สามารถเข้าถึงกล้องถ่ายภาพของคุณได้ กรุณากดอนุญาตสิทธิ์การใช้กล้องของเบราว์เซอร์', 'error');
+                document.getElementById('start-scan-btn').classList.remove('hidden');
+                document.getElementById('camera-container').classList.add('hidden');
             }
         }
 
         function processFaceRecognition() {
-            // ระบบสแกนจำลองการทำงาน AI (ในเคสใช้งานจริง Face-API จะประมวลผลที่จุดนี้)
-            // โดยการตรวจสอบเปรียบเทียบใบหน้ากับข้อมูลรูปภาพใน Google Sheet
             Swal.fire({
                 title: 'AI กำลังสแกนใบหน้า...',
                 timer: 1500,
                 didOpen: () => Swal.showLoading()
             }).then(() => {
-                // ปิดกล้อง
                 if (videoStream) {
                     videoStream.getTracks().forEach(track => track.stop());
                 }
 
-                // สุ่มสถานะการสแกนใบหน้าเพื่อทดสอบ UI
-                const isMatch = Math.random() > 0.15; // จำลองความถูกต้อง 85%
+                const isMatch = Math.random() > 0.15; // จำลองความสำเร็จ 85%
 
                 if (isMatch) {
                     Swal.fire('สำเร็จ', `ยืนยันตัวตนสำเร็จ! สวัสดีคุณ ${currentUser.name}`, 'success').then(() => {
-                        // ส่งข้อมูลบันทึกเวลาเรียนแบบอัติโนมัติไปหาครูผ่านชีตทันที
                         sendJSONP({
                             action: 'check',
                             studentId: currentUser.username || '123456789',
@@ -280,7 +284,7 @@
                         }, 'attendanceCallback');
                     });
                 } else {
-                    Swal.fire('ไม่สำเร็จ', 'ใบหน้าไม่ตรงกับข้อมูลที่บันทึกไว้ในระบบ กรุณาลองใหม่อีกครั้ง', 'error');
+                    Swal.fire('ไม่สำเร็จ', 'ใบหน้าไม่ตรงกับข้อมูลในระบบ กรุณาลองใหม่อีกครั้ง', 'error');
                     document.getElementById('start-scan-btn').classList.remove('hidden');
                     document.getElementById('camera-container').classList.add('hidden');
                 }
@@ -290,19 +294,22 @@
         window.attendanceCallback = function(res) {
             Swal.close();
             if(res.status === 'success') {
-                Swal.fire('ระบบส่งข้อมูลสำเร็จ', 'ข้อมูลถูกส่งไปที่ระบบคุมชั้นเรียนของครูเรียบร้อยแล้ว', 'success');
+                Swal.fire('ระบบส่งข้อมูลสำเร็จ', 'ข้อมูลถูกส่งไปที่ระบบคุมชั้นเรียนของครูเรียบร้อยแล้ว', 'success').then(() => {
+                    logout(); // สแกนเสร็จให้เคลียร์กลับหน้าแรกเพื่อคนต่อไป
+                });
             }
         };
 
-        // 3. ตรรกะฝั่งครู (Dashboard / ข้อมูลนักเรียน / กราฟ)
+        // 3. ตรรกะฝั่งครู
         function initChart() {
             const ctx = document.getElementById('attendanceChart').getContext('2d');
+            if (chartInstance) { chartInstance.destroy(); }
             chartInstance = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
                     labels: ['มาเรียน', 'ขาด', 'ลา', 'สาย'],
                     datasets: [{
-                        data: [80, 5, 10, 5], // ข้อมูลตัวอย่างเริ่มต้น
+                        data: [80, 5, 10, 5],
                         backgroundColor: ['#10B981', '#EF4444', '#F59E0B', '#3B82F6'],
                         borderWidth: 0
                     }]
@@ -339,7 +346,6 @@
             });
         }
 
-        // จัดการลบ/เพิ่มรายชื่อนักเรียนเฉพาะในแอป
         function manageStudent(action) {
             const name = document.getElementById('stu-name').value;
             const id = document.getElementById('stu-id').value;
@@ -350,14 +356,12 @@
                 localStudentData.push({ id: id, name: name, class: className, time: '-' });
                 Swal.fire('สำเร็จ', 'เพิ่มข้อมูลนักเรียนในตารางเรียบร้อยแล้ว', 'success');
             } else if (action === 'delete') {
-                // ลบแถวสุดท้ายออกจากเว็บแอปชั่วคราวแต่ไม่ตัดฐานข้อมูลหลังบ้าน
                 localStudentData.pop();
-                Swal.fire('สำเร็จ', 'ลบข้อมูลรายการล่าสุดออกจากหน้าแอปพลิเคชันเรียบร้อยแล้ว', 'success');
+                Swal.fire('สำเร็จ', 'ลบข้อมูลรายการล่าสุดเรียบร้อยแล้ว', 'success');
             }
             renderTable();
         }
 
-        // ดึงข้อมูลและเรียกดูข้อมูลจริงจาก Google Sheets
         function fetchDataFromSheet() {
             sendJSONP({ action: 'getStudents' }, 'fetchStudentsCallback');
         }
@@ -371,20 +375,21 @@
             }
         };
 
-        // กดบันทึกข้อมูลทั้งหมดถาวรลงใน Google Sheets
         function saveAttendanceToSheet() {
-            // ส่งค่าไปอัปเดตลง Google Sheet แบบถาวร
             sendJSONP({ action: 'manage', subAction: 'saveAll' }, 'saveAllCallback');
         }
 
         window.saveAllCallback = function(res) {
             Swal.close();
-            Swal.fire('บันทึกถาวรสำเร็จ', 'ระบบได้ทำการจัดเก็บสถิติลงบนคลาวด์ Google Sheet เรียบร้อยแล้ว ข้อมูลจะคงอยู่ถาวรแม้เปิด-ปิดใหม่', 'success');
+            Swal.fire('บันทึกถาวรสำเร็จ', 'ระบบได้ทำการจัดเก็บสถิติลงบนคลาวด์ Google Sheet เรียบร้อยแล้ว', 'success');
         };
 
-        // ออกจากระบบ
         function logout() {
             currentUser = null;
+            if (videoStream) {
+                videoStream.getTracks().forEach(track => track.stop());
+                videoStream = null;
+            }
             document.getElementById('student-page').classList.add('hidden');
             document.getElementById('teacher-page').classList.add('hidden');
             document.getElementById('login-page').classList.remove('hidden');
@@ -392,76 +397,6 @@
             document.getElementById('start-scan-btn').classList.remove('hidden');
             document.getElementById('camera-container').classList.add('hidden');
         }
-        // 1. สร้างตัวแปรไว้เก็บข้อมูลสตรีมของกล้อง
-let videoStream = null;
-
-// 2. ฟังก์ชันสั่งเปิดกล้องเมื่อนักเรียนกดปุ่ม (รองรับคอมพิวเตอร์, ไอแพด, มือถือ)
-async function openCamera() {
-    const video = document.getElementById('webcam');
-    
-    // แสดงกล่องกล้องถ่ายรูปขึ้นมาบนหน้าจอ
-    document.getElementById('camera-container').classList.remove('hidden');
-    if(document.getElementById('start-scan-btn')) {
-        document.getElementById('start-scan-btn').classList.add('hidden');
-    }
-
-    // ตั้งค่ากล้องให้รองรับระบบความปลอดภัยของ iOS (ไอแพด) และ Android
-    const constraints = {
-        video: {
-            facingMode: "user", // บังคับเปิดกล้องหน้าเท่านั้น
-            width: { ideal: 640 },
-            height: { ideal: 480 }
-        },
-        audio: false // ไม่เอาเสียง เพื่อป้องกันเบราว์เซอร์บล็อก
-    };
-
-    try {
-        // ขออนุญาตตัวเครื่องเพื่อเปิดกล้อง
-        videoStream = await navigator.mediaDevices.getUserMedia(constraints);
-        video.srcObject = videoStream;
-        
-        // ล็อกสเปกให้เล่นบนหน้าเว็บทันที ไม่เด้งไปเปิดแอปเล่นวิดีโอของไอแพด
-        video.setAttribute('playsinline', true);
-        video.setAttribute('webkit-playsinline', true);
-        
-        video.onloadedmetadata = function() {
-            video.play().catch(err => console.log("กล้องถูกบล็อกการ Auto Play:", err));
-        };
-
-    } catch (err) {
-        console.error("เปิดกล้องไม่ได้: ", error);
-        Swal.fire({
-            icon: 'error',
-            title: 'กล้องไม่ทำงาน',
-            text: 'กรุณาเปิดลิงก์นี้บน Safari หรือ Chrome และกดยอมรับการ "อนุญาตเข้าถึงกล้อง" ของตัวเครื่องด้วยนะครับ',
-            confirmButtonColor: '#2563eb'
-        });
-    }
-}
-
-// 3. ฟังก์ชันสแกนใบหน้าจำลอง (เมื่อกดปุ่มยืนยันใบหน้า)
-function processFaceRecognition() {
-    Swal.fire({
-        title: 'กำลังสแกนใบหน้า...',
-        text: 'AI กำลังตรวจสอบความถูกต้องกับระบบวิทยาลัย',
-        allowOutsideClick: false,
-        timer: 2000,
-        didOpen: () => Swal.showLoading()
-    }).then(() => {
-        // ปิดกล้องเมื่อสแกนเสร็จเพื่อประหยัดแบตเตอรี่
-        if (videoStream) {
-            videoStream.getTracks().forEach(track => track.stop());
-        }
-        
-        // แสดงกล่องสำเร็จตามโจทย์
-        Swal.fire({
-            icon: 'success',
-            title: 'สำเร็จ',
-            text: 'บันทึกเวลาเรียนและส่งข้อมูลให้คุณครูเรียบร้อยแล้ว!',
-            confirmButtonColor: '#2563eb'
-        });
-    });
-}
     </script>
 </body>
 </html>
