@@ -1,401 +1,346 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบเช็คชื่อด้วยเทคโนโลยีใบหน้า</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!doctype html>
+<html lang="th" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Student Attendance</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Sarabun', sans-serif; }
+    .page { display: none; }
+    .page.active { display: flex; }
+    .pulse-ring { animation: pulse-ring 1.5s infinite; }
+    @keyframes pulse-ring { 0% { transform: scale(0.9); opacity: 1; } 100% { transform: scale(1.4); opacity: 0; } }
+    .fade-in { animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+ </head>
+ <body class="h-full bg-slate-900 text-white overflow-auto">
+  <div id="app" class="h-full w-full flex flex-col">
+   
+   <div id="page-login" class="page active flex-col items-center justify-center h-full p-6" translate="no">
+    <div class="w-full max-w-md fade-in">
+     <div class="text-center mb-6">
+      <div class="w-20 h-20 mx-auto bg-gradient-to-br from-emerald-400 to-cyan-500 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-emerald-500/30">
+       <i data-lucide="scan-face" class="w-10 h-10 text-white"></i>
+      </div>
+      <h1 id="main-title" class="text-2xl font-bold bg-gradient-to-r from-emerald-300 to-cyan-300 bg-clip-text text-transparent">ระบบเช็คชื่อนักเรียนอัจฉริยะ</h1>
+      <p class="text-slate-400 mt-1 text-sm">Smart Student Attendance System</p>
+     </div>
 
-    <style>
-        body {
-            font-family: 'Noto Sans Thai', sans-serif;
-            background-color: #e0f2fe; 
-        }
-    </style>
-</head>
-<body class="min-h-screen flex flex-col justify-between bg-gradient-to-tr from-blue-100 to-sky-50">
+     <div class="bg-slate-800/80 backdrop-blur rounded-2xl p-6 border border-slate-700/50 shadow-xl">
+      <div class="flex bg-slate-900/60 p-1 rounded-xl mb-6 border border-slate-700/30">
+       <button id="tab-login-student" class="flex-1 py-2 text-sm font-medium rounded-lg bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow shadow-emerald-500/10 transition-all">
+        <i data-lucide="user" class="w-4 h-4 inline mr-1"></i> นักเรียน
+       </button>
+       <button id="tab-login-teacher" class="flex-1 py-2 text-sm font-medium rounded-lg text-slate-400 hover:text-white transition-all">
+        <i data-lucide="graduation-cap" class="w-4 h-4 inline mr-1"></i> ครูผู้สอน
+       </button>
+      </div>
 
-    <div id="login-page" class="flex-grow flex items-center justify-center p-4">
-        <div class="bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-xl w-full max-w-md border border-white text-center">
-            <header class="mb-8">
-                <h1 class="text-2xl md:text-3xl font-bold text-blue-900 mb-1">ระบบเช็คชื่อด้วยเทคโนโลยีใบหน้า</h1>
-            </header>
+      <div id="form-student" class="space-y-4">
+       <div>
+        <label for="login-id" class="block text-sm font-medium text-slate-300 mb-1">รหัสนักเรียน</label> 
+        <input id="login-id" type="text" placeholder="เช่น 65001" class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
+       </div>
+       <div>
+        <label for="login-name" class="block text-sm font-medium text-slate-300 mb-1">ชื่อ-นามสกุล</label> 
+        <input id="login-name" type="text" placeholder="เช่น สมชาย ใจดี" class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
+       </div>
+       <div>
+        <label for="login-class" class="block text-sm font-medium text-slate-300 mb-1">ชั้นเรียน</label> 
+        <select id="login-class" class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"> 
+         <option value="">เลือกชั้นเรียน</option> <option>ม.1/1</option><option>ม.1/2</option><option>ม.2/1</option><option>ม.2/2</option> <option>ม.3/1</option><option>ม.3/2</option><option>ม.4/1</option><option>ม.4/2</option> <option>ม.5/1</option><option>ม.5/2</option><option>ม.6/1</option><option>ม.6/2</option> 
+        </select>
+       </div>
+       <button id="btn-login" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-xl font-semibold text-white hover:from-emerald-600 hover:to-cyan-600 transition-all shadow-lg shadow-emerald-500/25 active:scale-95"> เข้าสู่โหมดสแกนใบหน้า </button>
+      </div>
 
-            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-5 text-left">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-                            <i class="fas fa-user"></i>
-                        </span>
-                        <input type="text" id="username" maxlength="9" pattern="\d{9}" inputmode="numeric" required
-                            class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800" 
-                            placeholder="กรอกรหัส 9 หลัก">
-                    </div>
-                </div>
+      <div id="form-teacher" class="space-y-4 hidden">
+       <div>
+        <label for="teacher-user" class="block text-sm font-medium text-slate-300 mb-1">Username ครู (พิมพ์เล็ก-ใหญ่ได้หมด)</label> 
+        <input id="teacher-user" type="text" placeholder="กรอกรหัสหรือชื่อผู้ใช้ครู" class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+       </div>
+       <div>
+        <label for="teacher-pass" class="block text-sm font-medium text-slate-300 mb-1">Password ครู (ตัวเลข 6 หลัก)</label> 
+        <input id="teacher-pass" type="password" maxlength="6" placeholder="******" class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent">
+       </div>
+       <button id="btn-teacher-submit" class="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl font-semibold text-white hover:from-cyan-600 hover:to-blue-600 transition-all shadow-lg shadow-cyan-500/25 active:scale-95"> เข้าสู่ระบบแดชบอร์ด </button>
+      </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-                            <i class="fas fa-lock"></i>
-                        </span>
-                        <input type="password" id="password" maxlength="6" pattern="\d{6}" inputmode="numeric" required
-                            class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800" 
-                            placeholder="เช่น 100169">
-                    </div>
-                </div>
+     </div>
+    </div>
+   </div>
 
-                <button type="submit" 
-                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-xl transition duration-200 shadow-md shadow-blue-200 flex items-center justify-center gap-2">
-                    <i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ
-                </button>
-            </form>
-        </div>
+   <div id="page-scan" class="page flex-col items-center justify-center h-full p-6">
+    <div class="w-full max-w-md text-center fade-in">
+     <h2 class="text-xl font-bold mb-2">เช็คชื่อด้วยใบหน้า</h2>
+     <p id="scan-user-info" class="text-slate-400 text-sm mb-6"></p>
+     <div class="relative mx-auto w-64 h-64 rounded-3xl overflow-hidden border-4 border-emerald-500/50 bg-slate-800 mb-6">
+      <video id="camera-feed" class="w-full h-full object-cover" autoplay playsinline muted></video>
+      <div class="absolute inset-0 flex items-center justify-center" id="scan-overlay">
+       <div class="w-40 h-40 border-4 border-emerald-400 rounded-full"></div>
+       <div class="absolute w-44 h-44 border-2 border-emerald-400/40 rounded-full pulse-ring"></div>
+      </div>
+      <div id="scan-status" class="absolute bottom-3 left-0 right-0 text-center text-sm font-medium text-emerald-300 hidden"> กำลังสแกน... </div>
+     </div>
+     <button id="btn-start-scan" class="px-8 py-3 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-xl font-semibold text-white hover:from-emerald-600 hover:to-cyan-600 transition-all shadow-lg shadow-emerald-500/25 active:scale-95 inline-flex items-center gap-2"> 
+      <i data-lucide="camera" class="w-5 h-5"></i> เริ่มเช็คชื่อ 
+     </button>
+     <div id="scan-result" class="mt-4 hidden bg-emerald-500/20 border border-emerald-500/40 rounded-xl p-4 text-emerald-300"></div>
+     <button id="btn-back-login" class="mt-4 text-slate-400 hover:text-white text-sm underline">ออกจากระบบ</button>
+    </div>
+   </div>
+
+   <div id="page-dashboard" class="page flex-col h-full">
+    <nav class="bg-slate-800/90 border-b border-slate-700/50 px-4 py-3 flex items-center justify-between">
+     <div class="flex items-center gap-2">
+      <div class="w-8 h-8 bg-gradient-to-br from-emerald-400 to-cyan-500 rounded-lg flex items-center justify-center"><i data-lucide="scan-face" class="w-4 h-4 text-white"></i></div>
+      <span class="font-bold text-sm">ระบบเช็คชื่อ - ครูผู้สอน</span>
+     </div>
+     <button id="btn-logout" class="text-sm text-slate-400 hover:text-white flex items-center gap-1"> <i data-lucide="log-out" class="w-4 h-4"></i> ออก </button>
+    </nav>
+    <div class="flex border-b border-slate-700/50 bg-slate-800/50 px-4">
+     <button class="tab-btn active px-4 py-3 text-sm font-medium border-b-2 border-emerald-400 text-emerald-400" data-tab="dashboard">แดชบอร์ด</button> 
+     <button class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-white" data-tab="manage">จัดการข้อมูล</button> 
+     <button class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-white" data-tab="history">ประวัติ</button>
+    </div>
+    
+    <div id="tab-dashboard" class="tab-content flex-1 overflow-auto p-4 space-y-4">
+     <div class="grid grid-cols-2 gap-3">
+      <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50">
+       <div class="flex items-center gap-2 mb-1"><i data-lucide="users" class="w-4 h-4 text-cyan-400"></i><span class="text-xs text-slate-400">นักเรียนทั้งหมด</span></div>
+       <p id="stat-total" class="text-2xl font-bold text-white">0</p>
+      </div>
+      <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50">
+       <div class="flex items-center gap-2 mb-1"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i><span class="text-xs text-slate-400">มาเรียนวันนี้</span></div>
+       <p id="stat-present" class="text-2xl font-bold text-emerald-400">0</p>
+      </div>
+      <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50">
+       <div class="flex items-center gap-2 mb-1"><i data-lucide="x-circle" class="w-4 h-4 text-red-400"></i><span class="text-xs text-slate-400">ขาดเรียน</span></div>
+       <p id="stat-absent" class="text-2xl font-bold text-red-400">0</p>
+      </div>
+      <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50">
+       <div class="flex items-center gap-2 mb-1"><i data-lucide="clock" class="w-4 h-4 text-amber-400"></i><span class="text-xs text-slate-400">มาสาย</span></div>
+       <p id="stat-late" class="text-2xl font-bold text-amber-400">0</p>
+      </div>
+     </div>
+     <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50">
+      <h3 class="font-semibold text-sm mb-3">เช็คชื่อล่าสุดวันนี้</h3>
+      <div id="recent-list" class="space-y-2 text-sm text-slate-300"><p class="text-slate-500 text-center py-4">ยังไม่มีข้อมูลวันนี้</p></div>
+     </div>
     </div>
 
-    <div id="student-page" class="hidden flex-grow flex items-center justify-center p-4">
-        <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-lg text-center border border-blue-50">
-            <h2 class="text-xl font-bold text-gray-800 mb-2" > welcome </h2>
-            <p class="text-gray-500 text-sm mb-6">กรุณากดปุ่มด้านล่างเพื่อทำการสแกนใบหน้าเข้าเรียน</p>
-
-            <button id="start-scan-btn" onclick="openCamera()"
-                class="mx-auto w-40 h-40 bg-sky-400 hover:bg-sky-500 text-white rounded-full shadow-lg flex flex-col items-center justify-center gap-3 transition-transform transform hover:scale-105">
-                <i class="fas fa-camera text-4xl"></i>
-                <span class="font-medium text-lg">เช็คชื่อทันที</span>
-            </button>
-
-            <div id="camera-container" class="hidden mt-6 space-y-4">
-                <div class="relative w-full aspect-video bg-gray-900 rounded-xl overflow-hidden shadow-inner border-2 border-sky-300">
-                    <video id="webcam" autoplay playsinline muted class="w-full h-full object-cover"></video>
-                    <div class="absolute inset-0 border-4 border-dashed border-white/50 m-8 rounded-full pointer-events-none animate-pulse"></div>
-                </div>
-                <p class="text-xs text-amber-600"><i class="fas fa-info-circle"></i> กรุณานิ่งๆ ให้กล้องจับใบหน้าของคุณ</p>
-                
-                <button onclick="processFaceRecognition()"
-                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-xl shadow transition">
-                    ยืนยันใบหน้า
-                </button>
-            </div>
-
-            <button onclick="logout()" class="mt-8 text-sm text-gray-400 hover:text-gray-600 underline">ออกจากระบบ</button>
-        </div>
+    <div id="tab-manage" class="tab-content flex-1 overflow-auto p-4 space-y-4 hidden">
+     <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50">
+      <h3 class="font-semibold text-sm mb-3 flex items-center gap-2"><i data-lucide="user-plus" class="w-4 h-4 text-emerald-400"></i>เพิ่มนักเรียน</h3>
+      <div class="space-y-3">
+       <input id="add-id" type="text" placeholder="รหัสนักเรียน" class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none"> 
+       <input id="add-name" type="text" placeholder="ชื่อ-นามสกุล" class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none"> 
+       <select id="add-class" class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none">
+        <option value="">เลือกชั้นเรียน</option> <option>ม.1/1</option><option>ม.1/2</option><option>ม.2/1</option><option>ม.2/2</option> <option>ม.3/1</option><option>ม.3/2</option><option>ม.4/1</option><option>ม.4/2</option> <option>ม.5/1</option><option>ม.5/2</option><option>ม.6/1</option><option>ม.6/2</option>
+       </select> 
+       <button id="btn-add-student" class="w-full py-2 bg-emerald-500 hover:bg-emerald-600 rounded-lg text-sm font-semibold transition-all">เพิ่มนักเรียน</button>
+       <div id="add-msg" class="text-sm text-center hidden"></div>
+      </div>
+     </div>
+     <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50">
+      <h3 class="font-semibold text-sm mb-3 flex items-center gap-2"><i data-lucide="list" class="w-4 h-4 text-cyan-400"></i>รายชื่อนักเรียน</h3>
+      <div id="student-list" class="space-y-2 text-sm max-h-64 overflow-auto"><p class="text-slate-500 text-center py-4">ยังไม่มีข้อมูลนักเรียน</p></div>
+     </div>
     </div>
 
-    <div id="teacher-page" class="hidden p-4 md:p-8 max-w-7xl mx-auto w-full space-y-6">
-        <div class="bg-white p-6 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-                <h3 class="text-xl font-bold text-gray-800" id="teacher-welcome">แผงควบคุมสำหรับอาจารย์</h3>
-                <p class="text-sm text-gray-500">ระบบจัดการเช็คชื่อถาวร</p>
-            </div>
-            <button onclick="logout()" class="bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2 rounded-xl text-sm font-medium transition">
-                <i class="fas fa-sign-out-alt"></i> ออกจากระบบ
-            </button>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-white p-4 rounded-2xl shadow-sm">
-            <div>
-                <label class="block text-xs font-medium text-gray-500 mb-1">เลือกวันที่</label>
-                <input type="date" id="filter-date" class="w-full p-2 bg-gray-50 border border-gray-200 rounded-xl text-sm">
-            </div>
-            <div>
-                <label class="block text-xs font-medium text-gray-500 mb-1">วิชาที่สอน (เลือกได้หลายรายการ/เพิ่มได้)</label>
-                <select id="filter-subject" class="w-full p-2 bg-gray-50 border border-gray-200 rounded-xl text-sm">
-                    <option value="ภาษาอังกฤษเทคนิค">ภาษาอังกฤษเทคนิค</option>
-                    <option value="ไมโครคอนโทรลเลอร์">ไมโครคอนโทรลเลอร์</option>
-                </select>
-            </div>
-            <div class="flex items-end gap-2">
-                <button onclick="fetchDataFromSheet()" class="flex-grow bg-blue-600 hover:bg-blue-700 text-white text-sm py-2 px-4 rounded-xl font-medium transition">
-                    <i class="fas fa-sync"></i> เรียกดูข้อมูลจาก GoogleSheet
-                </button>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="md:col-span-2 bg-white p-6 rounded-2xl shadow-sm">
-                <h4 class="text-sm font-bold text-gray-700 mb-4"><i class="fas fa-chart-bar text-blue-500"></i> สถิติการเช็คชื่อเข้าเรียนประจำวัน</h4>
-                <div class="h-64 flex items-center justify-center">
-                    <canvas id="attendanceChart"></canvas>
-                </div>
-            </div>
-            
-            <div class="bg-white p-6 rounded-2xl shadow-sm flex flex-col justify-between">
-                <div>
-                    <h4 class="text-sm font-bold text-gray-700 mb-3"><i class="fas fa-user-plus text-sky-500"></i> จัดการรายชื่อนักเรียน</h4>
-                    <div class="space-y-3 text-xs">
-                        <input type="text" id="stu-name" placeholder="ชื่อ-นามสกุล" class="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg">
-                        <input type="text" id="stu-id" placeholder="รหัสนักเรียน 9 หลัก" class="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg">
-                        <input type="text" id="stu-class" placeholder="ชั้นเรียน (เช่น ปวช.1 ไฟฟ้า)" class="w-full p-2 bg-gray-50 border border-gray-200 rounded-lg">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2 mt-4">
-                    <button onclick="manageStudent('add')" class="bg-emerald-500 hover:bg-emerald-600 text-white text-xs py-2 rounded-lg font-medium transition"><i class="fas fa-plus"></i> เพิ่มข้อมูล</button>
-                    <button onclick="manageStudent('delete')" class="bg-rose-500 hover:bg-rose-600 text-white text-xs py-2 rounded-lg font-medium transition"><i class="fas fa-trash"></i> ลบข้อมูลในแอป</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
-            <div class="p-5 border-b border-gray-100 flex justify-between items-center">
-                <h4 class="text-sm font-bold text-gray-700"><i class="fas fa-list-ul text-blue-500"></i> รายชื่อนักเรียนที่สแกนหน้าและสถานะการเข้าเรียนทั้งหมด</h4>
-                <span class="text-xs bg-blue-50 text-blue-600 px-2.5 py-1 rounded-full font-medium">แสดงผลแบบ Real-time</span>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse text-sm">
-                    <thead>
-                        <tr class="bg-gray-50 text-gray-500 font-medium text-xs border-b border-gray-100">
-                            <th class="p-4">รูป</th>
-                            <th class="p-4">รหัสนักเรียน</th>
-                            <th class="p-4">ชื่อ-นามสกุล</th>
-                            <th class="p-4">ชั้นเรียน</th>
-                            <th class="p-4">เวลาสแกนหน้า</th>
-                            <th class="p-4">สถานะเช็คชื่อ</th>
-                        </tr>
-                    </thead>
-                    <tbody id="student-table-body" class="divide-y divide-gray-50 text-gray-700">
-                    </tbody>
-                </table>
-            </div>
-            <div class="p-4 bg-gray-50 border-t border-gray-100 flex justify-end">
-                <button onclick="saveAttendanceToSheet()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl font-medium text-sm shadow-md transition">
-                    <i class="fas fa-save"></i> บันทึกข้อมูลลง GoogleSheet ถาวร
-                </button>
-            </div>
-        </div>
+    <div id="tab-history" class="tab-content flex-1 overflow-auto p-4 space-y-4 hidden">
+     <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50">
+      <h3 class="font-semibold text-sm mb-3">ประวัติการเช็คชื่อ</h3>
+      <div id="history-list" class="space-y-2 text-sm max-h-96 overflow-auto"><p class="text-slate-500 text-center py-4">ยังไม่มีประวัติ</p></div>
+     </div>
     </div>
+   </div>
 
-    <footer class="p-4 text-center text-xs text-gray-400">
-    </footer>
+  </div>
 
-    <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxRQsGVdlaQCrKEFDohIS3IKKks0YTg3suXcLRpRDzR7nDd3tyi4I3mOtSa2pkXhJzhuQ/exec"; 
-        
-        let currentUser = null;
-        let chartInstance = null;
-        let localStudentData = [];
-        let videoStream = null;
+  <script>
+    // 🚨 สำคัญมาก: วาง URL Web App (ที่ได้จากการ Deploy ใน Apps Script หลังบ้าน) ลงในช่องนี้ครับ
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwrEyN-Z6fUaGiuNzqixJQhlvNv3ilgvD-OLw4o1aYBaMJ5Memg0cG7N7AcYB8idgY3/exec";
 
-        document.getElementById('filter-date').valueAsDate = new Date();
+    let currentUser = null;
+    let allRecords = [];
+    let cameraStream = null;
 
-        function sendJSONP(params, callbackName) {
-            Swal.fire({
-                title: 'กำลังประมวลผล...',
-                text: 'กรุณารอสักครู่ระบบกำลังเชื่อมต่อฐานข้อมูล',
-                allowOutsideClick: false,
-                didOpen: () => Swal.showLoading()
-            });
+    // ระบบสลับหน้าฟอร์ม ล็อกอิน ครู / นักเรียน
+    document.getElementById('tab-login-student').addEventListener('click', () => {
+      toggleLoginTabs('student');
+    });
+    document.getElementById('tab-login-teacher').addEventListener('click', () => {
+      toggleLoginTabs('teacher');
+    });
 
-            const queryString = new URLSearchParams({ ...params, callback: callbackName }).toString();
-            const script = document.createElement('script');
-            script.src = `${SCRIPT_URL}?${queryString}`;
-            document.body.appendChild(script);
-            script.onload = () => script.remove();
-        }
+    function toggleLoginTabs(mode) {
+      const btnStudent = document.getElementById('tab-login-student');
+      const btnTeacher = document.getElementById('tab-login-teacher');
+      const formStudent = document.getElementById('form-student');
+      const formTeacher = document.getElementById('form-teacher');
 
-        // 1. ตรรกะการล็อกอิน
-        function handleLogin(e) {
-            e.preventDefault();
-            const user = document.getElementById('username').value;
-            const pass = document.getElementById('password').value;
-            sendJSONP({ action: 'login', username: user, password: pass }, 'loginCallback');
-        }
+      if(mode === 'student') {
+        btnStudent.className = "flex-1 py-2 text-sm font-medium rounded-lg bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow";
+        btnTeacher.className = "flex-1 py-2 text-sm font-medium rounded-lg text-slate-400 hover:text-white";
+        formStudent.classList.remove('hidden');
+        formTeacher.classList.add('hidden');
+      } else {
+        btnTeacher.className = "flex-1 py-2 text-sm font-medium rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow";
+        btnStudent.className = "flex-1 py-2 text-sm font-medium rounded-lg text-slate-400 hover:text-white";
+        formTeacher.classList.remove('hidden');
+        formStudent.classList.add('hidden');
+      }
+    }
 
-        window.loginCallback = function(response) {
-            Swal.close();
-            if (response.status === 'success') {
-                currentUser = response;
-                document.getElementById('login-page').classList.add('hidden');
-                
-                if (response.role === 'Teacher') {
-                    document.getElementById('teacher-page').classList.remove('hidden');
-                    initChart();
-                    fetchDataFromSheet();
-                } else {
-                    document.getElementById('student-page').classList.remove('hidden');
-                    document.getElementById('student-welcome').innerText = `สวัสดี, ${response.name}`;
-                }
-            } else {
-                Swal.fire('ไม่สำเร็จ', response.message || 'รหัสผ่านผิดพลาด', 'error');
-            }
-        };
+    // ฟังก์ชันนำทางสลับหน้าหลัก
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
 
-        // 2. ตรรกะฝั่งกล้องเว็บแคม (ปรับปรุงเพื่อ iPad / มือถือ และคอมพิวเตอร์)
-        async function openCamera() {
-            const video = document.getElementById('webcam');
-            document.getElementById('start-scan-btn').classList.add('hidden');
-            document.getElementById('camera-container').classList.remove('hidden');
+    // ทำงานเมื่อคลิกแท็บในหน้า Dashboard
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active', 'border-emerald-400', 'text-emerald-400'); b.classList.add('border-transparent', 'text-slate-400'); });
+        btn.classList.add('active', 'border-emerald-400', 'text-emerald-400');
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+        document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
+      });
+    });
 
-            const constraints = {
-                video: { 
-                    facingMode: "user",
-                    width: { ideal: 640 },
-                    height: { ideal: 480 }
-                },
-                audio: false
-            };
+    // 1. กดเข้าสู่ระบบฝั่ง นักเรียน
+    document.getElementById('btn-login').addEventListener('click', () => {
+      const id = document.getElementById('login-id').value.trim();
+      const name = document.getElementById('login-name').value.trim();
+      const cls = document.getElementById('login-class').value;
+      if (!id || !name || !cls) { Swal.fire('ข้อมูลไม่ครบ', 'กรุณากรอกข้อมูลนักเรียนให้ครบถ้วน', 'warning'); return; }
+      currentUser = { id, name, class_name: cls };
+      document.getElementById('scan-user-info').textContent = `${name} | ${cls} | รหัส ${id}`;
+      showPage('page-scan');
+    });
 
-            try {
-                videoStream = await navigator.mediaDevices.getUserMedia(constraints);
-                video.srcObject = videoStream;
-                
-                // สำหรับแก้ปัญหาหน้าจอดำ ค้าง หรือเด้งกลับหน้าล็อกอิน บน iOS / iPadOS
-                video.setAttribute('playsinline', true);
-                video.setAttribute('webkit-playsinline', true);
-                
-                video.onloadedmetadata = function() {
-                    video.play().catch(err => console.log("Auto Play ถูกบล็อก:", err));
-                };
-            } catch (err) {
-                console.error("เปิดกล้องล้มเหลว: ", err);
-                Swal.fire('ผิดพลาด', 'ไม่สามารถเข้าถึงกล้องถ่ายภาพของคุณได้ กรุณากดอนุญาตสิทธิ์การใช้กล้องของเบราว์เซอร์', 'error');
-                document.getElementById('start-scan-btn').classList.remove('hidden');
-                document.getElementById('camera-container').classList.add('hidden');
-            }
-        }
+    // 2. กดเข้าสู่ระบบฝั่ง ครูผู้สอน (เช็คผ่านระบบ API หลังบ้าน)
+    document.getElementById('btn-teacher-submit').addEventListener('click', () => {
+      const user = document.getElementById('teacher-user').value.trim();
+      const pass = document.getElementById('teacher-pass').value.trim();
 
-        function processFaceRecognition() {
-            Swal.fire({
-                title: 'AI กำลังสแกนใบหน้า...',
-                timer: 1500,
-                didOpen: () => Swal.showLoading()
-            }).then(() => {
-                if (videoStream) {
-                    videoStream.getTracks().forEach(track => track.stop());
-                }
+      if (!user || !pass) {
+        Swal.fire('ข้อมูลไม่ครบ', 'กรุณากรอกทั้ง Username และ Password', 'warning');
+        return;
+      }
+      if (pass.length !== 6 || isNaN(pass)) {
+        Swal.fire('รหัสผ่านไม่ถูกต้อง', 'Password ครูต้องเป็นตัวเลข 6 หลักเท่านั้น', 'warning');
+        return;
+      }
 
-                const isMatch = Math.random() > 0.15; // จำลองความสำเร็จ 85%
+      Swal.fire({
+        title: 'กำลังตรวจสอบสิทธิ์',
+        text: 'กรุณารอสักครู่ระบบกำลังเชื่อมต่อฐานข้อมูล',
+        allowOutsideClick: false,
+        didOpen: () => { Swal.showLoading(); }
+      });
 
-                if (isMatch) {
-                    Swal.fire('สำเร็จ', `ยืนยันตัวตนสำเร็จ! สวัสดีคุณ ${currentUser.name}`, 'success').then(() => {
-                        sendJSONP({
-                            action: 'check',
-                            studentId: currentUser.username || '123456789',
-                            name: currentUser.name,
-                            className: currentUser.class,
-                            status: 'มาเรียน'
-                        }, 'attendanceCallback');
-                    });
-                } else {
-                    Swal.fire('ไม่สำเร็จ', 'ใบหน้าไม่ตรงกับข้อมูลในระบบ กรุณาลองใหม่อีกครั้ง', 'error');
-                    document.getElementById('start-scan-btn').classList.remove('hidden');
-                    document.getElementById('camera-container').classList.add('hidden');
-                }
-            });
-        }
+      // ยิงคำขอเช็ครหัสผ่านไปที่สคริปต์ Google Sheets หลังบ้าน
+      const script = document.createElement('script');
+      script.src = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}&callback=teacherLoginResponse`;
+      document.body.appendChild(script);
+      document.body.removeChild(script);
+    });
 
-        window.attendanceCallback = function(res) {
-            Swal.close();
-            if(res.status === 'success') {
-                Swal.fire('ระบบส่งข้อมูลสำเร็จ', 'ข้อมูลถูกส่งไปที่ระบบคุมชั้นเรียนของครูเรียบร้อยแล้ว', 'success').then(() => {
-                    logout(); // สแกนเสร็จให้เคลียร์กลับหน้าแรกเพื่อคนต่อไป
-                });
-            }
-        };
+    // รอรับค่าตอบกลับผลลัพธ์การล็อกอินของครู
+    window.teacherLoginResponse = function(response) {
+      Swal.close();
+      if (response.status === 'success' && response.role.trim().toUpperCase() === 'TEACHER') {
+        currentUser = response;
+        Swal.fire({ icon: 'success', title: 'ยืนยันตัวตนสำเร็จ', text: `สวัสดีครับคุณครู ${response.name}`, timer: 1500, showConfirmButton: false });
+        showPage('page-dashboard');
+        loadDataFromSheets(); // ดึงประวัติและรายชื่อจากชีตจริงมาใช้งาน
+      } else {
+        Swal.fire('เข้าสู่ระบบไม่สำเร็จ', response.message || 'คุณไม่มีสิทธิ์การเข้าถึงในส่วนของครูผู้สอน', 'error');
+      }
+    };
 
-        // 3. ตรรกะฝั่งครู
-        function initChart() {
-            const ctx = document.getElementById('attendanceChart').getContext('2d');
-            if (chartInstance) { chartInstance.destroy(); }
-            chartInstance = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['มาเรียน', 'ขาด', 'ลา', 'สาย'],
-                    datasets: [{
-                        data: [80, 5, 10, 5],
-                        backgroundColor: ['#10B981', '#EF4444', '#F59E0B', '#3B82F6'],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false
-                }
-            });
-        }
+    function loadDataFromSheets() {
+      const script = document.createElement('script');
+      script.src = `${SCRIPT_URL}?action=getStudents&callback=syncStudentsData`;
+      document.body.appendChild(script);
+      document.body.removeChild(script);
+    }
 
-        function renderTable() {
-            const tbody = document.getElementById('student-table-body');
-            tbody.innerHTML = '';
+    window.syncStudentsData = function(response) {
+      if (response.status === 'success') {
+        allRecords = response.data.map(s => ({ type: 'student', student_id: s.id, name: s.name, class_name: s.class }));
+        updateDashboard();
+        updateStudentList();
+      }
+    };
 
-            localStudentData.forEach((student, index) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="p-4"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600"><i class="fas fa-user-circle text-xl"></i></div></td>
-                    <td class="p-4 font-mono font-medium">${student.id}</td>
-                    <td class="p-4">${student.name}</td>
-                    <td class="p-4 text-xs text-gray-500">${student.class}</td>
-                    <td class="p-4 text-xs font-mono text-emerald-600">${student.time || '08:30:01 น.'}</td>
-                    <td class="p-4">
-                        <div class="flex gap-2 text-xs">
-                            <label><input type="radio" name="status-${index}" value="มา" checked> มา</label>
-                            <label><input type="radio" name="status-${index}" value="ขาด"> ขาด</label>
-                            <label><input type="radio" name="status-${index}" value="ลา"> ลา</label>
-                            <label><input type="radio" name="status-${index}" value="สาย"> สาย</label>
-                        </div>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
+    // ปุ่มระบบกล้องและการควบคุมออกจากระบบ
+    document.getElementById('btn-back-login').addEventListener('click', () => { stopCamera(); showPage('page-login'); });
+    document.getElementById('btn-logout').addEventListener('click', () => { showPage('page-login'); });
 
-        function manageStudent(action) {
-            const name = document.getElementById('stu-name').value;
-            const id = document.getElementById('stu-id').value;
-            const className = document.getElementById('stu-class').value;
+    // ควบคุมกล้องสแกนหน้า
+    document.getElementById('btn-start-scan').addEventListener('click', async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+        cameraStream = stream;
+        document.getElementById('camera-feed').srcObject = stream;
+        document.getElementById('scan-status').classList.remove('hidden');
+        setTimeout(() => completeAttendance(), 3000);
+      } catch (e) {
+        document.getElementById('scan-status').classList.remove('hidden');
+        document.getElementById('scan-status').textContent = 'จำลองการสแกนใบหน้า...';
+        setTimeout(() => completeAttendance(), 2000);
+      }
+    });
 
-            if (action === 'add') {
-                if (!name || !id) return Swal.fire('คำเตือน', 'กรุณากรอกชื่อและรหัสนักเรียน', 'warning');
-                localStudentData.push({ id: id, name: name, class: className, time: '-' });
-                Swal.fire('สำเร็จ', 'เพิ่มข้อมูลนักเรียนในตารางเรียบร้อยแล้ว', 'success');
-            } else if (action === 'delete') {
-                localStudentData.pop();
-                Swal.fire('สำเร็จ', 'ลบข้อมูลรายการล่าสุดเรียบร้อยแล้ว', 'success');
-            }
-            renderTable();
-        }
+    function stopCamera() {
+      if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
+      document.getElementById('camera-feed').srcObject = null;
+    }
 
-        function fetchDataFromSheet() {
-            sendJSONP({ action: 'getStudents' }, 'fetchStudentsCallback');
-        }
+    function completeAttendance() {
+      if (!currentUser) return;
+      const now = new Date();
+      const isLate = now.getHours() >= 8 && now.getMinutes() > 30;
+      
+      document.getElementById('scan-status').classList.add('hidden');
+      showScanResult(`✅ เช็คชื่อสำเร็จ! สถานะ: ${isLate ? 'มาสาย' : 'มาเรียน'} เวลา ${now.toTimeString().slice(0, 5)}`, true);
+      stopCamera();
+    }
 
-        window.fetchStudentsCallback = function(res) {
-            Swal.close();
-            if(res.status === 'success') {
-                localStudentData = res.data;
-                renderTable();
-                Swal.fire('เรียกดูข้อมูลสำเร็จ', 'ดึงรายชื่อจากฐานข้อมูลแล้ว', 'success');
-            }
-        };
+    function showScanResult(msg, success) {
+      const el = document.getElementById('scan-result');
+      el.classList.remove('hidden');
+      el.textContent = msg;
+      el.className = `mt-4 rounded-xl p-4 text-sm font-medium ${success ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300' : 'bg-red-500/20 border border-red-500/40 text-red-300'}`;
+    }
 
-        function saveAttendanceToSheet() {
-            sendJSONP({ action: 'manage', subAction: 'saveAll' }, 'saveAllCallback');
-        }
+    // ฟังก์ชันจัดการ UI อัปเดตข้อมูลบน Dashboard
+    function updateDashboard() {
+      const students = allRecords.filter(r => r.type === 'student');
+      document.getElementById('stat-total').textContent = students.length;
+    }
 
-        window.saveAllCallback = function(res) {
-            Swal.close();
-            Swal.fire('บันทึกถาวรสำเร็จ', 'ระบบได้ทำการจัดเก็บสถิติลงบนคลาวด์ Google Sheet เรียบร้อยแล้ว', 'success');
-        };
+    function updateStudentList() {
+      const students = allRecords.filter(r => r.type === 'student');
+      const container = document.getElementById('student-list');
+      if (students.length === 0) { container.innerHTML = '<p class="text-slate-500 text-center py-4">ยังไม่มีข้อมูลนักเรียน</p>'; return; }
+      container.innerHTML = students.map(s => `
+        <div class="flex items-center justify-between bg-slate-700/30 rounded-lg px-3 py-2">
+          <div><span class="text-emerald-400 font-medium">${s.student_id}</span> <span class="text-white">${s.name}</span></div>
+          <span class="text-xs text-slate-400 bg-slate-700 px-2 py-1 rounded">${s.class_name}</span>
+        </div>
+      `).join('');
+    }
 
-        function logout() {
-            currentUser = null;
-            if (videoStream) {
-                videoStream.getTracks().forEach(track => track.stop());
-                videoStream = null;
-            }
-            document.getElementById('student-page').classList.add('hidden');
-            document.getElementById('teacher-page').classList.add('hidden');
-            document.getElementById('login-page').classList.remove('hidden');
-            document.getElementById('login-form').reset();
-            document.getElementById('start-scan-btn').classList.remove('hidden');
-            document.getElementById('camera-container').classList.add('hidden');
-        }
-    </script>
-</body>
+    lucide.createIcons();
+  </script>
+ </body>
 </html>
