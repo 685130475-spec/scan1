@@ -3,19 +3,24 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Student Attendance</title>
+  <title>ระบบเช็คชื่อด้วยเทคโนโลยีใบหน้า</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
   <style>
-    * { font-family: 'Sarabun', sans-serif; }
-    .page { display: none; }
+    * { font-family: 'Thai Sarabun', sans-serif;
+       background-color: #e0f2fe; /* สีฟ้าพาสเทล */
+      }
+   .page { display: none; }
     .page.active { display: flex; }
     .pulse-ring { animation: pulse-ring 1.5s infinite; }
     @keyframes pulse-ring { 0% { transform: scale(0.9); opacity: 1; } 100% { transform: scale(1.4); opacity: 0; } }
     .fade-in { animation: fadeIn 0.3s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }    
+    #camera-feed {
+      transform: scaleX(-1);
+    }
   </style>
  </head>
  <body class="h-full bg-slate-900 text-white overflow-auto">
