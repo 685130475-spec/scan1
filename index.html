@@ -7,262 +7,254 @@
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * { font-family: 'Thai Sarabun', sans-serif;
-     
-      }
-   .page { display: none; }
+    * { font-family: 'Sarabun', sans-serif; }
+    .page { display: none; }
     .page.active { display: flex; }
     .pulse-ring { animation: pulse-ring 1.5s infinite; }
     @keyframes pulse-ring { 0% { transform: scale(0.9); opacity: 1; } 100% { transform: scale(1.4); opacity: 0; } }
     .fade-in { animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }    
-    #camera-feed {
-      transform: scaleX(-1);
-    }
+    #camera-feed { transform: scaleX(-1); }
   </style>
  </head>
-<body class="h-full   background-color: #e0f2fe text-black overflow-auto">
+<body class="h-full bg-sky-50 text-slate-900 overflow-auto">
   <div id="app" class="h-full w-full flex flex-col">
    
    <div id="page-login" class="page active flex-col items-center justify-center h-full p-6" translate="no">
     <div class="w-full max-w-md fade-in">
      <div class="text-center mb-6">
-      <div class="w-20 h-20 mx-auto bg-gradient-to-br from-emerald-400 to-cyan-500 rounded-2xl sshadow-lg shadow-sky-400/20">
+      <div class="w-20 h-20 mx-auto bg-gradient-to-br from-sky-400 to-blue-500 rounded-2xl flex items-center justify-center shadow-lg shadow-sky-500/20">
        <i data-lucide="scan-face" class="w-10 h-10 text-white"></i>
       </div>
-      <h1 id="main-title" class="text-2xl text-black">ระบบเช็คชื่อด้วยเทคโนโลยีใบหน้า</h1>
+      <h1 id="main-title" class="text-2xl font-bold text-slate-800 mt-4">ระบบเช็คชื่อด้วยเทคโนโลยีใบหน้า</h1>
       <p class="text-slate-400 mt-1 text-sm">Facial Recognition Attendance System</p>
      </div>
 
-     <div class="bg-white/80 backdrop-blur rounded-2xl p-6 border border-white/20 shadow-xl text-slate-900">
-      <div class="flex bg-slate-900/60 p-1 rounded-xl mb-6 border border-slate-700/30">
-       <button id="tab-login-student" class="flex-1 py-2 text-sm font-medium rounded-lg bg-gradient-to-br from-emerald-400 to-cyan-500 text-slate-800  shadow-emerald-500/10 transition-all">
+     <div class="bg-white/90 backdrop-blur rounded-2xl p-6 border border-white/50 shadow-xl">
+      <div class="flex bg-slate-100 p-1 rounded-xl mb-6 border border-slate-200">
+       <button id="tab-login-student" class="flex-1 py-2 text-sm font-medium rounded-lg bg-gradient-to-r from-sky-400 to-blue-500 text-white shadow transition-all">
         <i data-lucide="user" class="w-4 h-4 inline mr-1"></i> นักศึกษา
        </button>
-       <button id="tab-login-teacher" class="flex-1 py-2 text-sm font-medium rounded-lg text-slate-400 hover:text-white transition-all">
+       <button id="tab-login-teacher" class="flex-1 py-2 text-sm font-medium rounded-lg text-slate-500 hover:text-slate-800 transition-all">
         <i data-lucide="graduation-cap" class="w-4 h-4 inline mr-1"></i> อาจารย์
        </button>
       </div>
 
       <div id="form-student" class="space-y-4">
        <div>
-        <label for="login-id" class="block text-sm font-medium text-slate-300 mb-1">รหัสนักเรียน</label> 
-      <input id="login-id" type="text" placeholder="เช่น 685130400" 
-       class="w-full px-4 py-3 bg-slate-100/80 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent">
-        <label for="login-name" class="block text-sm font-medium text-slate-700 mb-1">ชื่อ-นามสกุล</label> 
-<input id="login-name" type="text" placeholder="สมชาย ใจดี" 
-       class="w-full px-4 py-3 bg-slate-100/80 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent">
+        <label for="login-id" class="block text-sm font-medium text-slate-600 mb-1">รหัสนักเรียน/นักศึกษา</label> 
+        <input id="login-id" type="text" placeholder="เช่น 685130400" 
+               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all">
+       </div>
        <div>
-     <label for="login-class" class="block text-sm font-medium text-slate-700 mb-1">ชั้นเรียน</label> 
-<select id="login-class" class="w-full px-4 py-3 bg-slate-100/80 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent"> 
- <option value="" class="text-slate-800">เลือกชั้นเรียน</option> 
- <option class="text-slate-800">ปวช.1/1</option><option class="text-slate-800">ปวช.1/4</option>
- <option class="text-slate-800">ปวช1.7/1</option><option class="text-slate-800">ปวช.1/10</option> 
- <option class="text-slate-800">ปวช.1/21</option><option class="text-slate-800">ปวช.1/22</option>
- <option class="text-slate-800">ปวช.1/31</option><option class="text-slate-800">ปวช.1/32</option> 
- <option class="text-slate-800">ปวช.1/33</option><option class="text-slate-800">ปวช.1/41</option>
- <option class="text-slate-800">ปวช.2/1</option><option class="text-slate-800">ปวช.2/2</option> 
- <option class="text-slate-800">ปวช.2/4</option><option class="text-slate-800">ปวช.2/7</option> 
-<option class="text-slate-800">ปวช.2/10</option><option class="text-slate-800">ปวช.2/21</option> 
-<option class="text-slate-800">ปวช.2/22</option><option class="text-slate-800">ปวช.2/31</option> 
-<option class="text-slate-800">ปวช.2/32</option><option class="text-slate-800">ปวช.2/41</option> 
-<option class="text-slate-800">ปวช.3/1</option><option class="text-slate-800">ปวช.3/4</option> 
- <option class="text-slate-800">ปวช.3/7</option><option class="text-slate-800">ปวช.3/10</option> 
- <option class="text-slate-800">ปวช.3/21</option><option class="text-slate-800">ปวช.3/22</option> 
- <option class="text-slate-800">ปวช.3/31</option><option class="text-slate-800">ปวช.3/32</option> 
- <option class="text-slate-800">ปวช.3/41</option><option class="text-slate-800">ปวส.1/1</option> 
- <option class="text-slate-800">ปวส.1/4</option><option class="text-slate-800">ปวส.1/7</option> 
- <option class="text-slate-800">ปวส.1/10</option><option class="text-slate-800">ปวส.1/21</option> 
- <option class="text-slate-800">ปวส.1/22</option><option class="text-slate-800">ปวส.1/31</option> 
- <option class="text-slate-800">ปวส.1/32</option><option class="text-slate-800">ปวส.1/33</option> 
- <option class="text-slate-800">ปวส.1/41</option><option class="text-slate-800">ปวส.2/1</option> 
- <option class="text-slate-800">ปวส.2/4</option><option class="text-slate-800">ปวส.1/7</option> 
- <option class="text-slate-800">ปวส.2/10</option><option class="text-slate-800">ปวส.2/21</option> 
- <option class="text-slate-800">ปวส.2/22</option><option class="text-slate-800">ปวส.2/23</option> 
- <option class="text-slate-800">ปวส.2/31</option><option class="text-slate-800">ปวส.2/32</option> 
- <option class="text-slate-800">ปวส.2/33</option><option class="text-slate-800">ปวส.2/41</option> 
-</select>
-    <button id="btn-login" class="w-full py-3 bg-gradient-to-r from-sky-400 to-blue-500 rounded-xl font-semibold text-white hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-500/20 active:scale-95"> เข้าสู่ระบบสแกนใบหน้า </button>
+        <label for="login-name" class="block text-sm font-medium text-slate-600 mb-1">ชื่อ-นามสกุล</label> 
+        <input id="login-name" type="text" placeholder="สมชาย ใจดี" 
+               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all">
+       </div>
+       <div>
+        <label for="login-class" class="block text-sm font-medium text-slate-600 mb-1">ชั้นเรียน</label> 
+        <select id="login-class" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all"> 
+         <option value="" class="text-slate-800">เลือกชั้นเรียน</option> 
+         <option class="text-slate-800">ปวช.1/1</option><option class="text-slate-800">ปวช.1/4</option>
+         <option class="text-slate-800">ปวช.1/10</option><option class="text-slate-800">ปวช.1/21</option> 
+         <option class="text-slate-800">ปวช.1/22</option><option class="text-slate-800">ปวช.1/31</option>
+         <option class="text-slate-800">ปวช.1/32</option><option class="text-slate-800">ปวช.1/41</option>
+         <option class="text-slate-800">ปวช.2/1</option><option class="text-slate-800">ปวช.2/2</option> 
+         <option class="text-slate-800">ปวช.2/4</option><option class="text-slate-800">ปวช.2/10</option> 
+         <option class="text-slate-800">ปวช.2/21</option><option class="text-slate-800">ปวช.2/22</option> 
+         <option class="text-slate-800">ปวช.2/31</option><option class="text-slate-800">ปวช.2/32</option> 
+         <option class="text-slate-800">ปวช.2/41</option><option class="text-slate-800">ปวช.3/1</option> 
+         <option class="text-slate-800">ปวช.3/4</option><option class="text-slate-800">ปวช.3/10</option> 
+         <option class="text-slate-800">ปวช.3/21</option><option class="text-slate-800">ปวช.3/22</option> 
+         <option class="text-slate-800">ปวช.3/31</option><option class="text-slate-800">ปวช.3/32</option> 
+         <option class="text-slate-800">ปวช.3/41</option><option class="text-slate-800">ปวส.1/1</option> 
+         <option class="text-slate-800">ปวส.1/4</option><option class="text-slate-800">ปวส.1/10</option> 
+         <option class="text-slate-800">ปวส.1/21</option><option class="text-slate-800">ปวส.1/22</option> 
+         <option class="text-slate-800">ปวส.1/31</option><option class="text-slate-800">ปวส.1/32</option> 
+         <option class="text-slate-800">ปวส.1/41</option><option class="text-slate-800">ปวส.2/1</option> 
+         <option class="text-slate-800">ปวส.2/4</option><option class="text-slate-800">ปวส.2/10</option> 
+         <option class="text-slate-800">ปวส.2/21</option><option class="text-slate-800">ปวส.2/22</option> 
+         <option class="text-slate-800">ปวส.2/31</option><option class="text-slate-800">ปวส.2/32</option> 
+         <option class="text-slate-800">ปวส.2/41</option> 
+        </select>
+       </div>
+       <button id="btn-login" class="w-full mt-2 py-3 bg-gradient-to-r from-sky-400 to-blue-500 rounded-xl font-semibold text-white hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-500/20 active:scale-95"> เข้าสู่ระบบสแกนใบหน้า </button>
+      </div>
 
       <div id="form-teacher" class="space-y-4 hidden">
        <div>
- <label for="teacher-user" class="block text-sm font-medium text-slate-700 mb-1">Username</label> 
- <input id="teacher-user" type="text" placeholder="กรุณากรอกข้อมูล" 
-        class="w-full px-4 py-3 bg-slate-100/80 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent">
-</div>
-     <div>
- <label for="teacher-pass" class="block text-sm font-medium text-slate-700 mb-1">Password</label> 
- <input id="teacher-pass" type="password" maxlength="6" placeholder="******" 
-        class="w-full px-4 py-3 bg-slate-100/80 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent">
-</div>
-     <button id="btn-teacher-submit" class="w-full py-3 bg-gradient-to-r from-sky-400 to-blue-500 rounded-xl font-semibold text-white hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-500/20 active:scale-95"> เข้าสู่แดชบอร์ด </button>
+        <label for="teacher-user" class="block text-sm font-medium text-slate-700 mb-1">Username</label> 
+        <input id="teacher-user" type="text" placeholder="ชื่อผู้ใช้งานของคุณครู" 
+               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all">
+       </div>
+       <div>
+        <label for="teacher-pass" class="block text-sm font-medium text-slate-700 mb-1">Password</label> 
+        <input id="teacher-pass" type="password" maxlength="6" placeholder="ตัวเลข 6 หลัก" 
+               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all">
+       </div>
+       <button id="btn-teacher-submit" class="w-full py-3 bg-gradient-to-r from-sky-400 to-blue-500 rounded-xl font-semibold text-white hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-500/20 active:scale-95"> เข้าสู่แดชบอร์ดอาจารย์ </button>
+      </div>
      </div>
     </div>
    </div>
 
    <div id="page-scan" class="page flex-col items-center justify-center h-full p-6">
     <div class="w-full max-w-md text-center fade-in">
-     <h2 class="text-xl font-bold mb-2">เช็คชื่อด้วยเทคโนโลยีใบหน้า</h2>
-     <p id="scan-user-info" class="text-slate-400 text-sm mb-6"></p>
-     <div class="relative mx-auto w-80 h-80 rounded-3xl overflow-hidden border-4 border-sky-500/50 bg-slate-800 mb-6">
+     <h2 class="text-xl font-bold text-slate-800 mb-2">เช็คชื่อด้วยเทคโนโลยีใบหน้า</h2>
+     <p id="scan-user-info" class="text-slate-500 text-sm mb-6"></p>
+     
+     <div class="relative mx-auto w-80 h-80 rounded-3xl overflow-hidden border-4 border-sky-400 bg-slate-800 mb-6 shadow-xl">
       <video id="camera-feed" class="w-full h-full object-cover" autoplay playsinline muted></video>
       <div class="absolute inset-0 flex items-center justify-center" id="scan-overlay">
-       <div class="w-40 h-40 border-4 border-emerald-400 rounded-full"></div>
-       <div class="absolute w-44 h-44 border-2 border-emerald-400/40 rounded-full pulse-ring"></div>
+       <div class="w-52 h-52 border-4 border-sky-400 rounded-full"></div>
+       <div class="absolute w-56 h-56 border-2 border-sky-400/40 rounded-full pulse-ring"></div>
       </div>
-    <div id="scan-status" class="absolute bottom-3 left-0 right-0 text-center text-sm font-medium text-sky-300 hidden"> กำลังสแกน... </div>
-   <button id="btn-start-scan" class="px-8 py-3 bg-gradient-to-r from-sky-400 to-blue-500 rounded-xl font-semibold text-white hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-500/20 active:scale-95 inline-flex items-center gap-2"> 
- <i data-lucide="camera" class="w-5 h-5"></i> กดปุ่มเพื่อเริ่มเช็คชื่อ 
-</button>
-   <div id="scan-result" class="mt-4 hidden bg-sky-500/10 border border-sky-400/30 rounded-xl p-4 text-sky-300 text-center font-medium"></div>
- 
- <button id="btn-back-login" class="mt-4 text-slate-400 hover:text-sky-300 text-sm underline transition-colors">ออกจากระบบ</button>
-</div>
-</div>
+      <div id="scan-status" class="absolute bottom-3 left-0 right-0 text-center text-sm font-medium text-sky-300 hidden"> กำลังสแกน... </div>
+     </div>
 
-<div id="page-dashboard" class="page flex-col h-full">
- <nav class="bg-slate-800/90 border-b border-slate-700/50 px-4 py-3 flex items-center justify-between">
-  <div class="flex items-center gap-2">
-   <div class="w-8 h-8 bg-gradient-to-br from-sky-400 to-blue-500 rounded-lg flex items-center justify-center">
-    <i data-lucide="scan-face" class="w-4 h-4 text-white"></i>
+     <button id="btn-start-scan" class="px-8 py-3 bg-gradient-to-r from-sky-400 to-blue-500 rounded-xl font-semibold text-white hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-500/20 active:scale-95 inline-flex items-center gap-2🛞"> 
+      <i data-lucide="camera" class="w-5 h-5"></i> กดปุ่มเพื่อเริ่มเช็คชื่อ 
+     </button>
+     
+     <div id="scan-result" class="mt-4 hidden rounded-xl p-4 text-center font-medium"></div>
+     <br>
+     <button id="btn-back-login" class="mt-4 text-slate-500 hover:text-sky-500 text-sm underline transition-colors">ออกจากระบบ</button>
+    </div>
    </div>
-   <span class="font-bold text-sm text-white">ระบบเช็คชื่อ - อาจารย์</span>
-  </div>
-    <button id="btn-logout" class="text-sm text-slate-400 hover:text-sky-300 flex items-center gap-1 transition-colors"> 
- <i data-lucide="log-out" class="w-4 h-4"></i> ออก 
-</button>
-<div class="flex border-b border-slate-700/50 bg-slate-800/50 px-4">
- <button class="tab-btn active px-4 py-3 text-sm font-medium border-b-2 border-sky-400 text-sky-400 transition-all" data-tab="dashboard">แดชบอร์ด</button> 
- 
- <button class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-sky-300 transition-colors" data-tab="manage">จัดการข้อมูล</button> 
- <button class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-sky-300 transition-colors" data-tab="history">ประวัติ</button>
-</div>
-    
-  <div id="tab-dashboard" class="tab-content flex-1 overflow-auto p-4 space-y-4">
- <div class="grid grid-cols-2 gap-3">
-  
-  <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
-   <div class="flex items-center gap-2 mb-1">
-    <i data-lucide="users" class="w-4 h-4 text-sky-400"></i>
-    <span class="text-xs text-slate-400 font-medium">นักเรียนทั้งหมด</span>
-   </div>
-   <p id="stat-total" class="text-2xl font-bold text-white tracking-tight">0</p>
-  </div>
-      <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
- <div class="flex items-center gap-2 mb-1">
-  <i data-lucide="check-circle" class="w-4 h-4 text-green-400"></i>
-  <span class="text-xs text-slate-400 font-medium">มาเรียนวันนี้</span>
- </div>
- <p id="stat-present" class="text-2xl font-bold text-green-400 tracking-tight">0</p>
-</div>
-      <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50">
-       <div class="flex items-center gap-2 mb-1"><i data-lucide="x-circle" class="w-4 h-4 text-red-400"></i><span class="text-xs text-slate-400">ขาดเรียน</span></div>
-       <p id="stat-absent" class="text-2xl font-bold text-red-400">0</p>
+
+   <div id="page-dashboard" class="page flex-col h-full bg-slate-900 text-white">
+    <nav class="bg-slate-800/90 border-b border-slate-700/50 px-4 py-3 flex items-center justify-between">
+     <div class="flex items-center gap-2">
+      <div class="w-8 h-8 bg-gradient-to-br from-sky-400 to-blue-500 rounded-lg flex items-center justify-center">
+       <i data-lucide="scan-face" class="w-4 h-4 text-white"></i>
       </div>
-      <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50">
-       <div class="flex items-center gap-2 mb-1"><i data-lucide="clock" class="w-4 h-4 text-amber-400"></i><span class="text-xs text-slate-400">มาสาย</span></div>
-       <p id="stat-late" class="text-2xl font-bold text-amber-400">0</p>
+      <span class="font-bold text-sm text-white">ระบบเช็คชื่อ - อาจารย์</span>
+     </div>
+     <button id="btn-logout" class="text-sm text-slate-400 hover:text-sky-300 flex items-center gap-1 transition-colors"> 
+      <i data-lucide="log-out" class="w-4 h-4"></i> ออก 
+     </button>
+    </nav>
+    
+    <div class="flex border-b border-slate-700/50 bg-slate-800/50 px-4">
+     <button class="tab-btn active px-4 py-3 text-sm font-medium border-b-2 border-sky-400 text-sky-400 transition-all" data-tab="dashboard">แดชบอร์ด</button> 
+     <button class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-sky-300 transition-colors" data-tab="manage">จัดการข้อมูล</button> 
+     <button class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-sky-300 transition-colors" data-tab="history">ประวัติ</button>
+    </div>
+     
+    <div id="tab-dashboard" class="tab-content flex-1 overflow-auto p-4 space-y-4">
+     <div class="grid grid-cols-2 gap-3">
+      <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
+       <div class="flex items-center gap-2 mb-1">
+        <i data-lucide="users" class="w-4 h-4 text-sky-400"></i>
+        <span class="text-xs text-slate-400 font-medium">นักเรียนทั้งหมด</span>
+       </div>
+       <p id="stat-total" class="text-2xl font-bold text-white tracking-tight">0</p>
+      </div>
+      <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
+       <div class="flex items-center gap-2 mb-1">
+        <i data-lucide="check-circle" class="w-4 h-4 text-green-400"></i>
+        <span class="text-xs text-slate-400 font-medium">มาเรียนวันนี้</span>
+       </div>
+       <p id="stat-present" class="text-2xl font-bold text-green-400 tracking-tight">0</p>
+      </div>
+      <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
+       <div class="flex items-center gap-2 mb-1">
+        <i data-lucide="x-circle" class="w-4 h-4 text-rose-400"></i>
+        <span class="text-xs text-slate-400 font-medium">ขาดเรียน</span>
+       </div>
+       <p id="stat-absent" class="text-2xl font-bold text-rose-400 tracking-tight">0</p>
+      </div>
+      <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
+       <div class="flex items-center gap-2 mb-1">
+        <i data-lucide="clock" class="w-4 h-4 text-amber-400"></i>
+        <span class="text-xs text-slate-400 font-medium">มาสาย</span>
+       </div>
+       <p id="stat-late" class="text-2xl font-bold text-amber-400 tracking-tight">0</p>
       </div>
      </div>
-   <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
- <h3 class="font-semibold text-sm text-slate-200 mb-3 flex items-center gap-1.5">
-  <span class="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse"></span>
-  เช็คชื่อล่าสุดวันนี้
- </h3>
- 
- <div id="recent-list" class="space-y-2 text-sm text-slate-300">
-  <p class="text-slate-500 text-center py-6 italic">ยังไม่มีข้อมูลวันนี้</p>
- </div>
-</div>
-</div> 
-<div id="tab-manage" class="tab-content flex-1 overflow-auto p-4 space-y-4 hidden">
- 
- <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
-  <h3 class="font-semibold text-sm text-slate-200 mb-3 flex items-center gap-2">
-   <i data-lucide="user-plus" class="w-4 h-4 text-sky-400"></i>เพิ่มนักเรียน
-  </h3>
-  
-  <div class="space-y-3">
-   <input id="add-id" type="text" placeholder="รหัสนักเรียน" 
-          class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-400/70 focus:border-transparent transition-all"> 
-   
-   <input id="add-name" type="text" placeholder="ชื่อ-นามสกุล" 
-          class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-400/70 focus:border-transparent transition-all"> 
-   
-   <select id="add-class" 
-           class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-sky-400/70 focus:border-transparent transition-all">
-    <option value="" class="bg-slate-800 text-slate-400">เลือกชั้นเรียน</option> 
-   <option value="" class="text-slate-800">เลือกชั้นเรียน</option> 
- <option class="text-slate-800">ปวช.1/1</option><option class="text-slate-800">ปวช.1/4</option>
- <option class="text-slate-800">ปวช1.7/1</option><option class="text-slate-800">ปวช.1/10</option> 
- <option class="text-slate-800">ปวช.1/21</option><option class="text-slate-800">ปวช.1/22</option>
- <option class="text-slate-800">ปวช.1/31</option><option class="text-slate-800">ปวช.1/32</option> 
- <option class="text-slate-800">ปวช.1/33</option><option class="text-slate-800">ปวช.1/41</option>
- <option class="text-slate-800">ปวช.2/1</option><option class="text-slate-800">ปวช.2/2</option> 
- <option class="text-slate-800">ปวช.2/4</option><option class="text-slate-800">ปวช.2/7</option> 
-<option class="text-slate-800">ปวช.2/10</option><option class="text-slate-800">ปวช.2/21</option> 
-<option class="text-slate-800">ปวช.2/22</option><option class="text-slate-800">ปวช.2/31</option> 
-<option class="text-slate-800">ปวช.2/32</option><option class="text-slate-800">ปวช.2/41</option> 
-<option class="text-slate-800">ปวช.3/1</option><option class="text-slate-800">ปวช.3/4</option> 
- <option class="text-slate-800">ปวช.3/7</option><option class="text-slate-800">ปวช.3/10</option> 
- <option class="text-slate-800">ปวช.3/21</option><option class="text-slate-800">ปวช.3/22</option> 
- <option class="text-slate-800">ปวช.3/31</option><option class="text-slate-800">ปวช.3/32</option> 
- <option class="text-slate-800">ปวช.3/41</option><option class="text-slate-800">ปวส.1/1</option> 
- <option class="text-slate-800">ปวส.1/4</option><option class="text-slate-800">ปวส.1/7</option> 
- <option class="text-slate-800">ปวส.1/10</option><option class="text-slate-800">ปวส.1/21</option> 
- <option class="text-slate-800">ปวส.1/22</option><option class="text-slate-800">ปวส.1/31</option> 
- <option class="text-slate-800">ปวส.1/32</option><option class="text-slate-800">ปวส.1/33</option> 
- <option class="text-slate-800">ปวส.1/41</option><option class="text-slate-800">ปวส.2/1</option> 
- <option class="text-slate-800">ปวส.2/4</option><option class="text-slate-800">ปวส.1/7</option> 
- <option class="text-slate-800">ปวส.2/10</option><option class="text-slate-800">ปวส.2/21</option> 
- <option class="text-slate-800">ปวส.2/22</option><option class="text-slate-800">ปวส.2/23</option> 
- <option class="text-slate-800">ปวส.2/31</option><option class="text-slate-800">ปวส.2/32</option> 
- <option class="text-slate-800">ปวส.2/33</option><option class="text-slate-800">ปวส.2/41</option> 
-   </select>
-   <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
+     
+     <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
+      <h3 class="font-semibold text-sm text-slate-200 mb-3 flex items-center gap-1.5">
+       <span class="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse"></span>
+       เช็คชื่อล่าสุดวันนี้
+      </h3>
+      <div id="recent-list" class="space-y-2 text-sm text-slate-300">
+       <p class="text-slate-500 text-center py-6 italic">ยังไม่มีข้อมูลวันนี้</p>
+      </div>
+     </div>
+    </div> 
+
+    <div id="tab-manage" class="tab-content flex-1 overflow-auto p-4 space-y-4 hidden">
+     <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
+      <h3 class="font-semibold text-sm text-slate-200 mb-3 flex items-center gap-2">
+       <i data-lucide="user-plus" class="w-4 h-4 text-sky-400"></i>เพิ่มนักเรียน
+      </h3>
+      <div class="space-y-3">
+       <input id="add-id" type="text" placeholder="รหัสนักเรียน" class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-400/70 focus:border-transparent transition-all"> 
+       <input id="add-name" type="text" placeholder="ชื่อ-นามสกุล" class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-400/70 focus:border-transparent transition-all"> 
+       <select id="add-class" class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-sky-400/70 focus:border-transparent transition-all">
+        <option value="" class="bg-slate-800 text-slate-400">เลือกชั้นเรียน</option> 
+        <option class="bg-slate-800">ปวช.1/1</option><option class="bg-slate-800">ปวช.1/4</option>
+        <option class="bg-slate-800">ปวช.1/10</option><option class="bg-slate-800">ปวช.1/21</option> 
+        <option class="bg-slate-800">ปวช.1/22</option><option class="bg-slate-800">ปวช.1/31</option>
+        <option class="bg-slate-800">ปวช.1/32</option><option class="bg-slate-800">ปวช.1/41</option>
+        <option class="bg-slate-800">ปวช.2/1</option><option class="bg-slate-800">ปวช.2/2</option> 
+        <option class="bg-slate-800">ปวช.2/4</option><option class="bg-slate-800">ปวช.2/10</option> 
+        <option class="bg-slate-800">ปวช.2/21</option><option class="bg-slate-800">ปวช.2/22</option> 
+        <option class="bg-slate-800">ปวช.2/31</option><option class="bg-slate-800">ปวช.2/32</option> 
+        <option class="bg-slate-800">ปวช.2/41</option><option class="bg-slate-800">ปวช.3/1</option> 
+        <option class="bg-slate-800">ปวช.3/4</option><option class="bg-slate-800">ปวช.3/10</option> 
+        <option class="bg-slate-800">ปวช.3/21</option><option class="bg-slate-800">ปวช.3/22</option> 
+        <option class="bg-slate-800">ปวช.3/31</option><option class="bg-slate-800">ปวช.3/32</option> 
+        <option class="bg-slate-800">ปวช.3/41</option><option class="bg-slate-800">ปวส.1/1</option> 
+        <option class="bg-slate-800">ปวส.1/4</option><option class="bg-slate-800">ปวส.1/10</option> 
+        <option class="bg-slate-800">ปวส.1/21</option><option class="bg-slate-800">ปวส.1/22</option> 
+        <option class="bg-slate-800">ปวส.1/31</option><option class="bg-slate-800">ปวส.1/32</option> 
+        <option class="bg-slate-800">ปวส.1/41</option><option class="bg-slate-800">ปวส.2/1</option> 
+        <option class="bg-slate-800">ปวส.2/4</option><option class="bg-slate-800">ปวส.2/10</option> 
+        <option class="bg-slate-800">ปวส.2/21</option><option class="bg-slate-800">ปวส.2/22</option> 
+        <option class="bg-slate-800">ปวส.2/31</option><option class="bg-slate-800">ปวส.2/32</option> 
+        <option class="bg-slate-800">ปวส.2/41</option> 
+       </select>
+      </div>
+     </div> 
+
+     <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
       <h3 class="font-semibold text-sm text-slate-200 mb-3 flex items-center gap-2">
        <i data-lucide="list" class="w-4 h-4 text-sky-400"></i>รายชื่อนักเรียน
       </h3>
-      
       <div id="student-list" class="space-y-2 text-sm max-h-64 overflow-auto pr-1">
        <p class="text-slate-500 text-center py-6 italic">ยังไม่มีข้อมูลนักเรียน</p>
       </div>
      </div>
     </div> 
 
-   <div id="tab-history" class="tab-content flex-1 overflow-auto p-4 space-y-4 hidden">
- 
- <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
-  <h3 class="font-semibold text-sm text-slate-200 mb-3 flex items-center gap-2">
-   <i data-lucide="history" class="w-4 h-4 text-sky-400"></i>ประวัติการเช็คชื่อ
-  </h3>
-  
-  <div id="history-list" class="space-y-2 text-sm max-h-96 overflow-auto pr-1">
-   <p class="text-slate-500 text-center py-6 italic">ยังไม่มีประวัติ</p>
-  </div>
- </div>
-</div>
-</div> 
+    <div id="tab-history" class="tab-content flex-1 overflow-auto p-4 space-y-4 hidden">
+     <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
+      <h3 class="font-semibold text-sm text-slate-200 mb-3 flex items-center gap-2">
+       <i data-lucide="history" class="w-4 h-4 text-sky-400"></i>ประวัติการเช็คชื่อ
+      </h3>
+      <div id="history-list" class="space-y-2 text-sm max-h-96 overflow-auto pr-1">
+       <p class="text-slate-500 text-center py-6 italic">ยังไม่มีประวัติ</p>
+      </div>
+     </div>
+    </div>
 
+   </div> 
   </div>
 
   <script>
-    // 🚨 สำคัญมาก: วาง URL Web App (ที่ได้จากการ Deploy ใน Apps Script หลังบ้าน) ลงในช่องนี้ครับ
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxzCTKgDcmFOxkg768GY476SNFais4xvqXei_cWhClVEXIddY4siT3hIKQ4NQqIP7_EJw/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwrEyN-Z6fUaGiuNzqixJQhlvNv3ilgvD-OLw4o1aYBaMJ5Memg0cG7N7AcYB8idgY3/exec";
 
     let currentUser = null;
     let allRecords = [];
     let cameraStream = null;
 
-    // ระบบสลับหน้าฟอร์ม ล็อกอิน ครู / นักเรียน
-    document.getElementById('tab-login-student').addEventListener('click', () => {
-      toggleLoginTabs('student');
-    });
-    document.getElementById('tab-login-teacher').addEventListener('click', () => {
-      toggleLoginTabs('teacher');
-    });
+    // ระบบสลับแท็บหน้าล็อกอิน
+    document.getElementById('tab-login-student').addEventListener('click', () => toggleLoginTabs('student'));
+    document.getElementById('tab-login-teacher').addEventListener('click', () => toggleLoginTabs('teacher'));
 
     function toggleLoginTabs(mode) {
       const btnStudent = document.getElementById('tab-login-student');
@@ -271,58 +263,54 @@
       const formTeacher = document.getElementById('form-teacher');
 
       if(mode === 'student') {
-        btnStudent.className = "flex-1 py-2 text-sm font-medium rounded-lg bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow";
-        btnTeacher.className = "flex-1 py-2 text-sm font-medium rounded-lg text-slate-400 hover:text-white";
+        btnStudent.className = "flex-1 py-2 text-sm font-medium rounded-lg bg-gradient-to-r from-sky-400 to-blue-500 text-white shadow transition-all";
+        btnTeacher.className = "flex-1 py-2 text-sm font-medium rounded-lg text-slate-500 hover:text-slate-800 transition-all";
         formStudent.classList.remove('hidden');
         formTeacher.classList.add('hidden');
       } else {
-        btnTeacher.className = "flex-1 py-2 text-sm font-medium rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow";
-        btnStudent.className = "flex-1 py-2 text-sm font-medium rounded-lg text-slate-400 hover:text-white";
+        btnTeacher.className = "flex-1 py-2 text-sm font-medium rounded-lg bg-gradient-to-r from-sky-400 to-blue-500 text-white shadow transition-all";
+        btnStudent.className = "flex-1 py-2 text-sm font-medium rounded-lg text-slate-500 hover:text-slate-800 transition-all";
         formTeacher.classList.remove('hidden');
         formStudent.classList.add('hidden');
       }
     }
 
-    // ฟังก์ชันนำทางสลับหน้าหลัก
     function showPage(id) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.getElementById(id).classList.add('active');
     }
 
-    // ทำงานเมื่อคลิกแท็บในหน้า Dashboard
+    // แก้ไขบั๊กตรงนี้: เปลี่ยนฟังก์ชันคลิกแท็บแดชบอร์ดให้ใช้งานสีฟ้าพาสเทล sky-400 แทน emerald เดิม
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active', 'border-emerald-400', 'text-emerald-400'); b.classList.add('border-transparent', 'text-slate-400'); });
-        btn.classList.add('active', 'border-emerald-400', 'text-emerald-400');
+        document.querySelectorAll('.tab-btn').forEach(b => { 
+          b.classList.remove('active', 'border-sky-400', 'text-sky-400'); 
+          b.classList.add('border-transparent', 'text-slate-400'); 
+        });
+        btn.classList.add('active', 'border-sky-400', 'text-sky-400');
         document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
         document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
       });
     });
 
-    // 1. กดเข้าสู่ระบบฝั่ง นักเรียน
+    // 1. กดเข้าสู่ระบบฝั่ง นักศึกษา
     document.getElementById('btn-login').addEventListener('click', () => {
       const id = document.getElementById('login-id').value.trim();
       const name = document.getElementById('login-name').value.trim();
       const cls = document.getElementById('login-class').value;
-      if (!id || !name || !cls) { Swal.fire('ข้อมูลไม่ครบ', 'กรุณากรอกข้อมูลนักเรียนให้ครบถ้วน', 'warning'); return; }
+      if (!id || !name || !cls) { Swal.fire('ข้อมูลไม่ครบ', 'กรุณากรอกข้อมูลให้ครบถ้วน', 'warning'); return; }
       currentUser = { id, name, class_name: cls };
       document.getElementById('scan-user-info').textContent = `${name} | ${cls} | รหัส ${id}`;
       showPage('page-scan');
     });
 
-    // 2. กดเข้าสู่ระบบฝั่ง ครูผู้สอน (เช็คผ่านระบบ API หลังบ้าน)
+    // 2. กดเข้าสู่ระบบฝั่ง อาจารย์
     document.getElementById('btn-teacher-submit').addEventListener('click', () => {
       const user = document.getElementById('teacher-user').value.trim();
       const pass = document.getElementById('teacher-pass').value.trim();
 
-      if (!user || !pass) {
-        Swal.fire('ข้อมูลไม่ครบ', 'กรุณากรอกทั้ง Username และ Password', 'warning');
-        return;
-      }
-      if (pass.length !== 6 || isNaN(pass)) {
-        Swal.fire('รหัสผ่านไม่ถูกต้อง', 'Password ครูต้องเป็นตัวเลข 6 หลักเท่านั้น', 'warning');
-        return;
-      }
+      if (!user || !pass) { Swal.fire('ข้อมูลไม่ครบ', 'กรุณากรอกข้อมูลให้ครบ', 'warning'); return; }
+      if (pass.length !== 6 || isNaN(pass)) { Swal.fire('รหัสผ่านไม่ถูกต้อง', 'Password ต้องเป็นตัวเลข 6 หลัก', 'warning'); return; }
 
       Swal.fire({
         title: 'กำลังตรวจสอบสิทธิ์',
@@ -331,23 +319,21 @@
         didOpen: () => { Swal.showLoading(); }
       });
 
-      // ยิงคำขอเช็ครหัสผ่านไปที่สคริปต์ Google Sheets หลังบ้าน
       const script = document.createElement('script');
       script.src = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}&callback=teacherLoginResponse`;
       document.body.appendChild(script);
       document.body.removeChild(script);
     });
 
-    // รอรับค่าตอบกลับผลลัพธ์การล็อกอินของครู
     window.teacherLoginResponse = function(response) {
       Swal.close();
       if (response.status === 'success' && response.role.trim().toUpperCase() === 'TEACHER') {
         currentUser = response;
         Swal.fire({ icon: 'success', title: 'ยืนยันตัวตนสำเร็จ', text: `สวัสดีอาจารย์ ${response.name}`, timer: 1500, showConfirmButton: false });
         showPage('page-dashboard');
-        loadDataFromSheets(); // ดึงประวัติและรายชื่อจากชีตจริงมาใช้งาน
+        loadDataFromSheets();
       } else {
-        Swal.fire('เข้าสู่ระบบไม่สำเร็จ', response.message || 'คุณไม่มีสิทธิ์การเข้าถึงในส่วนของอาจารย์', 'error');
+        Swal.fire('เข้าสู่ระบบไม่สำเร็จ', response.message || 'คุณไม่มีสิทธิ์เข้าใช้งานหน้าอาจารย์', 'error');
       }
     };
 
@@ -366,11 +352,10 @@
       }
     };
 
-    // ปุ่มระบบกล้องและการควบคุมออกจากระบบ
     document.getElementById('btn-back-login').addEventListener('click', () => { stopCamera(); showPage('page-login'); });
     document.getElementById('btn-logout').addEventListener('click', () => { showPage('page-login'); });
 
-    // ควบคุมกล้องสแกนหน้า
+    // ควบคุมระบบกล้องสแกนหน้า
     document.getElementById('btn-start-scan').addEventListener('click', async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
@@ -404,10 +389,9 @@
       const el = document.getElementById('scan-result');
       el.classList.remove('hidden');
       el.textContent = msg;
-      el.className = `mt-4 rounded-xl p-4 text-sm font-medium ${success ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300' : 'bg-red-500/20 border border-red-500/40 text-red-300'}`;
+      el.className = `mt-4 rounded-xl p-4 text-sm font-medium ${success ? 'bg-sky-500/10 border border-sky-400/30 text-sky-600' : 'bg-rose-500/10 border border-rose-500/30 text-rose-600'}`;
     }
 
-    // ฟังก์ชันจัดการ UI อัปเดตข้อมูลบน Dashboard
     function updateDashboard() {
       const students = allRecords.filter(r => r.type === 'student');
       document.getElementById('stat-total').textContent = students.length;
@@ -419,7 +403,7 @@
       if (students.length === 0) { container.innerHTML = '<p class="text-slate-500 text-center py-4">ยังไม่มีข้อมูลนักเรียน</p>'; return; }
       container.innerHTML = students.map(s => `
         <div class="flex items-center justify-between bg-slate-700/30 rounded-lg px-3 py-2">
-          <div><span class="text-emerald-400 font-medium">${s.student_id}</span> <span class="text-white">${s.name}</span></div>
+          <div><span class="text-sky-400 font-medium">${s.student_id}</span> <span class="text-white">${s.name}</span></div>
           <span class="text-xs text-slate-400 bg-slate-700 px-2 py-1 rounded">${s.class_name}</span>
         </div>
       `).join('');
