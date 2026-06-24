@@ -35,16 +35,16 @@
      <div class="bg-white/90 backdrop-blur rounded-2xl p-6 border border-white/50 shadow-xl">
       <div class="space-y-4">
        <div>
-        <label for="global-user" class="block text-sm font-medium text-slate-600 mb-1">ชื่อผู้ใช้งาน (Username)</label> 
+        <label for="global-user" class="block text-sm font-medium text-slate-600 mb-1">Username</label> 
         <input id="global-user" type="text" max-length="60" placeholder="ชื่อ-นามสกุลภาษาไทย หรือ Username ครู" 
                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all">
-        <p class="text-[11px] text-slate-400 mt-1">* นักศึกษาใส่ชื่อ-นามสกุลไทย / อาจารย์ใส่ Username (ไม่เกิน 60 ตัวอักษร)</p>
+        <p class="text-[11px] text-slate-400 mt-1">* </p>
        </div>
        <div>
-        <label for="global-pass" class="block text-sm font-medium text-slate-600 mb-1">รหัสผ่าน (Password)</label> 
+        <label for="global-pass" class="block text-sm font-medium text-slate-600 mb-1">Password</label> 
         <input id="global-pass" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="9" placeholder="รหัสตัวเลข 9 หลัก" 
                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all">
-        <p class="text-[11px] text-slate-400 mt-1">* รหัสนักศึกษา หรือ รหัสผ่านอาจารย์ จำนวน 9 หลักเท่านั้น</p>
+        <p class="text-[11px] text-slate-400 mt-1">กรุณากรอก Password</p>
        </div>
        <button id="btn-global-login" class="w-full mt-2 py-3 bg-gradient-to-r from-sky-400 to-blue-500 rounded-xl font-semibold text-white hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-500/20 active:scale-95"> 
         เข้าสู่ระบบ
@@ -200,7 +200,7 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz8_T-ZTT2Fq0_9Rqy3rZif8ILGGsoxAcphtoWNyQj1JWBoUxWXFRYGkn68JFtIfRwhOQ/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzv6exFjHV2P7LrzNOThBp-mz29Z-MPP_UZK5snoFEtPoHOMeu-1dxFt37E7ajDwNgP6Q/exec";
 
     let currentUser = null;
     let allRecords = [];
