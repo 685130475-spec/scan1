@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2=family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { font-family: 'Sarabun', sans-serif; }
     .page { display: none; }
@@ -33,68 +33,22 @@
      </div>
 
      <div class="bg-white/90 backdrop-blur rounded-2xl p-6 border border-white/50 shadow-xl">
-      <div class="flex bg-slate-100 p-1 rounded-xl mb-6 border border-slate-200">
-       <button id="tab-login-student" class="flex-1 py-2 text-sm font-medium rounded-lg bg-gradient-to-r from-sky-400 to-blue-500 text-white shadow transition-all">
-        <i data-lucide="user" class="w-4 h-4 inline mr-1"></i> นักศึกษา
+      <div class="space-y-4">
+       <div>
+        <label for="global-user" class="block text-sm font-medium text-slate-600 mb-1">ชื่อผู้ใช้งาน (Username)</label> 
+        <input id="global-user" type="text" max-length="60" placeholder="ชื่อ-นามสกุลภาษาไทย หรือ Username ครู" 
+               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all">
+        <p class="text-[11px] text-slate-400 mt-1">* นักศึกษาใส่ชื่อ-นามสกุลไทย / อาจารย์ใส่ Username (ไม่เกิน 60 ตัวอักษร)</p>
+       </div>
+       <div>
+        <label for="global-pass" class="block text-sm font-medium text-slate-600 mb-1">รหัสผ่าน (Password)</label> 
+        <input id="global-pass" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="9" placeholder="รหัสตัวเลข 9 หลัก" 
+               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all">
+        <p class="text-[11px] text-slate-400 mt-1">* รหัสนักศึกษา หรือ รหัสผ่านอาจารย์ จำนวน 9 หลักเท่านั้น</p>
+       </div>
+       <button id="btn-global-login" class="w-full mt-2 py-3 bg-gradient-to-r from-sky-400 to-blue-500 rounded-xl font-semibold text-white hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-500/20 active:scale-95"> 
+        เข้าสู่ระบบ
        </button>
-       <button id="tab-login-teacher" class="flex-1 py-2 text-sm font-medium rounded-lg text-slate-500 hover:text-slate-800 transition-all">
-        <i data-lucide="graduation-cap" class="w-4 h-4 inline mr-1"></i> อาจารย์
-       </button>
-      </div>
-
-      <div id="form-student" class="space-y-4">
-       <div>
-        <label for="login-id" class="block text-sm font-medium text-slate-600 mb-1">รหัสนักเรียน/นักศึกษา</label> 
-        <input id="login-id" type="text" placeholder="เช่น 685130400" 
-               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all">
-       </div>
-       <div>
-        <label for="login-name" class="block text-sm font-medium text-slate-600 mb-1">ชื่อ-นามสกุล</label> 
-        <input id="login-name" type="text" placeholder="สมชาย ใจดี" 
-               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all">
-       </div>
-       <div>
-        <label for="login-class" class="block text-sm font-medium text-slate-600 mb-1">ชั้นเรียน</label> 
-        <select id="login-class" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all"> 
-         <option value="" class="text-slate-800">เลือกชั้นเรียน</option> 
-         <option class="text-slate-800">ปวช.1/1</option><option class="text-slate-800">ปวช.1/4</option>
-         <option class="text-slate-800">ปวช.1/10</option><option class="text-slate-800">ปวช.1/21</option> 
-         <option class="text-slate-800">ปวช.1/22</option><option class="text-slate-800">ปวช.1/31</option>
-         <option class="text-slate-800">ปวช.1/32</option><option class="text-slate-800">ปวช.1/41</option>
-         <option class="text-slate-800">ปวช.2/1</option><option class="text-slate-800">ปวช.2/2</option> 
-         <option class="text-slate-800">ปวช.2/4</option><option class="text-slate-800">ปวช.2/10</option> 
-         <option class="text-slate-800">ปวช.2/21</option><option class="text-slate-800">ปวช.2/22</option> 
-         <option class="text-slate-800">ปวช.2/31</option><option class="text-slate-800">ปวช.2/32</option> 
-         <option class="text-slate-800">ปวช.2/41</option><option class="text-slate-800">ปวช.3/1</option> 
-         <option class="text-slate-800">ปวช.3/4</option><option class="text-slate-800">ปวช.3/10</option> 
-         <option class="text-slate-800">ปวช.3/21</option><option class="text-slate-800">ปวช.3/22</option> 
-         <option class="text-slate-800">ปวช.3/31</option><option class="text-slate-800">ปวช.3/32</option> 
-         <option class="text-slate-800">ปวช.3/41</option><option class="text-slate-800">ปวส.1/1</option> 
-         <option class="text-slate-800">ปวส.1/4</option><option class="text-slate-800">ปวส.1/10</option> 
-         <option class="text-slate-800">ปวส.1/21</option><option class="text-slate-800">ปวส.1/22</option> 
-         <option class="text-slate-800">ปวส.1/31</option><option class="text-slate-800">ปวส.1/32</option> 
-         <option class="text-slate-800">ปวส.1/41</option><option class="text-slate-800">ปวส.2/1</option> 
-         <option class="text-slate-800">ปวส.2/4</option><option class="text-slate-800">ปวส.2/10</option> 
-         <option class="text-slate-800">ปวส.2/21</option><option class="text-slate-800">ปวส.2/22</option> 
-         <option class="text-slate-800">ปวส.2/31</option><option class="text-slate-800">ปวส.2/32</option> 
-         <option class="text-slate-800">ปวส.2/41</option> 
-        </select>
-       </div>
-       <button id="btn-login" class="w-full mt-2 py-3 bg-gradient-to-r from-sky-400 to-blue-500 rounded-xl font-semibold text-white hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-500/20 active:scale-95"> เข้าสู่ระบบสแกนใบหน้า </button>
-      </div>
-
-      <div id="form-teacher" class="space-y-4 hidden">
-       <div>
-        <label for="teacher-user" class="block text-sm font-medium text-slate-700 mb-1">Username</label> 
-        <input id="teacher-user" type="text" placeholder="ชื่อผู้ใช้งานของคุณครู" 
-               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all">
-       </div>
-       <div>
-        <label for="teacher-pass" class="block text-sm font-medium text-slate-700 mb-1">Password</label> 
-        <input id="teacher-pass" type="password" maxlength="6" placeholder="ตัวเลข 6 หลัก" 
-               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all">
-       </div>
-       <button id="btn-teacher-submit" class="w-full py-3 bg-gradient-to-r from-sky-400 to-blue-500 rounded-xl font-semibold text-white hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-500/20 active:scale-95"> เข้าสู่แดชบอร์ดอาจารย์ </button>
       </div>
      </div>
     </div>
@@ -114,7 +68,7 @@
       <div id="scan-status" class="absolute bottom-3 left-0 right-0 text-center text-sm font-medium text-sky-300 hidden"> กำลังสแกน... </div>
      </div>
 
-     <button id="btn-start-scan" class="px-8 py-3 bg-gradient-to-r from-sky-400 to-blue-500 rounded-xl font-semibold text-white hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-500/20 active:scale-95 inline-flex items-center gap-2🛞"> 
+     <button id="btn-start-scan" class="px-8 py-3 bg-gradient-to-r from-sky-400 to-blue-500 rounded-xl font-semibold text-white hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-500/20 active:scale-95 inline-flex items-center gap-2"> 
       <i data-lucide="camera" class="w-5 h-5"></i> กดปุ่มเพื่อเริ่มเช็คชื่อ 
      </button>
      
@@ -203,7 +157,7 @@
         <option class="bg-slate-800">ปวช.2/1</option><option class="bg-slate-800">ปวช.2/2</option> 
         <option class="bg-slate-800">ปวช.2/4</option><option class="bg-slate-800">ปวช.2/10</option> 
         <option class="bg-slate-800">ปวช.2/21</option><option class="bg-slate-800">ปวช.2/22</option> 
-        <option class="bg-slate-800">ปวช.2/31</option><option class="bg-slate-800">ปวช.2/32</option> 
+        <option class="bg-slate-800">ปwช.2/31</option><option class="bg-slate-800">ปวช.2/32</option> 
         <option class="bg-slate-800">ปวช.2/41</option><option class="bg-slate-800">ปวช.3/1</option> 
         <option class="bg-slate-800">ปวช.3/4</option><option class="bg-slate-800">ปวช.3/10</option> 
         <option class="bg-slate-800">ปวช.3/21</option><option class="bg-slate-800">ปวช.3/22</option> 
@@ -252,35 +206,12 @@
     let allRecords = [];
     let cameraStream = null;
 
-    // ระบบสลับแท็บหน้าล็อกอิน
-    document.getElementById('tab-login-student').addEventListener('click', () => toggleLoginTabs('student'));
-    document.getElementById('tab-login-teacher').addEventListener('click', () => toggleLoginTabs('teacher'));
-
-    function toggleLoginTabs(mode) {
-      const btnStudent = document.getElementById('tab-login-student');
-      const btnTeacher = document.getElementById('tab-login-teacher');
-      const formStudent = document.getElementById('form-student');
-      const formTeacher = document.getElementById('form-teacher');
-
-      if(mode === 'student') {
-        btnStudent.className = "flex-1 py-2 text-sm font-medium rounded-lg bg-gradient-to-r from-sky-400 to-blue-500 text-white shadow transition-all";
-        btnTeacher.className = "flex-1 py-2 text-sm font-medium rounded-lg text-slate-500 hover:text-slate-800 transition-all";
-        formStudent.classList.remove('hidden');
-        formTeacher.classList.add('hidden');
-      } else {
-        btnTeacher.className = "flex-1 py-2 text-sm font-medium rounded-lg bg-gradient-to-r from-sky-400 to-blue-500 text-white shadow transition-all";
-        btnStudent.className = "flex-1 py-2 text-sm font-medium rounded-lg text-slate-500 hover:text-slate-800 transition-all";
-        formTeacher.classList.remove('hidden');
-        formStudent.classList.add('hidden');
-      }
-    }
-
     function showPage(id) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.getElementById(id).classList.add('active');
     }
 
-    // แก้ไขบั๊กตรงนี้: เปลี่ยนฟังก์ชันคลิกแท็บแดชบอร์ดให้ใช้งานสีฟ้าพาสเทล sky-400 แทน emerald เดิม
+    // จัดการแท็บหน้าแดชบอร์ดอาจารย์
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.tab-btn').forEach(b => { 
@@ -293,47 +224,64 @@
       });
     });
 
-    // 1. กดเข้าสู่ระบบฝั่ง นักศึกษา
-    document.getElementById('btn-login').addEventListener('click', () => {
-      const id = document.getElementById('login-id').value.trim();
-      const name = document.getElementById('login-name').value.trim();
-      const cls = document.getElementById('login-class').value;
-      if (!id || !name || !cls) { Swal.fire('ข้อมูลไม่ครบ', 'กรุณากรอกข้อมูลให้ครบถ้วน', 'warning'); return; }
-      currentUser = { id, name, class_name: cls };
-      document.getElementById('scan-user-info').textContent = `${name} | ${cls} | รหัส ${id}`;
-      showPage('page-scan');
-    });
+    // --- ระบบล็อกอินฟอร์มเดี่ยว แยกสิทธิ์อัจฉริยะ ---
+    document.getElementById('btn-global-login').addEventListener('click', () => {
+      const user = document.getElementById('global-user').value.trim();
+      const pass = document.getElementById('global-pass').value.trim();
 
-    // 2. กดเข้าสู่ระบบฝั่ง อาจารย์
-    document.getElementById('btn-teacher-submit').addEventListener('click', () => {
-      const user = document.getElementById('teacher-user').value.trim();
-      const pass = document.getElementById('teacher-pass').value.trim();
-
-      if (!user || !pass) { Swal.fire('ข้อมูลไม่ครบ', 'กรุณากรอกข้อมูลให้ครบ', 'warning'); return; }
-      if (pass.length !== 6 || isNaN(pass)) { Swal.fire('รหัสผ่านไม่ถูกต้อง', 'Password ต้องเป็นตัวเลข 6 หลัก', 'warning'); return; }
+      // 1. ตรวจสอบข้อมูลเบื้องต้น
+      if (!user || !pass) { 
+        Swal.fire('ข้อมูลไม่ครบ', 'กรุณากรอกทั้งชื่อผู้ใช้งานและรหัสผ่าน', 'warning'); 
+        return; 
+      }
+      if (user.length > 60) {
+        Swal.fire('ข้อมูลยาวเกินไป', 'ชื่อผู้ใช้งานต้องไม่เกิน 60 ตัวอักษร', 'warning');
+        return;
+      }
+      if (pass.length !== 9 || isNaN(pass)) { 
+        Swal.fire('รหัสผ่านไม่ถูกต้อง', 'Password ต้องเป็นตัวเลขความยาว 9 หลักเท่านั้น', 'warning'); 
+        return; 
+      }
 
       Swal.fire({
         title: 'กำลังตรวจสอบสิทธิ์',
-        text: 'กรุณารอสักครู่ระบบกำลังเชื่อมต่อฐานข้อมูล',
+        text: 'กรุณารอสักครู่ ระบบกำลังเชื่อมต่อฐานข้อมูล...',
         allowOutsideClick: false,
         didOpen: () => { Swal.showLoading(); }
       });
 
+      // 2. ส่งคำขอแบบดั้งเดิมไปตรวจสอบที่ Google Sheets ของครู
       const script = document.createElement('script');
-      script.src = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}&callback=teacherLoginResponse`;
+      script.src = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}&callback=globalLoginResponse`;
       document.body.appendChild(script);
       document.body.removeChild(script);
     });
 
-    window.teacherLoginResponse = function(response) {
+    // 3. ฟังก์ชันรับคำตอบจาก Google Sheets แล้วคัดแยกหน้าจอตามบทบาท (Role)
+    window.globalLoginResponse = function(response) {
       Swal.close();
-      if (response.status === 'success' && response.role.trim().toUpperCase() === 'TEACHER') {
+      if (response.status === 'success') {
         currentUser = response;
-        Swal.fire({ icon: 'success', title: 'ยืนยันตัวตนสำเร็จ', text: `สวัสดีอาจารย์ ${response.name}`, timer: 1500, showConfirmButton: false });
-        showPage('page-dashboard');
-        loadDataFromSheets();
+        const role = (response.role || '').trim().toUpperCase();
+
+        if (role === 'TEACHER') {
+          // ถ้าหลังบ้านตอบกลับมาว่าเป็นครู -> ไปหน้า Dashboard
+          Swal.fire({ icon: 'success', title: 'ยืนยันตัวตนสำเร็จ', text: `สวัสดีอาจารย์ ${response.name}`, timer: 1500, showConfirmButton: false });
+          showPage('page-dashboard');
+          loadDataFromSheets();
+        } else {
+          // ถ้าเป็นนักเรียน หรือสิทธิ์อื่นๆ -> ไปหน้าสแกนกล้องถ่ายรูปเช็คชื่อ
+          // นำข้อมูล Class และ ID ที่ Google Sheets ส่งกลับมาผูกเข้าหน้าจอ
+          const studentClass = response.class_name || response.class || 'ไม่ระบุชั้นเรียน';
+          const studentId = response.student_id || response.id || document.getElementById('global-pass').value;
+          
+          document.getElementById('scan-user-info').textContent = `${response.name} | ${studentClass} | รหัส ${studentId}`;
+          Swal.fire({ icon: 'success', title: 'เข้าสู่ระบบสำเร็จ', text: `ยินดีต้อนรับคุณ ${response.name}`, timer: 1200, showConfirmButton: false });
+          showPage('page-scan');
+        }
       } else {
-        Swal.fire('เข้าสู่ระบบไม่สำเร็จ', response.message || 'คุณไม่มีสิทธิ์เข้าใช้งานหน้าอาจารย์', 'error');
+        // กรณี Username หรือ Password ไม่ตรงกับใน Google Sheets
+        Swal.fire('เข้าสู่ระบบไม่สำเร็จ', response.message || 'ไม่พบข้อมูลผู้ใช้งาน หรือรหัสผ่านไม่ถูกต้อง', 'error');
       }
     };
 
@@ -352,10 +300,20 @@
       }
     };
 
-    document.getElementById('btn-back-login').addEventListener('click', () => { stopCamera(); showPage('page-login'); });
-    document.getElementById('btn-logout').addEventListener('click', () => { showPage('page-login'); });
+    document.getElementById('btn-back-login').addEventListener('click', () => { 
+      stopCamera(); 
+      document.getElementById('global-user').value = '';
+      document.getElementById('global-pass').value = '';
+      showPage('page-login'); 
+    });
+    
+    document.getElementById('btn-logout').addEventListener('click', () => { 
+      document.getElementById('global-user').value = '';
+      document.getElementById('global-pass').value = '';
+      showPage('page-login'); 
+    });
 
-    // ควบคุมระบบกล้องสแกนหน้า
+    // ระบบควบคุมกล้อง (คงเดิม)
     document.getElementById('btn-start-scan').addEventListener('click', async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
