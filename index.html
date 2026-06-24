@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <link href="https://fonts.googleapis.com/css2=family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { font-family: 'Sarabun', sans-serif; }
     .page { display: none; }
@@ -36,15 +36,13 @@
       <div class="space-y-4">
        <div>
         <label for="global-user" class="block text-sm font-medium text-slate-600 mb-1">Username</label> 
-        <input id="global-user" type="text" max-length="60" placeholder="ชื่อ-นามสกุลภาษาไทย หรือ Username ครู" 
+        <input id="global-user" type="text" maxlength="60" placeholder=" กรอก Username" 
                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all">
-        <p class="text-[11px] text-slate-400 mt-1">* </p>
        </div>
        <div>
         <label for="global-pass" class="block text-sm font-medium text-slate-600 mb-1">Password</label> 
-        <input id="global-pass" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="9" placeholder="รหัสตัวเลข 9 หลัก" 
+        <input id="global-pass" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="9" placeholder=" กรอก Password" 
                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all">
-        <p class="text-[11px] text-slate-400 mt-1">กรุณากรอก Password</p>
        </div>
        <button id="btn-global-login" class="w-full mt-2 py-3 bg-gradient-to-r from-sky-400 to-blue-500 rounded-xl font-semibold text-white hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-500/20 active:scale-95"> 
         เข้าสู่ระบบ
@@ -57,24 +55,61 @@
    <div id="page-scan" class="page flex-col items-center justify-center h-full p-6">
     <div class="w-full max-w-md text-center fade-in">
      <h2 class="text-xl font-bold text-slate-800 mb-2">เช็คชื่อด้วยเทคโนโลยีใบหน้า</h2>
-     <p id="scan-user-info" class="text-slate-500 text-sm mb-6"></p>
+     <p id="scan-user-info" class="text-slate-600 font-semibold text-base bg-white/80 py-2 px-4 rounded-xl inline-block border border-slate-200 mb-4 shadow-sm"></p>
      
-     <div class="relative mx-auto w-80 h-80 rounded-3xl overflow-hidden border-4 border-sky-400 bg-slate-800 mb-6 shadow-xl">
+     <div class="bg-white p-4 rounded-2xl border border-slate-200 text-left space-y-3 mb-4 shadow-sm">
+       <div>
+         <label for="scan-select-class" class="block text-xs font-semibold text-slate-500 mb-1">1. เลือกชั้นเรียนของคุณ</label>
+         <select id="scan-select-class" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 focus:ring-2 focus:ring-sky-400 focus:outline-none transition-all">
+           <option value="">-- กำลังโหลดข้อมูลชั้นเรียน --</option>
+           <option value="" class="bg-slate-800 text-slate-400">เลือกชั้นเรียน</option> 
+        <option class="bg-slate-800">ปวช.1/1</option><option class="bg-slate-800">ปวช.1/4</option>
+        <option class="bg-slate-800">ปวช.1/10</option><option class="bg-slate-800">ปวช.1/21</option> 
+        <option class="bg-slate-800">ปวช.1/22</option><option class="bg-slate-800">ปวช.1/31</option>
+        <option class="bg-slate-800">ปวช.1/32</option><option class="bg-slate-800">ปวช.1/41</option>
+        <option class="bg-slate-800">ปวช.2/1</option><option class="bg-slate-800">ปวช.2/2</option> 
+        <option class="bg-slate-800">ปวช.2/4</option><option class="bg-slate-800">ปวช.2/10</option> 
+        <option class="bg-slate-800">ปวช.2/21</option><option class="bg-slate-800">ปวช.2/22</option> 
+        <option class="bg-slate-800">ปวช.2/31</option><option class="bg-slate-800">ปวช.2/32</option> 
+        <option class="bg-slate-800">ปวช.2/41</option><option class="bg-slate-800">ปวช.3/1</option> 
+        <option class="bg-slate-800">ปวช.3/4</option><option class="bg-slate-800">ปวช.3/10</option> 
+        <option class="bg-slate-800">ปวช.3/21</option><option class="bg-slate-800">ปวช.3/22</option> 
+        <option class="bg-slate-800">ปวช.3/31</option><option class="bg-slate-800">ปวช.3/32</option> 
+        <option class="bg-slate-800">ปวช.3/41</option><option class="bg-slate-800">ปวส.1/1</option> 
+        <option class="bg-slate-800">ปวส.1/4</option><option class="bg-slate-800">ปวส.1/10</option> 
+        <option class="bg-slate-800">ปวส.1/21</option><option class="bg-slate-800">ปวส.1/22</option> 
+        <option class="bg-slate-800">ปวส.1/31</option><option class="bg-slate-800">ปวส.1/32</option> 
+        <option class="bg-slate-800">ปวส.1/41</option><option class="bg-slate-800">ปวส.2/1</option> 
+        <option class="bg-slate-800">ปวส.2/4</option><option class="bg-slate-800">ปวส.2/10</option> 
+        <option class="bg-slate-800">ปวส.2/21</option><option class="bg-slate-800">ปวส.2/22</option> 
+        <option class="bg-slate-800">ปวส.2/31</option><option class="bg-slate-800">ปวส.2/32</option> 
+        <option class="bg-slate-800">ปวส.2/41</option> 
+         </select>
+       </div>
+       <div>
+         <label for="scan-select-subject" class="block text-xs font-semibold text-slate-500 mb-1">2. เลือกวิชาเรียน</label>
+         <select id="scan-select-subject" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 focus:ring-2 focus:ring-sky-400 focus:outline-none transition-all">
+           <option value="">-- กำลังโหลดข้อมูลวิชาเรียน --</option>
+          
+         </select>
+       </div>
+     </div>
+
+     <div class="relative mx-auto w-72 h-72 rounded-3xl overflow-hidden border-4 border-sky-400 bg-slate-800 mb-4 shadow-xl">
       <video id="camera-feed" class="w-full h-full object-cover" autoplay playsinline muted></video>
       <div class="absolute inset-0 flex items-center justify-center" id="scan-overlay">
-       <div class="w-52 h-52 border-4 border-sky-400 rounded-full"></div>
-       <div class="absolute w-56 h-56 border-2 border-sky-400/40 rounded-full pulse-ring"></div>
+       <div class="w-48 h-48 border-4 border-sky-400 rounded-full"></div>
+       <div class="absolute w-52 h-52 border-2 border-sky-400/40 rounded-full pulse-ring"></div>
       </div>
       <div id="scan-status" class="absolute bottom-3 left-0 right-0 text-center text-sm font-medium text-sky-300 hidden"> กำลังสแกน... </div>
      </div>
 
-     <button id="btn-start-scan" class="px-8 py-3 bg-gradient-to-r from-sky-400 to-blue-500 rounded-xl font-semibold text-white hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-500/20 active:scale-95 inline-flex items-center gap-2"> 
-      <i data-lucide="camera" class="w-5 h-5"></i> กดปุ่มเพื่อเริ่มเช็คชื่อ 
+     <button id="btn-start-scan" class="w-full py-3 bg-gradient-to-r from-sky-400 to-blue-500 rounded-xl font-semibold text-white hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-500/20 active:scale-95 inline-flex items-center justify-center gap-2"> 
+      <i data-lucide="camera" class="w-5 h-5"></i> เริ่มต้นสแกนใบหน้าเข้าเรียน 
      </button>
      
      <div id="scan-result" class="mt-4 hidden rounded-xl p-4 text-center font-medium"></div>
-     <br>
-     <button id="btn-back-login" class="mt-4 text-slate-500 hover:text-sky-500 text-sm underline transition-colors">ออกจากระบบ</button>
+     <button id="btn-back-login" class="mt-4 text-slate-500 hover:text-sky-500 text-sm underline transition-colors block mx-auto">ออกจากระบบ</button>
     </div>
    </div>
 
@@ -127,6 +162,13 @@
        </div>
        <p id="stat-late" class="text-2xl font-bold text-amber-400 tracking-tight">0</p>
       </div>
+        <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
+       <div class="flex items-center gap-2 mb-1">
+        <i data-lucide="check-circle" class="w-4 h-4 text-green-400"></i>
+        <span class="text-xs text-slate-400 font-medium">ลา</span>
+       </div>
+       <p id="stat-present" class="text-2xl font-bold text-green-400 tracking-tight">0</p>
+      </div>
      </div>
      
      <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
@@ -157,7 +199,7 @@
         <option class="bg-slate-800">ปวช.2/1</option><option class="bg-slate-800">ปวช.2/2</option> 
         <option class="bg-slate-800">ปวช.2/4</option><option class="bg-slate-800">ปวช.2/10</option> 
         <option class="bg-slate-800">ปวช.2/21</option><option class="bg-slate-800">ปวช.2/22</option> 
-        <option class="bg-slate-800">ปwช.2/31</option><option class="bg-slate-800">ปวช.2/32</option> 
+        <option class="bg-slate-800">ปวช.2/31</option><option class="bg-slate-800">ปวช.2/32</option> 
         <option class="bg-slate-800">ปวช.2/41</option><option class="bg-slate-800">ปวช.3/1</option> 
         <option class="bg-slate-800">ปวช.3/4</option><option class="bg-slate-800">ปวช.3/10</option> 
         <option class="bg-slate-800">ปวช.3/21</option><option class="bg-slate-800">ปวช.3/22</option> 
@@ -172,6 +214,8 @@
         <option class="bg-slate-800">ปวส.2/31</option><option class="bg-slate-800">ปวส.2/32</option> 
         <option class="bg-slate-800">ปวส.2/41</option> 
        </select>
+         <select id="add-class" class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-sky-400/70 focus:border-transparent transition-all">
+        <option value="" class="bg-slate-800 text-slate-400">เลือกวิชา</option> 
       </div>
      </div> 
 
@@ -200,11 +244,15 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzv6exFjHV2P7LrzNOThBp-mz29Z-MPP_UZK5snoFEtPoHOMeu-1dxFt37E7ajDwNgP6Q/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz8_T-ZTT2Fq0_9Rqy3rZif8ILGGsoxAcphtoWNyQj1JWBoUxWXFRYGkn68JFtIfRwhOQ/exec";
 
     let currentUser = null;
     let allRecords = [];
     let cameraStream = null;
+
+    // รายชื่อชั้นเรียนและวิชา (จะเรียกจากชีต หรือใช้ค่าเริ่มต้นนี้เมื่อเชื่อมต่อชีตล้มเหลว)
+    let classOptions = ["ปวช.1/1", "ปวช.1/4", "ปวช.2/1", "ปวส.1/1", "ปวส.2/1"];
+    let subjectOptions = ["วิชา เทคโนโลยีใบหน้าเพื่อการเช็คชื่อ", "วิชา การพัฒนาเว็บแอปพลิเคชัน", "วิชา คอมพิวเตอร์กราฟิก", "วิชา ภาษาอังกฤษเพื่อการสื่อสาร"];
 
     function showPage(id) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -224,12 +272,30 @@
       });
     });
 
-    // --- ระบบล็อกอินฟอร์มเดี่ยว แยกสิทธิ์อัจฉริยะ ---
+    // ฟังก์ชันสร้างเมนู Dropdown ในหน้าสแกนหน้า
+    function setupScanDropdowns(selectedClass) {
+      const classSelect = document.getElementById('scan-select-class');
+      const subjectSelect = document.getElementById('scan-select-subject');
+
+      // ตรวจสอบข้อมูลชั้นเรียน
+      classSelect.innerHTML = '<option value="">-- เลือกชั้นเรียนของคุณ --</option>';
+      classOptions.forEach(cls => {
+        const isSelected = cls === selectedClass ? 'selected' : '';
+        classSelect.innerHTML += `<option value="${cls}" ${isSelected}>${cls}</option>`;
+      });
+
+      // ตรวจสอบข้อมูลวิชาเรียน
+      subjectSelect.innerHTML = '<option value="">-- เลือกวิชาที่กำลังเข้าเรียน --</option>';
+      subjectOptions.forEach(sub => {
+        subjectSelect.innerHTML += `<option value="${sub}">${sub}</option>`;
+      });
+    }
+
+    // --- ระบบล็อกอินฟอร์มเดี่ยว ---
     document.getElementById('btn-global-login').addEventListener('click', () => {
       const user = document.getElementById('global-user').value.trim();
       const pass = document.getElementById('global-pass').value.trim();
 
-      // 1. ตรวจสอบข้อมูลเบื้องต้น
       if (!user || !pass) { 
         Swal.fire('ข้อมูลไม่ครบ', 'กรุณากรอกทั้งชื่อผู้ใช้งานและรหัสผ่าน', 'warning'); 
         return; 
@@ -250,37 +316,40 @@
         didOpen: () => { Swal.showLoading(); }
       });
 
-      // 2. ส่งคำขอแบบดั้งเดิมไปตรวจสอบที่ Google Sheets ของครู
       const script = document.createElement('script');
       script.src = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}&callback=globalLoginResponse`;
       document.body.appendChild(script);
       document.body.removeChild(script);
     });
 
-    // 3. ฟังก์ชันรับคำตอบจาก Google Sheets แล้วคัดแยกหน้าจอตามบทบาท (Role)
+    // ฟังก์ชันรับคำตอบและแก้บั๊กชื่อไม่ขึ้น
     window.globalLoginResponse = function(response) {
       Swal.close();
       if (response.status === 'success') {
         currentUser = response;
+        
+        // แก้บั๊กตรงนี้: พยายามหาชื่อจากทุกฟิลด์ที่เป็นไปได้ (name, username, user)
+        const displayName = response.name || response.username || document.getElementById('global-user').value;
         const role = (response.role || '').trim().toUpperCase();
 
         if (role === 'TEACHER') {
-          // ถ้าหลังบ้านตอบกลับมาว่าเป็นครู -> ไปหน้า Dashboard
-          Swal.fire({ icon: 'success', title: 'ยืนยันตัวตนสำเร็จ', text: `สวัสดีอาจารย์ ${response.name}`, timer: 1500, showConfirmButton: false });
+          Swal.fire({ icon: 'success', title: 'ยืนยันตัวตนสำเร็จ', text: `สวัสดีอาจารย์ ${displayName}`, timer: 1500, showConfirmButton: false });
           showPage('page-dashboard');
           loadDataFromSheets();
         } else {
-          // ถ้าเป็นนักเรียน หรือสิทธิ์อื่นๆ -> ไปหน้าสแกนกล้องถ่ายรูปเช็คชื่อ
-          // นำข้อมูล Class และ ID ที่ Google Sheets ส่งกลับมาผูกเข้าหน้าจอ
-          const studentClass = response.class_name || response.class || 'ไม่ระบุชั้นเรียน';
+          const studentClass = response.class_name || response.class || "";
           const studentId = response.student_id || response.id || document.getElementById('global-pass').value;
           
-          document.getElementById('scan-user-info').textContent = `${response.name} | ${studentClass} | รหัส ${studentId}`;
-          Swal.fire({ icon: 'success', title: 'เข้าสู่ระบบสำเร็จ', text: `ยินดีต้อนรับคุณ ${response.name}`, timer: 1200, showConfirmButton: false });
+          // แสดงชื่อผู้ใช้บนกล่องข้อความอย่างถูกต้อง
+          document.getElementById('scan-user-info').textContent = `👤 ผู้ใช้งาน: ${displayName} (รหัส: ${studentId})`;
+          
+          // โหลดค่า Dropdown รอให้เลือก
+          setupScanDropdowns(studentClass);
+
+          Swal.fire({ icon: 'success', title: 'เข้าสู่ระบบสำเร็จ', text: `ยินดีต้อนรับคุณ ${displayName}`, timer: 1200, showConfirmButton: false });
           showPage('page-scan');
         }
       } else {
-        // กรณี Username หรือ Password ไม่ตรงกับใน Google Sheets
         Swal.fire('เข้าสู่ระบบไม่สำเร็จ', response.message || 'ไม่พบข้อมูลผู้ใช้งาน หรือรหัสผ่านไม่ถูกต้อง', 'error');
       }
     };
@@ -313,18 +382,27 @@
       showPage('page-login'); 
     });
 
-    // ระบบควบคุมกล้อง (คงเดิม)
+    // ระบบควบคุมกล้องและการบังคับเลือก ชั้นเรียน/วิชาเรียน
     document.getElementById('btn-start-scan').addEventListener('click', async () => {
+      const selectedClass = document.getElementById('scan-select-class').value;
+      const selectedSubject = document.getElementById('scan-select-subject').value;
+
+      // บังคับเลือกข้อมูลก่อนสแกน
+      if (!selectedClass || !selectedSubject) {
+        Swal.fire('กรุณาเลือกข้อมูล', 'โปรดระบุชั้นเรียนและวิชาเรียนของคุณก่อนเริ่มสแกนหน้า', 'warning');
+        return;
+      }
+
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
         cameraStream = stream;
         document.getElementById('camera-feed').srcObject = stream;
         document.getElementById('scan-status').classList.remove('hidden');
-        setTimeout(() => completeAttendance(), 3000);
+        setTimeout(() => completeAttendance(selectedClass, selectedSubject), 3000);
       } catch (e) {
         document.getElementById('scan-status').classList.remove('hidden');
         document.getElementById('scan-status').textContent = 'จำลองการสแกนใบหน้า...';
-        setTimeout(() => completeAttendance(), 2000);
+        setTimeout(() => completeAttendance(selectedClass, selectedSubject), 2000);
       }
     });
 
@@ -333,13 +411,21 @@
       document.getElementById('camera-feed').srcObject = null;
     }
 
-    function completeAttendance() {
+    function completeAttendance(cls, subject) {
       if (!currentUser) return;
       const now = new Date();
       const isLate = now.getHours() >= 8 && now.getMinutes() > 30;
       
       document.getElementById('scan-status').classList.add('hidden');
-      showScanResult(`✅ เช็คชื่อสำเร็จ! สถานะ: ${isLate ? 'มาสาย' : 'มาเรียน'} เวลา ${now.toTimeString().slice(0, 5)}`, true);
+      
+      // แสดงข้อความความสำเร็จพร้อมวิชาและชั้นเรียนที่เลือก
+      Swal.fire({
+        icon: 'success',
+        title: 'เช็คชื่อสำเร็จ',
+        html: `ชั้นเรียน: <b>${cls}</b><br>วิชา: <b>${subject}</b><br>สถานะ: ${isLate ? '<span class="text-amber-500">มาสาย</span>' : '<span class="text-green-500">มาเรียน</span>'}`
+      });
+
+      showScanResult(`✅ เช็คชื่อเข้าเรียนชั้น ${cls} วิชา ${subject} สำเร็จ! เวลา ${now.toTimeString().slice(0, 5)}`, true);
       stopCamera();
     }
 
