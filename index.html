@@ -36,7 +36,7 @@
       <div class="space-y-4">
        <div>
         <label for="global-user" class="block text-sm font-medium text-slate-600 mb-1">Username (ชื่อผู้ใช้งาน)</label> 
-        <input id="global-user" type="text" maxlength="60" placeholder="กรอก Username หรือชื่อ-นามสกุล" 
+        <input id="global-user" type="text" maxlength="60" placeholder="กรอกชื่อ-นามสกุล" 
                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all">
        </div>
        <div>
@@ -142,13 +142,6 @@
        </div>
        <p id="stat-late" class="text-2xl font-bold text-amber-400 tracking-tight">0</p>
       </div>
-      <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
-       <div class="flex items-center gap-2 mb-1">
-        <i data-lucide="check-circle" class="w-4 h-4 text-green-400"></i>
-        <span class="text-xs text-slate-400 font-medium">ลา</span>
-       </div>
-       <p id="stat-leave" class="text-2xl font-bold text-green-400 tracking-tight">0</p>
-      </div>
      </div>
      
      <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
@@ -199,80 +192,23 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz8_T-ZTT2Fq0_9Rqy3rZif8ILGGsoxAcphtoWNyQj1JWBoUxWXFRYGkn68JFtIfRwhOQ/exec";
+    // ⚠️ อย่าลืมเอาลิงก์ Web App ของคุณครูมาวางแทนที่ตรงนี้
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzaQ9uxuO5a2-POSAf5-5Aqa0G3xuV2lf1JEqiJYo2PHteEeypKzM8hzlPVIW9bu1sg1Q/exec";
 
     let currentUser = null;
-    let savedDisplayName = "// โค้ดสำหรับฝั่ง Google Apps Script (ใน Google Sheet)
-function doGet(e) {
-  var action = e.parameter.action;
-  var callback = e.parameter.callback;
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Students"); // ชื่อชีตเก็บรายชื่อนักเรียน
-  var logSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Attendance"); // ชื่อชีตเก็บประวัติสแกน
-  
-  if (!logSheet) {
-    // ถ้ายังไม่มีชีตประวัติ ให้สร้างขึ้นมาอัตโนมัติ
-    logSheet = SpreadsheetApp.getActiveSpreadsheet().insertSheet("Attendance");
-    logSheet.appendRow(["Timestamp", "StudentID", "Name", "Class", "Subject", "Status"]);
-  }
-
-  var result = { status: "error", message: "ไม่พบคำสั่งที่ระบุ" };
-
-  // 1. ระบบจัดการ Login
-  if (action == "login") {
-    var username = e.parameter.username;
-    var password = e.parameter.password;
-    
-    // ตรวจสอบว่าเป็นอาจารย์ไหม
-    if (username == "admin" && password == "123456789") { // ปรับเปลี่ยน User/Pass ครูตรงนี้ได้
-      result = { status: "success", role: "TEACHER", name: "อาจารย์ผู้ดูแลระบบ" };
-    } else {
-      // ค้นหาในชีตนักเรียน (สมมุติว่า Column A=รหัส, Column B=ชื่อ, Column C=ชั้นเรียน)
-      var data = sheet.getDataRange().getValues();
-      var found = false;
-      for (var i = 1; i < data.length; i++) {
-        if (data[i][1] == username && data[i][0] == password) { // ค้นหาจากชื่อ และ รหัส
-          result = { 
-            status: "success", 
-            role: "STUDENT", 
-            id: data[i][0], 
-            name: data[i][1], 
-            class: data[i][2] 
-          };
-          found = true;
-          break;
-        }
-      }
-      if (!found) result = { status: "error", message: "ไม่พบรหัสผู้ใช้งานนี้ในฐานข้อมูล" };
-    }
-  }
-  
-  // 2. ระบบดึงรายชื่อนักเรียนไปโผล่บนแดชบอร์ดครู
-  if (action == "getStudents") {
-    var data = sheet.getDataRange().getValues();
-    var students = [];
-    for (var i = 1; i < data.length; i++) {
-      students.push({ id: data[i][0], name: data[i][1], class: data[i][2] });
-    }
-    result = { status: "success", data: students };
-  }
-
-  // ส่งข้อมูลกลับไปที่หน้าเว็บ HTML
-  var json = JSON.stringify(result);
-  return ContentService.createTextOutput(callback + "(" + json + ")").setMimeType(ContentService.MimeType.JAVASCRIPT);
-}"; // ตัวแปรเก็บชื่อผู้ใช้แบบ Global ป้องกันบั๊กชื่อไม่ขึ้น
+    let savedDisplayName = ""; 
+    let savedStudentId = "";
     let allRecords = [];
     let cameraStream = null;
 
-    // รายชื่อชั้นเรียนทั้งหมดตามที่กำหนดในแบบฟอร์มหน้าเว็บ
     const fullClassList = [
-      "ปวช.1/1", "ปวช.1/4", "ปวช.1/7","ปวช.1/10", "ปวช.1/21", "ปวช.1/22", "ปวช.1/31", "ปวช.1/32", "ปวช.1/41",
-      "ปวช.2/1", "ปวช.2/2", "ปวช.2/4", "ปวช.2/7","ปวช.2/10", "ปวช.2/21", "ปวช.2/22", "ปวช.2/31", "ปวช.2/32", "ปวช.2/41",
-      "ปวช.3/1", "ปวช.3/4", "ปวช.3/7","ปวช.3/10", "ปวช.3/21", "ปวช.3/22", "ปวช.3/31", "ปวช.3/32", "ปวช.3/41",
-      "ปวส.1/1", "ปวส.1/4", "ปวส.1/7","ปวส.1/10", "ปวส.1/21", "ปวส.1/22", "ปวส.1/31", "ปวส.1/32", "ปวส.1/41",
-      "ปวส.2/1", "ปวส.2/4", "ปวส.2/7","ปวส.2/10", "ปวส.2/21", "ปวส.2/22", "ปวส.2/31", "ปวส.2/32", "ปวส.2/41"
+      "ปวช.1/1", "ปวช.1/4", "ปวช.1/7", "ปวช.1/10", "ปวช.1/21", "ปวช.1/22", "ปวช.1/31", "ปวช.1/32", "ปวช.1/41",
+      "ปวช.2/1", "ปวช.2/2", "ปวช.2/4", "ปวช.2/7", "ปวช.2/10", "ปวช.2/21", "ปวช.2/22", "ปวช.2/31", "ปวช.2/32", "ปวช.2/41",
+      "ปวช.3/1", "ปวช.3/4", "ปวช.3/7", "ปวช.3/10", "ปวช.3/21", "ปวช.3/22", "ปวช.3/31", "ปวช.3/32", "ปวช.3/41",
+      "ปวส.1/1", "ปวส.1/4", "ปวส.1/7" ,"ปวส.1/10", "ปวส.1/21", "ปวส.1/22", "ปวส.1/31", "ปวส.1/32", "ปวส.1/41",
+      "ปวส.2/1", "ปวส.2/4", "ปวส.2/7" ,"ปวส.2/10", "ปวส.2/21", "ปวส.2/22", "ปวส.2/31", "ปวส.2/32", "ปวส.2/41"
     ];
 
-    // รายชื่อวิชาเรียนเบื้องต้น (ระบบจะนำไปแสดงในช่องเลือกวิชาอัตโนมัติ)
     let subjectOptions = [
       "วิชา เทคโนโลยีใบหน้าเพื่อการเช็คชื่อ", 
       "วิชา การพัฒนาเว็บแอปพลิเคชัน", 
@@ -285,7 +221,6 @@ function doGet(e) {
       document.getElementById(id).classList.add('active');
     }
 
-    // จัดการแท็บหน้าแดชบอร์ดอาจารย์
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.tab-btn').forEach(b => { 
@@ -298,26 +233,22 @@ function doGet(e) {
       });
     });
 
-    // ฟังก์ชันสร้างเมนู Dropdown ให้แสดงครบทุกห้องเรียนที่มีอยู่จริง
     function setupScanDropdowns(selectedClass) {
       const classSelect = document.getElementById('scan-select-class');
       const subjectSelect = document.getElementById('scan-select-subject');
 
-      // 1. ใส่ตัวเลือกชั้นเรียนทั้งหมดลงในหน้าสแกน
       classSelect.innerHTML = '<option value="">-- เลือกชั้นเรียนของคุณ --</option>';
       fullClassList.forEach(cls => {
         const isSelected = cls.trim() === String(selectedClass).trim() ? 'selected' : '';
         classSelect.innerHTML += `<option value="${cls}" ${isSelected}>${cls}</option>`;
       });
 
-      // 2. ใส่ตัวเลือกวิชาเรียนทั้งหมดลงในหน้าสแกน
       subjectSelect.innerHTML = '<option value="">-- เลือกวิชาเรียน --</option>';
       subjectOptions.forEach(sub => {
         subjectSelect.innerHTML += `<option value="${sub}">${sub}</option>`;
       });
     }
 
-    // โหลดตัวเลือกห้องเรียนใส่หน้าจัดการของอาจารย์ด้วยเมื่อเปิดระบบ
     function setupTeacherDropdown() {
       const addClassSelect = document.getElementById('add-class');
       if(addClassSelect) {
@@ -346,8 +277,8 @@ function doGet(e) {
         didOpen: () => { Swal.showLoading(); }
       });
 
-      // ดึงค่าเก็บไว้ล่วงหน้าเพื่อกันเหนียวกรณีฐานข้อมูลไม่ยอมคืนค่าชื่อกลับมา
       savedDisplayName = user; 
+      savedStudentId = pass;
 
       const script = document.createElement('script');
       script.src = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}&callback=globalLoginResponse`;
@@ -355,31 +286,28 @@ function doGet(e) {
       document.body.removeChild(script);
     });
 
-    // ฟังก์ชันรับการตอบกลับหลังจาก Login
     window.globalLoginResponse = function(response) {
       Swal.close();
       if (response.status === 'success') {
         currentUser = response;
         
-        // เช็คชื่อที่ส่งคืนมาจากชีต ถ้าไม่มีให้ใช้ชื่อที่ผู้ใช้พิมพ์ตอนล็อกอิน
         if (response.name || response.username) {
           savedDisplayName = response.name || response.username;
+        }
+        if (response.id || response.student_id) {
+          savedStudentId = response.id || response.student_id;
         }
         
         const role = (response.role || '').trim().toUpperCase();
 
         if (role === 'TEACHER') {
-          Swal.fire({ icon: 'success', title: 'ยืนยันตัวตนสำเร็จ', text: `สวัสดีอาจารย์ ${savedDisplayName}`, timer: 1500, showConfirmButton: false });
+          Swal.fire({ icon: 'success', title: 'ยืนยันตัวตนสำเร็จ', text: `สวัสดี ${savedDisplayName}`, timer: 1500, showConfirmButton: false });
           showPage('page-dashboard');
           loadDataFromSheets();
         } else {
           const studentClass = response.class_name || response.class || "";
-          const studentId = response.student_id || response.id || document.getElementById('global-pass').value;
           
-          // แก้ไขจุดแสดงชื่อหน้าสแกน: รับรองว่าขึ้นชื่อแน่นอนไม่เป็นช่องว่างหรือ undefined
-          document.getElementById('scan-user-info').textContent = `👤 ผู้ใช้งาน: ${savedDisplayName} (รหัส: ${studentId})`;
-          
-          // เปิดใช้งานเมนูตัวเลือกห้องเรียนตัวเต็ม
+          document.getElementById('scan-user-info').textContent = `👤 ผู้ใช้งาน: ${savedDisplayName} (รหัส: ${savedStudentId})`;
           setupScanDropdowns(studentClass);
 
           Swal.fire({ icon: 'success', title: 'เข้าสู่ระบบสำเร็จ', text: `ยินดีต้อนรับ ${savedDisplayName}`, timer: 1200, showConfirmButton: false });
@@ -418,12 +346,11 @@ function doGet(e) {
       showPage('page-login'); 
     });
 
-    // ระบบควบคุมกล้องและการเช็คชื่อเข้าเรียน
+    // ระบบควบคุมกล้องและการสแกน
     document.getElementById('btn-start-scan').addEventListener('click', async () => {
       const selectedClass = document.getElementById('scan-select-class').value;
       const selectedSubject = document.getElementById('scan-select-subject').value;
 
-      // บังคับเลือกข้อมูลก่อนสแกน
       if (!selectedClass || !selectedSubject) {
         Swal.fire('กรุณาเลือกข้อมูล', 'โปรดระบุชั้นเรียนและวิชาเรียนของคุณก่อนเริ่มสแกนหน้า', 'warning');
         return;
@@ -447,24 +374,55 @@ function doGet(e) {
       document.getElementById('camera-feed').srcObject = null;
     }
 
-    // ฟังก์ชันแจ้งเตือนผลการสแกนเช็คชื่อ (แก้ไขเรื่องการดึงชื่อมาแสดงผลแล้ว)
+    // ⭐ [จุดแก้ไขหลัก] ฟังก์ชันแจ้งเช็คชื่อและส่งข้อมูลจริงเข้า Google Sheets
     function completeAttendance(cls, subject) {
       if (!currentUser) return;
-      const now = new Date();
-      const isLate = now.getHours() >= 8 && now.getMinutes() > 30;
       
       document.getElementById('scan-status').classList.add('hidden');
-      
-      // แสดงข้อความกล่องแจ้งเตือนความสำเร็จพร้อม "ชื่อผู้ใช้งานที่แท้จริง" อย่างถูกต้อง
+      stopCamera();
+
       Swal.fire({
-        icon: 'success',
-        title: 'เช็คชื่อสำเร็จ',
-        html: `คุณ: <b>${savedDisplayName}</b><br>ชั้นเรียน: <b>${cls}</b><br>วิชา: <b>${subject}</b><br>สถานะ: ${isLate ? '<span class="text-amber-500">มาสาย</span>' : '<span class="text-green-500">มาเรียน</span>'}`
+        title: 'กำลังบันทึกข้อมูล',
+        text: 'กรุณารอสักครู่ ระบบกำลังส่งข้อมูลเวลาเรียน...',
+        allowOutsideClick: false,
+        didOpen: () => { Swal.showLoading(); }
       });
 
-      showScanResult(`✅ คุณ ${savedDisplayName} เช็คชื่อเข้าเรียนชั้น ${cls} วิชา ${subject} สำเร็จ! เวลา ${now.toTimeString().slice(0, 5)}`, true);
-      stopCamera();
+      // ดึงเวลาปัจจุบันเพื่อส่งไปบันทึก
+      const now = new Date();
+      const timeString = now.toTimeString().slice(0, 5);
+      const isLate = now.getHours() >= 8 && now.getMinutes() > 30;
+      const statusText = isLate ? 'มาสาย' : 'มาเรียน';
+
+      // 🚀 ยิง API ส่งข้อมูล ชื่อ รหัส ชั้นเรียน วิชา และสถานะ ไปที่ Google Apps Script หลังบ้าน
+      const script = document.createElement('script');
+      script.src = `${SCRIPT_URL}?action=checkIn&student_id=${encodeURIComponent(savedStudentId)}&name=${encodeURIComponent(savedDisplayName)}&class_name=${encodeURIComponent(cls)}&subject=${encodeURIComponent(subject)}&status=${encodeURIComponent(statusText)}&callback=attendanceResponse`;
+      document.body.appendChild(script);
+      document.body.removeChild(script);
     }
+
+    // ฟังก์ชันรับคำตอบหลังจากส่งข้อมูลเช็คชื่อเรียบร้อยแล้ว
+    window.attendanceResponse = function(response) {
+      Swal.close();
+      const now = new Date();
+      const timeString = now.toTimeString().slice(0, 5);
+      
+      if (response.status === 'success') {
+        const selectedClass = document.getElementById('scan-select-class').value;
+        const selectedSubject = document.getElementById('scan-select-subject').value;
+        
+        Swal.fire({
+          icon: 'success',
+          title: 'บันทึกเวลาเรียนสำเร็จ',
+          html: `คุณ: <b>${savedDisplayName}</b><br>ชั้นเรียน: <b>${selectedClass}</b><br>วิชา: <b>${selectedSubject}</b><br>สถานะ: <span class="${response.attendance_status === 'มาสาย' ? 'text-amber-500' : 'text-green-500'}">${response.attendance_status}</span>`
+        });
+
+        showScanResult(`✅ คุณ ${savedDisplayName} เช็คชื่อเข้าเรียนสำเร็จ! เวลา ${timeString}`, true);
+      } else {
+        Swal.fire('เกิดข้อผิดพลาด', response.message || 'ไม่สามารถบันทึกข้อมูลได้', 'error');
+        showScanResult(`❌ บันทึกข้อมูลล้มเหลว`, false);
+      }
+    };
 
     function showScanResult(msg, success) {
       const el = document.getElementById('scan-result');
