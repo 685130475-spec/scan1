@@ -202,17 +202,74 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz8_T-ZTT2Fq0_9Rqy3rZif8ILGGsoxAcphtoWNyQj1JWBoUxWXFRYGkn68JFtIfRwhOQ/exec";
 
     let currentUser = null;
-    let savedDisplayName = ""; // ตัวแปรเก็บชื่อผู้ใช้แบบ Global ป้องกันบั๊กชื่อไม่ขึ้น
+    let savedDisplayName = "// โค้ดสำหรับฝั่ง Google Apps Script (ใน Google Sheet)
+function doGet(e) {
+  var action = e.parameter.action;
+  var callback = e.parameter.callback;
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Students"); // ชื่อชีตเก็บรายชื่อนักเรียน
+  var logSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Attendance"); // ชื่อชีตเก็บประวัติสแกน
+  
+  if (!logSheet) {
+    // ถ้ายังไม่มีชีตประวัติ ให้สร้างขึ้นมาอัตโนมัติ
+    logSheet = SpreadsheetApp.getActiveSpreadsheet().insertSheet("Attendance");
+    logSheet.appendRow(["Timestamp", "StudentID", "Name", "Class", "Subject", "Status"]);
+  }
+
+  var result = { status: "error", message: "ไม่พบคำสั่งที่ระบุ" };
+
+  // 1. ระบบจัดการ Login
+  if (action == "login") {
+    var username = e.parameter.username;
+    var password = e.parameter.password;
+    
+    // ตรวจสอบว่าเป็นอาจารย์ไหม
+    if (username == "admin" && password == "123456789") { // ปรับเปลี่ยน User/Pass ครูตรงนี้ได้
+      result = { status: "success", role: "TEACHER", name: "อาจารย์ผู้ดูแลระบบ" };
+    } else {
+      // ค้นหาในชีตนักเรียน (สมมุติว่า Column A=รหัส, Column B=ชื่อ, Column C=ชั้นเรียน)
+      var data = sheet.getDataRange().getValues();
+      var found = false;
+      for (var i = 1; i < data.length; i++) {
+        if (data[i][1] == username && data[i][0] == password) { // ค้นหาจากชื่อ และ รหัส
+          result = { 
+            status: "success", 
+            role: "STUDENT", 
+            id: data[i][0], 
+            name: data[i][1], 
+            class: data[i][2] 
+          };
+          found = true;
+          break;
+        }
+      }
+      if (!found) result = { status: "error", message: "ไม่พบรหัสผู้ใช้งานนี้ในฐานข้อมูล" };
+    }
+  }
+  
+  // 2. ระบบดึงรายชื่อนักเรียนไปโผล่บนแดชบอร์ดครู
+  if (action == "getStudents") {
+    var data = sheet.getDataRange().getValues();
+    var students = [];
+    for (var i = 1; i < data.length; i++) {
+      students.push({ id: data[i][0], name: data[i][1], class: data[i][2] });
+    }
+    result = { status: "success", data: students };
+  }
+
+  // ส่งข้อมูลกลับไปที่หน้าเว็บ HTML
+  var json = JSON.stringify(result);
+  return ContentService.createTextOutput(callback + "(" + json + ")").setMimeType(ContentService.MimeType.JAVASCRIPT);
+}"; // ตัวแปรเก็บชื่อผู้ใช้แบบ Global ป้องกันบั๊กชื่อไม่ขึ้น
     let allRecords = [];
     let cameraStream = null;
 
     // รายชื่อชั้นเรียนทั้งหมดตามที่กำหนดในแบบฟอร์มหน้าเว็บ
     const fullClassList = [
-      "ปวช.1/1", "ปวช.1/4", "ปวช.1/10", "ปวช.1/21", "ปวช.1/22", "ปวช.1/31", "ปวช.1/32", "ปวช.1/41",
-      "ปวช.2/1", "ปwช.2/2", "ปวช.2/4", "ปวช.2/10", "ปวช.2/21", "ปวช.2/22", "ปวช.2/31", "ปวช.2/32", "ปวช.2/41",
-      "ปวช.3/1", "ปวช.3/4", "ปวช.3/10", "ปวช.3/21", "ปวช.3/22", "ปวช.3/31", "ปวช.3/32", "ปวช.3/41",
-      "ปวส.1/1", "ปวส.1/4", "ปวส.1/10", "ปวส.1/21", "ปวส.1/22", "ปวส.1/31", "ปวส.1/32", "ปวส.1/41",
-      "ปวส.2/1", "ปวส.2/4", "ปวส.2/10", "ปวส.2/21", "ปวส.2/22", "ปวส.2/31", "ปวส.2/32", "ปวส.2/41"
+      "ปวช.1/1", "ปวช.1/4", "ปวช.1/7","ปวช.1/10", "ปวช.1/21", "ปวช.1/22", "ปวช.1/31", "ปวช.1/32", "ปวช.1/41",
+      "ปวช.2/1", "ปวช.2/2", "ปวช.2/4", "ปวช.2/7","ปวช.2/10", "ปวช.2/21", "ปวช.2/22", "ปวช.2/31", "ปวช.2/32", "ปวช.2/41",
+      "ปวช.3/1", "ปวช.3/4", "ปวช.3/7","ปวช.3/10", "ปวช.3/21", "ปวช.3/22", "ปวช.3/31", "ปวช.3/32", "ปวช.3/41",
+      "ปวส.1/1", "ปวส.1/4", "ปวส.1/7","ปวส.1/10", "ปวส.1/21", "ปวส.1/22", "ปวส.1/31", "ปวส.1/32", "ปวส.1/41",
+      "ปวส.2/1", "ปวส.2/4", "ปวส.2/7","ปวส.2/10", "ปวส.2/21", "ปวส.2/22", "ปวส.2/31", "ปวส.2/32", "ปวส.2/41"
     ];
 
     // รายชื่อวิชาเรียนเบื้องต้น (ระบบจะนำไปแสดงในช่องเลือกวิชาอัตโนมัติ)
@@ -284,7 +341,7 @@
 
       Swal.fire({
         title: 'กำลังตรวจสอบสิทธิ์',
-        text: 'กรุณารอสักครู่ ระบบกำลังเชื่อมต่อฐานข้อมูล...',
+        text: 'กรุณารอสักครู่...',
         allowOutsideClick: false,
         didOpen: () => { Swal.showLoading(); }
       });
@@ -325,7 +382,7 @@
           // เปิดใช้งานเมนูตัวเลือกห้องเรียนตัวเต็ม
           setupScanDropdowns(studentClass);
 
-          Swal.fire({ icon: 'success', title: 'เข้าสู่ระบบสำเร็จ', text: `ยินดีต้อนรับคุณ ${savedDisplayName}`, timer: 1200, showConfirmButton: false });
+          Swal.fire({ icon: 'success', title: 'เข้าสู่ระบบสำเร็จ', text: `ยินดีต้อนรับ ${savedDisplayName}`, timer: 1200, showConfirmButton: false });
           showPage('page-scan');
         }
       } else {
