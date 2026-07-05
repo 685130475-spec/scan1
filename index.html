@@ -36,7 +36,7 @@
       <div class="space-y-4">
        <div>
         <label for="global-user" class="block text-sm font-medium text-slate-600 mb-1">Username (ชื่อผู้ใช้งาน)</label> 
-        <input id="global-user" type="text" maxlength="60" placeholder="กรอกชื่อ-นามสกุล" 
+        <input id="global-user" type="text" maxlength="60" placeholder="กรอก Username หรือชื่อ-นามสกุล" 
                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all">
        </div>
        <div>
@@ -193,7 +193,7 @@
 
   <script>
     // ⚠️ อย่าลืมเอาลิงก์ Web App ของคุณครูมาวางแทนที่ตรงนี้
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzuRq-R1ZxUpU0RXKahIOU2J2Fqiar9bbyJKfu0K4ge2uhd_8LMxsfZKLvN5de9myU8Bg/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz4Yu07YsZ3s3qo7vk_9FIcgaoqjopYZUra8HEn1qbqmIF9R_uE21My9anUD37Nxt7qiQ/exec";
 
     let currentUser = null;
     let savedDisplayName = ""; 
@@ -202,15 +202,15 @@
     let cameraStream = null;
 
     const fullClassList = [
-      "ปวช.1/1", "ปวช.1/4", "ปวช.1/7", "ปวช.1/10", "ปวช.1/21", "ปวช.1/22", "ปวช.1/31", "ปวช.1/32", "ปวช.1/41",
-      "ปวช.2/1", "ปวช.2/2", "ปวช.2/4", "ปวช.2/7",  "ปวช.2/10", "ปวช.2/21", "ปวช.2/22", "ปวช.2/31", "ปวช.2/32", "ปวช.2/41",
-      "ปวช.3/1", "ปวช.3/4", "ปวช.3/7", "ปวช.3/10", "ปวช.3/21", "ปวช.3/22", "ปวช.3/31", "ปวช.3/32", "ปวช.3/41",
-      "ปวส.1/1", "ปวส.1/4", "ปวส.1/7" ,"ปวส.1/10", "ปวส.1/21", "ปวส.1/22", "ปวส.1/31", "ปวส.1/32", "ปวส.1/41",
-      "ปวส.2/1", "ปวส.2/4", "ปวส.2/7" ,"ปวส.2/10", "ปวส.2/21", "ปวส.2/22", "ปวส.2/31", "ปวส.2/32", "ปวส.2/41"
+      "ปวช.1/1", "ปวช.1/4", "ปวช.1/10", "ปวช.1/21", "ปวช.1/22", "ปวช.1/31", "ปวช.1/32", "ปวช.1/41",
+      "ปวช.2/1", "ปวช.2/2", "ปวช.2/4", "ปวช.2/10", "ปวช.2/21", "ปวช.2/22", "ปวช.2/31", "ปวช.2/32", "ปวช.2/41",
+      "ปวช.3/1", "ปวช.3/4", "ปวช.3/10", "ปวช.3/21", "ปวช.3/22", "ปวช.3/31", "ปวช.3/32", "ปวช.3/41",
+      "ปวส.1/1", "ปวส.1/4", "ปวส.1/10", "ปวส.1/21", "ปวส.1/22", "ปวส.1/31", "ปวส.1/32", "ปวส.1/41",
+      "ปวส.2/1", "ปวส.2/4", "ปวส.2/10", "ปวส.2/21", "ปวส.2/22", "ปวส.2/31", "ปวส.2/32", "ปวส.2/41"
     ];
 
     let subjectOptions = [
-      "วิชา โครงงานด้านเทคโนโลยีธุรกิจดิจิทัล", 
+   "วิชา โครงงานด้านเทคโนโลยีธุรกิจดิจิทัล", 
       "วิชา สื่อสร้างสรรค์ธุรกิจดิจิทัล", 
       "วิชา ทักษะการเขียนและการพูดภาษาไทยในงานอาชีพ", 
       "วิชา เครือข่ายคอมพิวเตอร์และความปลอดภัย"
@@ -275,7 +275,7 @@
 
       Swal.fire({
         title: 'กำลังตรวจสอบสิทธิ์',
-        text: 'กรุณารอสักครู่...',
+        text: 'กรุณารอสักครู่ ระบบกำลังเชื่อมต่อฐานข้อมูล...',
         allowOutsideClick: false,
         didOpen: () => { Swal.showLoading(); }
       });
@@ -304,7 +304,7 @@
         const role = (response.role || '').trim().toUpperCase();
 
         if (role === 'TEACHER') {
-          Swal.fire({ icon: 'success', title: 'ยืนยันตัวตนสำเร็จ', text: `สวัสดี ${savedDisplayName}`, timer: 1500, showConfirmButton: false });
+          Swal.fire({ icon: 'success', title: 'ยืนยันตัวตนสำเร็จ', text: `สวัสดีอาจารย์ ${savedDisplayName}`, timer: 1500, showConfirmButton: false });
           showPage('page-dashboard');
           loadDataFromSheets();
         } else {
@@ -313,7 +313,7 @@
           document.getElementById('scan-user-info').textContent = `👤 ผู้ใช้งาน: ${savedDisplayName} (รหัส: ${savedStudentId})`;
           setupScanDropdowns(studentClass);
 
-          Swal.fire({ icon: 'success', title: 'เข้าสู่ระบบสำเร็จ', text: `ยินดีต้อนรับ ${savedDisplayName}`, timer: 1200, showConfirmButton: false });
+          Swal.fire({ icon: 'success', title: 'เข้าสู่ระบบสำเร็จ', text: `ยินดีต้อนรับคุณ ${savedDisplayName}`, timer: 1200, showConfirmButton: false });
           showPage('page-scan');
         }
       } else {
