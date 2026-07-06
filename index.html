@@ -235,9 +235,9 @@
    "วิชา โครงงานด้านเทคโนโลยีธุรกิจดิจิทัล", 
       "วิชา สื่อสร้างสรรค์ธุรกิจดิจิทัล", 
       "วิชา ทักษะการเขียนและการพูดภาษาไทยในงานอาชีพ", 
-      "วิชา เครือข่ายคอมพิวเตอร์และความปลอดภัย"
-      "วิชา วิทยาศาสตร์งานอาชีพธุรกิจและบริการ"
-      "วิชา ระบบปัญญาประดิษฐ์เบื้องต้น"
+      "วิชา เครือข่ายคอมพิวเตอร์และความปลอดภัย",
+      "วิชา วิทยาศาสตร์งานอาชีพธุรกิจและบริการ",
+      "วิชา ระบบปัญญาประดิษฐ์เบื้องต้น",
       "วิชา ธุรกิจดิจิทัล"
     ];
 
@@ -275,7 +275,7 @@
       subjectOptions.forEach(sub => {
         subjectSelect.innerHTML += `<option value="${sub}">${sub}</option>`;
       });
-    }
+    
       // โหลดตัวเลือกห้องเรียนใส่หน้าจัดการของอาจารย์ด้วยเมื่อเปิดระบบ
     function setupTeacherDropdown() {
       const addClassSelect = document.getElementById('add-class');
@@ -284,7 +284,7 @@
         fullClassList.forEach(cls => {
           addClassSelect.innerHTML += `<option>${cls}</option>`;
         });
-
+        }
     // --- ระบบล็อกอินฟอร์มเดี่ยว แยกสิทธิ์อัจฉริยะ ---
     document.getElementById('btn-global-login').addEventListener('click', () => {
       const user = document.getElementById('global-user').value.trim();
