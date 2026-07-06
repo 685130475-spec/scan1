@@ -313,6 +313,7 @@
         allRecords = response.data.map(s => ({ type: 'student', student_id: s.id, name: s.name, class_name: s.class }));
         updateDashboard();
         updateStudentList();
+        renderManualAttendanceList();
       }
     };
 
@@ -382,7 +383,135 @@
         </div>
       `).join('');
     }
+// ฟังก์ชันสร้างรายชื่อนักศึกษา และปุ่มเช็คชื่อในหน้าแดชบอร์ด
+function renderManualAttendanceList() {
+  const students = allRecords.filter(r => r.type === 'student');
+  const container = document.getElementById('manual-check-list');
+  
+  if (students.length === 0) {
+    container.innerHTML = '<p class="text-slate-500 text-center py-6 italic">ยังไม่มีข้อมูลนักศึกษาในระบบ</p>';
+    return;
+  }
 
+  container.innerHTML = students.map((s, idx) => `
+    <div class="bg-slate-700/30 border border-slate-700/50 rounded-xl p-3 space-y-2" data-student-id="${s.student_id}">
+      <div class="flex justify-between items-center">
+        <div>
+          <span class="text-xs bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded mr-1">${s.class_name || s.class}</span>
+          <span class="text-white font-medium">${s.name}</span>
+        </div>
+        <span class="text-xs text-slate-500 font-mono">${s.student_id}</span>
+      </div>
+      
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
+        <label class="flex items-center gap-1 cursor-pointer text-slate-300 hover:text-green-400">
+          <input type="radio" name="status-${s.student_id}" value="มาเรียน" checked class="accent-green-500" onclick="toggleNoteField('${s.student_id}', false)"> มาเรียน
+        </label>
+        <label class="flex items-center gap-1 cursor-pointer text-slate-300 hover:text-amber-400">
+          <input type="radio" name="status-${s.student_id}" value="มาสาย" class="accent-amber-500" onclick="toggleNoteField('${s.student_id}', false)"> มาสาย
+        </label>
+        <label class="flex items-center gap-1 cursor-pointer text-slate-300 hover:text-rose-400">
+          <input type="radio" name="status-${s.student_id}" value="ขาดเรียน" class="accent-rose-500" onclick="toggleNoteField('${s.student_id}', false)"> ขาดเรียน
+        </label>
+        <label class="flex items-center gap-1 cursor-pointer text-slate-300 hover:text-sky-400">
+          <input type="radio" name="status-${s.student_id}" value="ลา" class="accent-sky-500" onclick="toggleNoteField('${s.student_id}', true)"> ลา
+        </label>
+      </div>
+
+      <div id="note-container-${s.student_id}" class="hidden mt-1.5">
+        <input id="note-${s.student_id}" type="text" placeholder="ระบุหมายเหตุ (เช่น ลาป่วย, ลากิจ)" 
+               class="w-full px-2.5 py-1.5 bg-slate-800 border border-slate-600 rounded-lg text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-sky-400">
+      </div>
+    </div>
+  `).join('');
+}
+
+// ฟังก์ชันสร้างรายชื่อนักศึกษา และปุ่มเช็คชื่อในหน้าแดชบอร์ด
+function renderManualAttendanceList() {
+  const students = allRecords.filter(r => r.type === 'student');
+  const container = document.getElementById('manual-check-list');
+  
+  if (students.length === 0) {
+    container.innerHTML = '<p class="text-slate-500 text-center py-6 italic">ยังไม่มีข้อมูลนักศึกษาในระบบ</p>';
+    return;
+  }
+
+  container.innerHTML = students.map((s, idx) => `
+    <div class="bg-slate-700/30 border border-slate-700/50 rounded-xl p-3 space-y-2" data-student-id="${s.student_id}">
+      <div class="flex justify-between items-center">
+        <div>
+          <span class="text-xs bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded mr-1">${s.class_name || s.class}</span>
+          <span class="text-white font-medium">${s.name}</span>
+        </div>
+        <span class="text-xs text-slate-500 font-mono">${s.student_id}</span>
+      </div>
+      
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
+        <label class="flex items-center gap-1 cursor-pointer text-slate-300 hover:text-green-400">
+          <input type="radio" name="status-${s.student_id}" value="มาเรียน" checked class="accent-green-500" onclick="toggleNoteField('${s.student_id}', false)"> มาเรียน
+        </label>
+        <label class="flex items-center gap-1 cursor-pointer text-slate-300 hover:text-amber-400">
+          <input type="radio" name="status-${s.student_id}" value="มาสาย" class="accent-amber-500" onclick="toggleNoteField('${s.student_id}', false)"> มาสาย
+        </label>
+        <label class="flex items-center gap-1 cursor-pointer text-slate-300 hover:text-rose-400">
+          <input type="radio" name="status-${s.student_id}" value="ขาดเรียน" class="accent-rose-500" onclick="toggleNoteField('${s.student_id}', false)"> ขาดเรียน
+        </label>
+        <label class="flex items-center gap-1 cursor-pointer text-slate-300 hover:text-sky-400">
+          <input type="radio" name="status-${s.student_id}" value="ลา" class="accent-sky-500" onclick="toggleNoteField('${s.student_id}', true)"> ลา
+        </label>
+      </div>
+
+      <div id="note-container-${s.student_id}" class="hidden mt-1.5">
+        <input id="note-${s.student_id}" type="text" placeholder="ระบุหมายเหตุ (เช่น ลาป่วย, ลากิจ)" 
+               class="w-full px-2.5 py-1.5 bg-slate-800 border border-slate-600 rounded-lg text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-sky-400">
+      </div>
+    </div>
+  `).join('');
+}
+
+// ฟังก์ชันเปิด/ปิดกล่องหมายเหตุอัตโนมัติ
+window.toggleNoteField = function(studentId, isLeave) {
+  const container = document.getElementById(`note-container-${studentId}`);
+  if (isLeave) {
+    container.classList.remove('hidden');
+  } else {
+    container.classList.add('hidden');
+    document.getElementById(`note-${studentId}`).value = ''; 
+  }
+}
+   // วางต่อท้ายสุดของไฟล์ Apps Script เดิมได้เลย
+function saveManualAttendanceData(dataJson) {
+  try {
+    var attendanceList = JSON.parse(dataJson);
+    // เปิดสเปรดชีต (ระบบจะวิ่งไปหาแผ่นงานที่ชื่อ "AttendanceLog")
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = ss.getSheetByName("AttendanceLog") || ss.insertSheet("AttendanceLog");
+    
+    // ถ้ายังไม่มีหัวตาราง ให้สร้างหัวตารางในบรรทัดแรก
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(["วันที่-เวลา", "รหัสนักศึกษา", "ชื่อ-นามสกุล", "ชั้นเรียน", "สถานะ", "หมายเหตุ", "ผู้บันทึก"]);
+    }
+    
+    var timestamp = new Date();
+    
+    // วนลูปบันทึกข้อมูลรายคนลงบรรทัดใหม่ต่อท้ายไปเรื่อยๆ
+    for (var i = 0; i < attendanceList.length; i++) {
+      var record = attendanceList[i];
+      sheet.appendRow([
+        timestamp,         // วันที่บันทึก
+        record.id,         // รหัสนักศึกษา
+        record.name,       // ชื่อนักศึกษา
+        record.class,      // ชั้นเรียน
+        record.status,     // มาเรียน / มาสาย / ขาดเรียน / ลา
+        record.remark,     // หมายเหตุการลา
+      ]);
+    }
+    
+    return { status: "success", message: "บันทึกข้อมูลสำเร็จเรียบร้อยแล้ว" };
+  } catch (error) {
+    return { status: "error", message: "เกิดข้อผิดพลาดหลังบ้าน: " + error.toString() };
+  }
+}
     lucide.createIcons();
   </script>
  </body>
