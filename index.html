@@ -284,7 +284,7 @@
         fullClassList.forEach(cls => {
           addClassSelect.innerHTML += `<option>${cls}</option>`;
         });
-        }
+      
     // --- ระบบล็อกอินฟอร์มเดี่ยว แยกสิทธิ์อัจฉริยะ ---
     document.getElementById('btn-global-login').addEventListener('click', () => {
       const user = document.getElementById('global-user').value.trim();
@@ -303,7 +303,6 @@
         Swal.fire('รหัสผ่านไม่ถูกต้อง','warning'); 
         return; 
       }
-
       Swal.fire({
         title: 'กำลังตรวจสอบสิทธิ์',
         text: 'กรุณารอสักครู่...',
