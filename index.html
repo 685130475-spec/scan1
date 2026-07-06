@@ -35,16 +35,16 @@
      <div class="bg-white/90 backdrop-blur rounded-2xl p-6 border border-white/50 shadow-xl">
       <div class="space-y-4">
        <div>
-        <label for="global-user" class="block text-sm font-medium text-slate-600 mb-1">ชื่อผู้ใช้งาน (Username)</label> 
-        <input id="global-user" type="text" max-length="60" placeholder="ชื่อ-นามสกุลภาษาไทย หรือ Username ครู" 
+        <label for="global-user" class="block text-sm font-medium text-slate-600 mb-1">Username</label> 
+        <input id="global-user" type="text" max-length="60" placeholder="ชื่อ-นามสกุล" 
                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all">
-        <p class="text-[11px] text-slate-400 mt-1">* นักศึกษาใส่ชื่อ-นามสกุลไทย / อาจารย์ใส่ Username (ไม่เกิน 60 ตัวอักษร)</p>
+
        </div>
        <div>
-        <label for="global-pass" class="block text-sm font-medium text-slate-600 mb-1">รหัสผ่าน (Password)</label> 
-        <input id="global-pass" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="9" placeholder="รหัสตัวเลข 9 หลัก" 
+        <label for="global-pass" class="block text-sm font-medium text-slate-600 mb-1">Password</label> 
+        <input id="global-pass" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="9" placeholder="รหัสผ่าน" 
                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all">
-        <p class="text-[11px] text-slate-400 mt-1">* รหัสนักศึกษา หรือ รหัสผ่านอาจารย์ จำนวน 9 หลักเท่านั้น</p>
+
        </div>
        <button id="btn-global-login" class="w-full mt-2 py-3 bg-gradient-to-r from-sky-400 to-blue-500 rounded-xl font-semibold text-white hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-500/20 active:scale-95"> 
         เข้าสู่ระบบ
@@ -95,6 +95,8 @@
      <button class="tab-btn active px-4 py-3 text-sm font-medium border-b-2 border-sky-400 text-sky-400 transition-all" data-tab="dashboard">แดชบอร์ด</button> 
      <button class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-sky-300 transition-colors" data-tab="manage">จัดการข้อมูล</button> 
      <button class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-sky-300 transition-colors" data-tab="history">ประวัติ</button>
+     <button id="btn-start-scan" class="px-8 py-3 bg-gradient-to-r from-sky-400 to-blue-500 rounded-xl font-semibold text-white hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-500/20 active:scale-95 inline-flex items-center gap-2"> 
+      <i data-lucide="camera" class="w-5 h-5"></i> บันทึกข้อมูล</button>
     </div>
      
     <div id="tab-dashboard" class="tab-content flex-1 overflow-auto p-4 space-y-4">
@@ -124,6 +126,13 @@
        <div class="flex items-center gap-2 mb-1">
         <i data-lucide="clock" class="w-4 h-4 text-amber-400"></i>
         <span class="text-xs text-slate-400 font-medium">มาสาย</span>
+       </div>
+       <p id="stat-late" class="text-2xl font-bold text-amber-400 tracking-tight">0</p>
+      </div>
+        <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
+       <div class="flex items-center gap-2 mb-1">
+        <i data-lucide="clock" class="w-4 h-4 text-amber-400"></i>
+        <span class="text-xs text-slate-400 font-medium">ลา</span>
        </div>
        <p id="stat-late" class="text-2xl font-bold text-amber-400 tracking-tight">0</p>
       </div>
