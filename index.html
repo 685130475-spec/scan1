@@ -1,15 +1,15 @@
 <!doctype html>
-<html lang="th" class="h-full">
+<html lang=th class=h-full>
  <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset= UTF-8>
+  <meta name= viewport , content= width=device-width, initial-scale=1.0 >
   <title>ระบบเช็คชื่อด้วยเทคโนโลยีใบหน้า</title>
-  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src= https://cdn.tailwindcss.com/3.4.17 ></script>
+  <script src= https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js ></script>
+  <script src= https://cdn.jsdelivr.net/npm/sweetalert2@11 ></script>
+  <link href= https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap  rel= stylesheet></style>
   <style>
-    * { font-family: 'Sarabun', sans-serif; }
+    * { font-family: Sarabun, sans-serif; }
     .page { display: none; }
     .page.active { display: flex; }
     .pulse-ring { animation: pulse-ring 1.5s infinite; }
@@ -19,32 +19,34 @@
     #camera-feed { transform: scaleX(-1); }
   </style>
  </head>
-<body class="h-full bg-sky-50 text-slate-900 overflow-auto">
-  <div id="app" class="h-full w-full flex flex-col">
+<body class= h-full bg-sky-50 text-slate-900 overflow-auto >
+  <div id= app  class= h-full w-full flex flex-col >
    
-   <div id="page-login" class="page active flex-col items-center justify-center h-full p-6" translate="no">
-    <div class="w-full max-w-md fade-in">
-     <div class="text-center mb-6">
-      <div class="w-20 h-20 mx-auto bg-gradient-to-br from-sky-400 to-blue-500 rounded-2xl flex items-center justify-center shadow-lg shadow-sky-500/20">
-       <i data-lucide="scan-face" class="w-10 h-10 text-white"></i>
+   <div id= page-login class=page active flex-col items-center justify-center h-full p-6 translate=no>
+    <div class= w-full max-w-md fade-in>
+     <div class=text-center mb-6>
+      <div class=w-20 h-20 mx-auto bg-gradient-to-br from-sky-400 to-blue-500 rounded-2xl flex items-center justify-center shadow-lg shadow-sky-500/20>
+       <i data-lucide=scan-face ,class=w-10 h-10 text-white></i>
       </div>
-      <h1 id="main-title" class="text-2xl font-bold text-slate-800 mt-4">ระบบเช็คชื่อด้วยเทคโนโลยีใบหน้า</h1>
-      <p class="text-slate-400 mt-1 text-sm">Facial Recognition Attendance System</p>
+      <h1 id=main-title class=text-2xl font-bold text-slate-800 mt-4>"ระบบเช็คชื่อด้วยเทคโนโลยีใบหน้า"</h1>
+      <p class=text-slate-400 mt-1 text-sm>"Facial Recognition Attendance System"</p>
      </div>
 
-     <div class="bg-white/90 backdrop-blur rounded-2xl p-6 border border-white/50 shadow-xl">
-      <div class="space-y-4">
+     <div class=bg-white/90 backdrop-blur rounded-2xl p-6 border border-white/50 shadow-xl>
+      <div class=space-y-4>
        <div>
-        <label for="global-user" class="block text-sm font-medium text-slate-600 mb-1">Username</label> 
-        <input id="global-user" type="text" max-length="60" placeholder="ชื่อ-นามสกุล" 
-               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all">
+        <label for=global-user class=block text-sm font-medium text-slate-600 mb-1>Username</label> 
+        <input id=global-user type=text max-length=60 placeholder="ชื่อ-นามสกุล"
+               class=w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all>
+
        </div>
        <div>
-        <label for="global-pass" class="block text-sm font-medium text-slate-600 mb-1">Password</label> 
-        <input id="global-pass" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="9" placeholder="รหัสผ่าน" 
-               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all">
+        <label for=global-pass class=block text-sm font-medium text-slate-600 mb-1>Password</label> 
+        <input id=global-pass type=password inputmode=numeric pattern=[0-9]* maxlength=9 placeholder="รหัสผ่าน"
+               class=w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all>
+
        </div>
-       <button id="btn-global-login" class="w-full mt-2 py-3 bg-gradient-to-r from-sky-400 to-blue-500 rounded-xl font-semibold text-white hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-500/20 active:scale-95"> 
+       <button id=btn-global-login class=w-full mt-2 py-3 bg-gradient-to-r from-sky-400 to-blue-500 rounded-xl font-semibold text-white hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-500/20 active:scale-95> 
         เข้าสู่ระบบ
        </button>
       </div>
@@ -52,150 +54,161 @@
     </div>
    </div>
 
-   <div id="page-scan" class="page flex-col items-center justify-center h-full p-6">
-    <div class="w-full max-w-md text-center fade-in">
-     <h2 class="text-xl font-bold text-slate-800 mb-2">เช็คชื่อด้วยเทคโนโลยีใบหน้า</h2>
-     <p id="scan-user-info" class="text-slate-500 text-sm mb-6"></p>
+   <div id=page-scan class=page flex-col items-center justify-center h-full p-6>
+    <div class=w-full max-w-md text-center fade-in>
+     <h2 class=text-xl font-bold text-slate-800 mb-2>เช็คชื่อด้วยเทคโนโลยีใบหน้า</h2>
+     <p id=scan-user-info class="text-slate-500 text-sm mb-6></p>
      
-     <div class="relative mx-auto w-80 h-80 rounded-3xl overflow-hidden border-4 border-sky-400 bg-slate-800 mb-6 shadow-xl">
-      <video id="camera-feed" class="w-full h-full object-cover" autoplay playsinline muted></video>
-      <div class="absolute inset-0 flex items-center justify-center" id="scan-overlay">
-       <div class="w-52 h-52 border-4 border-sky-400 rounded-full"></div>
-       <div class="absolute w-56 h-56 border-2 border-sky-400/40 rounded-full pulse-ring"></div>
+     <div class=relative mx-auto w-80 h-80 rounded-3xl overflow-hidden border-4 border-sky-400 bg-slate-800 mb-6 shadow-xl>
+      <video id=camera-feed class=w-full h-full object-cover autoplay playsinline muted></video>
+      <div class=absolute inset-0 flex items-center justify-center id=scan-overlay>
+       <div class=w-52 h-52 border-4 border-sky-400 rounded-full></div>
+       <div class=absolute w-56 h-56 border-2 border-sky-400/40 rounded-full pulse-ring></div>
       </div>
-      <div id="scan-status" class="absolute bottom-3 left-0 right-0 text-center text-sm font-medium text-sky-300 hidden"> กำลังสแกน... </div>
+      <div id=scan-status class=absolute bottom-3 left-0 right-0 text-center text-sm font-medium text-sky-300 hidden> กำลังสแกน... </div>
      </div>
 
-     <button id="btn-start-scan" class="px-8 py-3 bg-gradient-to-r from-sky-400 to-blue-500 rounded-xl font-semibold text-white hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-500/20 active:scale-95 inline-flex items-center gap-2"> 
-      <i data-lucide="camera" class="w-5 h-5"></i> กดปุ่มเพื่อเริ่มเช็คชื่อ 
+     <button id=btn-start-scan class=px-8 py-3 bg-gradient-to-r from-sky-400 to-blue-500 rounded-xl font-semibold text-white hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-500/20 active:scale-95 inline-flex items-center gap-2> 
+      <i data-lucide=camera class=w-5 h-5></i> กดปุ่มเพื่อเริ่มเช็คชื่อ 
      </button>
 
      <!-- ปุ่มแจ้งลาที่เพิ่มเข้ามาใหม่ -->
-     <button id="btn-open-leave" class="mt-2 px-8 py-2.5 bg-slate-200 text-slate-700 hover:bg-slate-300 font-medium rounded-xl transition-all active:scale-95 inline-flex items-center gap-2 text-sm w-full justify-center max-w-[260px] mx-auto">
-       <i data-lucide="file-text" class="w-4 h-4"></i> แจ้งลาออนไลน์ 
-     </button>
+    <button id=btn-open-leave class=mt-2 px-8 py-2.5 bg-slate-200 text-slate-700 hover:bg-slate-300 font-medium rounded-xl transition-all active:scale-95 inline-flex items-center gap-2 text-sm w-full justify-center max-w-[260px] mx-auto>
+       <i data-lucide=file-text class=w-4 h-4></i> แจ้งลาออนไลน์ 
+      </button>
      
-     <div id="scan-result" class="mt-4 hidden rounded-xl p-4 text-center font-medium"></div>
+     <div id=scan-result class=mt-4 hidden rounded-xl p-4 text-center font-medium></div>
      <br>
-     <button id="btn-back-login" class="mt-4 text-slate-500 hover:text-sky-500 text-sm underline transition-colors">ออกจากระบบ</button>
+     <button id=btn-back-login class=mt-4 text-slate-500 hover:text-sky-500 text-sm underline transition-colors>ออกจากระบบ</button>
     </div>
    </div>
 
-   <div id="page-dashboard" class="page flex-col h-full bg-slate-900 text-white">
-    <nav class="bg-slate-800/90 border-b border-slate-700/50 px-4 py-3 flex items-center justify-between">
-     <div class="flex items-center gap-2">
-      <div class="w-8 h-8 bg-gradient-to-br from-sky-400 to-blue-500 rounded-lg flex items-center justify-center">
-       <i data-lucide="scan-face" class="w-4 h-4 text-white"></i>
+   <div id=page-dashboard class=page flex-col h-full bg-slate-900 text-white>
+    <nav class="bg-slate-800/90 border-b border-slate-700/50 px-4 py-3 flex items-center justify-between>
+     <div class=flex items-center gap-2>
+      <div class="w-8 h-8 bg-gradient-to-br from-sky-400 to-blue-500 rounded-lg flex items-center justify-center>
+       <i data-lucide=scan-face class=w-4 h-4 text-white"></i>
       </div>
-      <span class="font-bold text-sm text-white">ระบบเช็คชื่อ - อาจารย์</span>
+      <span class=font-bold text-sm text-white>ระบบเช็คชื่อ - อาจารย์</span>
      </div>
-     <button id="btn-logout" class="text-sm text-slate-400 hover:text-sky-300 flex items-center gap-1 transition-colors"> 
-      <i data-lucide="log-out" class="w-4 h-4"></i> ออก 
+     <button id=btn-logout class=text-sm text-slate-400 hover:text-sky-300 flex items-center gap-1 transition-colors> 
+      <i data-lucide=log-out class=w-4 h-4></i> ออก 
      </button>
     </nav>
     
-    <div class="flex border-b border-slate-700/50 bg-slate-800/50 px-4">
-     <button class="tab-btn active px-4 py-3 text-sm font-medium border-b-2 border-sky-400 text-sky-400 transition-all" data-tab="dashboard">แดชบอร์ด</button> 
-     <button class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-sky-300 transition-colors" data-tab="manage">จัดการข้อมูล</button> 
-     <button class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-sky-300 transition-colors" data-tab="history">ประวัติ</button>
+    <div class=flex border-b border-slate-700/50 bg-slate-800/50 px-4">
+     <button class=tab-btn active px-4 py-3 text-sm font-medium border-b-2 border-sky-400 text-sky-400 transition-all data-tab="dashboard>แดชบอร์ด</button> 
+     <button class=tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-sky-300 transition-colors data-tab=manage>จัดการข้อมูล</button> 
+     <button class=tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-sky-300 transition-colors data-tab="history>ประวัติ</button>
+     
     </div>
      
-    <div id="tab-dashboard" class="tab-content flex-1 overflow-auto p-4 space-y-4">
-     <div class="grid grid-cols-2 gap-3">
-      <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
-       <div class="flex items-center gap-2 mb-1">
-        <i data-lucide="users" class="w-4 h-4 text-sky-400"></i>
-        <span class="text-xs text-slate-400 font-medium">นักเรียนทั้งหมด</span>
+    <div id=tab-dashboard class=tab-content flex-1 overflow-auto p-4 space-y-4>
+     <div class=grid grid-cols-2 gap-3>
+      <div class=bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm>
+       <div class=flex items-center gap-2 mb-1>
+        <i data-lucide=users class=w-4 h-4 text-sky-400></i>
+        <span class="text-xs text-slate-400 font-medium>นักเรียนทั้งหมด</span>
        </div>
-       <p id="stat-total" class="text-2xl font-bold text-white tracking-tight">0</p>
+       <p id=stat-total class=text-2xl font-bold text-white tracking-tight>0</p>
       </div>
-      <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
-       <div class="flex items-center gap-2 mb-1">
-        <i data-lucide="check-circle" class="w-4 h-4 text-green-400"></i>
-        <span class="text-xs text-slate-400 font-medium">มาเรียนวันนี้</span>
+      <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm>
+       <div class=flex items-center gap-2 mb-1>
+        <i data-lucide=check-circle class=w-4 h-4 text-green-400></i>
+        <span class=text-xs text-slate-400 font-medium>มาเรียนวันนี้</span>
        </div>
-       <p id="stat-present" class="text-2xl font-bold text-green-400 tracking-tight">0</p>
+       <p id=stat-present class=text-2xl font-bold text-green-400 tracking-tight>0</p>
       </div>
-      <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
-       <div class="flex items-center gap-2 mb-1">
-        <i data-lucide="x-circle" class="w-4 h-4 text-rose-400"></i>
-        <span class="text-xs text-slate-400 font-medium">ขาดเรียน</span>
+      <div class=bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm>
+       <div class=flex items-center gap-2 mb-1>
+        <i data-lucide=x-circle class=w-4 h-4 text-rose-400></i>
+        <span class=text-xs text-slate-400 font-medium>ขาดเรียน</span>
        </div>
-       <p id="stat-absent" class="text-2xl font-bold text-rose-400 tracking-tight">0</p>
+       <p id=stat-absent class=text-2xl font-bold text-rose-400 tracking-tight>0</p>
       </div>
-      <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
-       <div class="flex items-center gap-2 mb-1">
-        <i data-lucide="clock" class="w-4 h-4 text-amber-400"></i>
-        <span class="text-xs text-slate-400 font-medium">มาสาย</span>
+      <div class=bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm>
+       <div class=flex items-center gap-2 mb-1>
+        <i data-lucide=clock class=w-4 h-4 text-amber-400></i>
+        <span class=text-xs text-slate-400 font-medium>มาสาย</span>
        </div>
-       <p id="stat-late" class="text-2xl font-bold text-amber-400 tracking-tight">0</p>
+       <p id=stat-late class=text-2xl font-bold text-amber-400 tracking-tight>0</p>
       </div>
-      <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm col-span-2">
-       <div class="flex items-center gap-2 mb-1">
-        <i data-lucide="file-text" class="w-4 h-4 text-orange-400"></i>
-        <span class="text-xs text-orange-400 font-medium">ลาวันนี้ (ป่วย/กิจ)</span>
+        <div class=bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm>
+       <div class=flex items-center gap-2 mb-1>
+        <i data-lucide=clock class=w-4 h-4 text-amber-400></i>
+        <span class=text-xs text-purple-400 font-medium>ลา</span>
        </div>
-       <p id="stat-leave" class="text-2xl font-bold text-orange-400 tracking-tight">0</p>
+       <p id=stat-late class=text-2xl font-bold text-amber-400 tracking-tight>0</p>
       </div>
      </div>
      
-     <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
-      <h3 class="font-semibold text-sm text-slate-200 mb-3 flex items-center gap-1.5">
-       <span class="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse"></span>
+     <div class=bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm>
+      <h3 class=font-semibold text-sm text-slate-200 mb-3 flex items-center gap-1.5"
+       <span class=w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse></span>
        เช็คชื่อล่าสุดวันนี้
       </h3>
-      <div id="recent-list" class="space-y-2 text-sm text-slate-300">
-       <p class="text-slate-500 text-center py-6 italic">ยังไม่มีข้อมูลวันนี้</p>
+      <div id=recent-list class=space-y-2 text-sm text-slate-300>
+       <p class=text-slate-500 text-center py-6 italic>ยังไม่มีข้อมูลวันนี้</p>
       </div>
      </div>
     </div> 
 
-    <div id="tab-manage" class="tab-content flex-1 overflow-auto p-4 space-y-4 hidden">
-     <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
-      <h3 class="font-semibold text-sm text-slate-200 mb-3 flex items-center gap-2">
-       <i data-lucide="user-plus" class="w-4 h-4 text-sky-400"></i>เพิ่มนักเรียน
+    <div id=tab-manage class=tab-content flex-1 overflow-auto p-4 space-y-4 hidden>
+     <div class=bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm>
+      <h3 class=font-semibold text-sm text-slate-200 mb-3 flex items-center gap-2>
+       <i data-lucide=user-plus class=w-4 h-4 text-sky-400></i>เพิ่มนักเรียน
       </h3>
-      <div class="space-y-3">
-       <input id="add-id" type="text" placeholder="รหัสนักเรียน" class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-400/70 focus:border-transparent transition-all"> 
-       <input id="add-name" type="text" placeholder="ชื่อ-นามสกุล" class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-400/70 focus:border-transparent transition-all"> 
-       <select id="add-class" class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-sky-400/70 focus:border-transparent transition-all">
-        <option value="" class="bg-slate-800 text-slate-400">เลือกชั้นเรียน</option> 
-        <option class="bg-slate-800">ปวช.1/1</option><option class="bg-slate-800">ปวช.1/4</option><option class="bg-slate-800">ปวช.1/7</option><option class="bg-slate-800">ปวช.1/10</option>
-        <option class="bg-slate-800">ปวช.1/21</option><option class="bg-slate-800">ปวช.1/22</option>
-        <option class="bg-slate-800">ปวช.1/31</option><option class="bg-slate-800">ปวช.1/32</option><option class="bg-slate-800">ปวช.1/41</option>
-        <option class="bg-slate-800">ปวช.2/1</option><option class="bg-slate-800">ปวช.2/2</option><option class="bg-slate-800">ปวช.2/4</option><option class="bg-slate-800">ปวช.2/7</option> 
-        <option class="bg-slate-800">ปวช.2/10</option><option class="bg-slate-800">ปวช.2/21</option><option class="bg-slate-800">ปวช.2/22</option> 
-        <option class="bg-slate-800">ปวช.2/31</option><option class="bg-slate-800">ปวช.2/32</option><option class="bg-slate-800">ปวช.2/41</option>
-        <option class="bg-slate-800">ปวช.3/1</option><option class="bg-slate-800">ปวช.3/4</option><option class="bg-slate-800">ปวช.3/7</option><option class="bg-slate-800">ปวช.3/10</option> 
-        <option class="bg-slate-800">ปวช.3/21</option><option class="bg-slate-800">ปวช.3/22</option><option class="bg-slate-800">ปวช.3/31</option><option class="bg-slate-800">ปวช.3/32</option> 
-        <option class="bg-slate-800">ปวช.3/41</option><option class="bg-slate-800">ปวส.1/1</option><option class="bg-slate-800">ปวส.1/4</option><option class="bg-slate-800">ปวส.1/7</option> 
-        <option class="bg-slate-800">ปวส.1/10</option><option class="bg-slate-800">ปวส.1/21</option><option class="bg-slate-800">ปวส.1/22</option> 
-        <option class="bg-slate-800">ปวส.1/31</option><option class="bg-slate-800">ปวส.1/32</option><option class="bg-slate-800">ปวส.1/41</option>
-        <option class="bg-slate-800">ปวส.2/1</option><option class="bg-slate-800">ปวส.2/4</option><option class="bg-slate-800">ปวส.2/7</option><option class="bg-slate-800">ปวส.2/10</option> 
-        <option class="bg-slate-800">ปวส.2/21</option><option class="bg-slate-800">ปวส.2/22</option><option class="bg-slate-800">ปวส.2/31</option><option class="bg-slate-800">ปวส.2/32</option> 
-        <option class="bg-slate-800">ปวส.2/41</option> 
+      <div class=space-y-3>
+       <input id=add-id type=text placeholder="รหัสนักเรียน" class=w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-400/70 focus:border-transparent transition-all> 
+       <input id=add-name type=text placeholder="ชื่อ-นามสกุล" class=w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-400/70 focus:border-transparent transition-all> 
+       <select id=add-class class=w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-sky-400/70 focus:border-transparent transition-all>
+        <option value="" class=bg-slate-800 text-slate-400">เลือกชั้นเรียน</option> 
+        <option class=bg-slate-800>ปวช.1/1</option><option class=bg-slate-800>ปวช.1/4</option><option class=bg-slate-800>ปวช.1/7</option><option class=bg-slate-800>ปวช.1/10</option>
+        <option class=bg-slate-800>ปวช.1/21</option><option class=bg-slate-800>ปวช.1/22</option>
+        <option class=bg-slate-800>ปวช.1/31</option>
+        <option class=bg-slate-800>ปวช.1/32</option><option class=bg-slate-800>ปวช.1/41</option>
+        <option class=bg-slate-800>ปวช.2/1</option><option class=bg-slate-800>ปวช.2/2</option> 
+        <option class=bg-slate-800>ปวช.2/4</option><option class=bg-slate-800>ปวช.2/7</option> 
+        <option class=bg-slate-800>ปวช.2/10</option> 
+        <option class=bg-slate-800>ปวช.2/21</option><option class=bg-slate-800>ปวช.2/22</option> 
+        <option class=bg-slate-800>ปวช.2/31</option><option class=bg-slate-800>ปวช.2/32</option> 
+        <option class=bg-slate-800>ปวช.2/41</option><option class=bg-slate-800>ปวช.3/1</option> 
+        <option class=bg-slate-800>ปวช.3/4</option><option class=bg-slate-800>ปวช.3/7</option> 
+        <option class=bg-slate-800>ปวช.3/10</option> 
+        <option class=bg-slate-800>ปวช.3/21</option><option class=bg-slate-800>ปวช.3/22</option> 
+        <option class=bg-slate-800>ปวช.3/31</option><option class=bg-slate-800>ปวช.3/32</option> 
+        <option class=bg-slate-800>ปวช.3/41</option><option class=bg-slate-800>ปวส.1/1</option> 
+        <option class=bg-slate-800>ปวส.1/4</option><option class=bg-slate-800>ปวส.1/7</option> 
+        <option class=bg-slate-800>ปวส.1/10</option> 
+        <option class=bg-slate-800>ปวส.1/21</option><option class=bg-slate-800>ปวส.1/22</option> 
+        <option class=bg-slate-800>ปวส.1/31</option><option class=bg-slate-800>ปวส.1/32</option> 
+        <option class=bg-slate-800>ปวส.1/41</option><option class=bg-slate-800>ปวส.2/1</option> 
+        <option class=bg-slate-800>ปวส.2/4</option><option class=bg-slate-800>ปวส.2/7</option> 
+        <option class=bg-slate-800>ปวส.2/10</option> 
+        <option class=bg-slate-800>ปวส.2/21</option><option class=bg-slate-800>ปวส.2/22</option> 
+        <option class=bg-slate-800>ปวส.2/31</option><option class=bg-slate-800>ปวส.2/32</option> 
+        <option class=bg-slate-800>ปวส.2/41</option> 
        </select>
-       <button id="btn-add-student" class="w-full py-2 bg-sky-500 text-white rounded-lg font-medium text-sm hover:bg-sky-600 transition-all">บันทึกข้อมูล</button>
       </div>
      </div> 
 
-     <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
-      <h3 class="font-semibold text-sm text-slate-200 mb-3 flex items-center gap-2">
-       <i data-lucide="list" class="w-4 h-4 text-sky-400"></i>รายชื่อนักเรียน
+     <div class=bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm>
+      <h3 class=font-semibold text-sm text-slate-200 mb-3 flex items-center gap-2>
+       <i data-lucide=list class=w-4 h-4 text-sky-400></i>รายชื่อนักเรียน
       </h3>
-      <div id="student-list" class="space-y-2 text-sm max-h-64 overflow-auto pr-1">
-       <p class="text-slate-500 text-center py-6 italic">ยังไม่มีข้อมูลนักเรียน</p>
+      <div id=student-list class=space-y-2 text-sm max-h-64 overflow-auto pr-1>
+       <p class=text-slate-500 text-center py-6 italic>ยังไม่มีข้อมูลนักเรียน</p>
       </div>
      </div>
     </div> 
 
-    <div id="tab-history" class="tab-content flex-1 overflow-auto p-4 space-y-4 hidden">
-     <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
-      <h3 class="font-semibold text-sm text-slate-200 mb-3 flex items-center gap-2">
-       <i data-lucide="history" class="w-4 h-4 text-sky-400"></i>ประวัติการเช็คชื่อ
+    <div id=tab-history class=tab-content flex-1 overflow-auto p-4 space-y-4 hidden>
+     <div class=bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm>
+      <h3 class=font-semibold text-sm text-slate-200 mb-3 flex items-center gap-2>
+       <i data-lucide=history class=w-4 h-4 text-sky-400></i>ประวัติการเช็คชื่อ
       </h3>
-      <div id="history-list" class="space-y-2 text-sm max-h-96 overflow-auto pr-1">
-       <p class="text-slate-500 text-center py-6 italic">ยังไม่มีประวัติ</p>
+      <div id=history-list class=space-y-2 text-sm max-h-96 overflow-auto pr-1>
+       <p class= text-slate-500 text-center py-6 italic>ยังไม่มีประวัติ</p>
       </div>
      </div>
     </div>
@@ -204,27 +217,28 @@
   </div>
 
   <script>
-    const SCRIPT_URL = AKfycbx7nbkeKqN8t_HYPMM1OBPDfWwOdsVaJlXiDE5u9UrBkkX3EZSCepHVipuDAwB-uAc13w/exec;
+  const SCRIPT_URL=
+https://script.google.com/macros/s/AKfycbxdoXTMCw1rjIuodk1OOFyaxO3XzKkWsHabmyr3Vj-Z8ZW-QAPq5quqKFVUg7Q7plIW8g/exec
+
     let currentUser = null;
     let allRecords = [];
-    let attendanceHistory = []; // เพิ่มตัวแปรสำหรับเก็บประวัติที่ขาดหายไป
     let cameraStream = null;
 
     function showPage(id) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
+      document.querySelectorAll(.page).forEach(p => p.classList.remove(active));
+      document.getElementById(id).classList.add(active);
     }
 
     // จัดการแท็บหน้าแดชบอร์ดอาจารย์
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => { 
-          b.classList.remove('active', 'border-sky-400', 'text-sky-400'); 
-          b.classList.add('border-transparent', 'text-slate-400'); 
+    document.querySelectorAll(.tab-btn).forEach(btn => {
+      btn.addEventListener(click, () => {
+        document.querySelectorAll(.tab-btn).forEach(b => { 
+          b.classList.remove(active, border-sky-400, text-sky-400); 
+          b.classList.add(border-transparent, text-slate-400); 
         });
-        btn.classList.add('active', 'border-sky-400', 'text-sky-400');
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
-        document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
+        btn.classList.add(active, border-sky-400, text-sky-400);
+        document.querySelectorAll(.tab-content).forEach(t => t.classList.add(hidden));
+        document.getElementById(tab- + btn.dataset.tab).classList.remove(hidden);
       });
     });
 
@@ -233,6 +247,7 @@
       const user = document.getElementById('global-user').value.trim();
       const pass = document.getElementById('global-pass').value.trim();
 
+      // 1. ตรวจสอบข้อมูลเบื้องต้น
       if (!user || !pass) { 
         Swal.fire('ข้อมูลไม่ครบ', 'กรุณากรอกชื่อผู้ใช้งานและรหัสผ่าน', 'warning'); 
         return; 
@@ -242,7 +257,7 @@
         return;
       }
       if (pass.length !== 9 || isNaN(pass)) { 
-        Swal.fire('รหัสผ่านไม่ถูกต้อง', 'รหัสผ่านต้องเป็นตัวเลข 9 หลัก', 'warning'); 
+        Swal.fire('รหัสผ่านไม่ถูกต้อง',  'warning'); 
         return; 
       }
       Swal.fire({
@@ -252,12 +267,14 @@
         didOpen: () => { Swal.showLoading(); }
       });
 
+      // 2. ส่งคำขอแบบดั้งเดิมไปตรวจสอบที่ Google Sheets ของครู
       const script = document.createElement('script');
       script.src = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}&callback=globalLoginResponse`;
       document.body.appendChild(script);
       document.body.removeChild(script);
     });
 
+    // 3. ฟังก์ชันรับคำตอบจาก Google Sheets แล้วคัดแยกหน้าจอตามบทบาท (Role)
     window.globalLoginResponse = function(response) {
       Swal.close();
       if (response.status === 'success') {
@@ -265,10 +282,13 @@
         const role = (response.role || '').trim().toUpperCase();
 
         if (role === 'TEACHER') {
+          // ถ้าหลังบ้านตอบกลับมาว่าเป็นครู -> ไปหน้า Dashboard
           Swal.fire({ icon: 'success', title: 'ยืนยันตัวตนสำเร็จ', text: `สวัสดีอาจารย์ ${response.name}`, timer: 1500, showConfirmButton: false });
           showPage('page-dashboard');
           loadDataFromSheets();
         } else {
+          // ถ้าเป็นนักเรียน หรือสิทธิ์อื่นๆ -> ไปหน้าสแกนกล้องถ่ายรูปเช็คชื่อ
+          // นำข้อมูล Class และ ID ที่ Google Sheets ส่งกลับมาผูกเข้าหน้าจอ
           const studentClass = response.class_name || response.class || 'ไม่ระบุชั้นเรียน';
           const studentId = response.student_id || response.id || document.getElementById('global-pass').value;
           
@@ -277,6 +297,7 @@
           showPage('page-scan');
         }
       } else {
+        // กรณี Username หรือ Password ไม่ตรงกับใน Google Sheets
         Swal.fire('เข้าสู่ระบบไม่สำเร็จ', response.message || 'ไม่พบข้อมูลผู้ใช้งาน หรือรหัสผ่านไม่ถูกต้อง', 'error');
       }
     };
@@ -291,47 +312,47 @@
     window.syncStudentsData = function(response) {
       if (response.status === 'success') {
         allRecords = response.data.map(s => ({ type: 'student', student_id: s.id, name: s.name, class_name: s.class }));
-        attendanceHistory = response.history || []; 
         updateDashboard();
         updateStudentList();
-        updateHistoryList(); 
+        updateHistoryList() 
       }
     };
-
+    // --- โค้ดสำหรับปุ่มกดเพิ่มนักเรียนและฟังก์ชันรับค่ากลับ ---
     document.getElementById('btn-add-student').addEventListener('click', () => {
       const id = document.getElementById('add-id').value.trim();
       const name = document.getElementById('add-name').value.trim();
       const className = document.getElementById('add-class').value;
 
       if (!id || !name || !className) {
-        Swal.fire('ข้อมูลไม่ครบ', 'กรุณากรอกข้อมูลนักเรียนให้ครบถ้วน', 'warning');
-        return;
+      Swal.fire('ข้อมูลไม่ครบ', 'กรุณากรอกข้อมูลนักเรียนให้ครบถ้วน', 'warning');
+      return;
       }
 
-      Swal.fire({ 
+       Swal.fire({ 
         title: 'กำลังบันทึกข้อมูล...', 
         allowOutsideClick: false, 
         didOpen: () => { Swal.showLoading(); } 
-      });
+     });
 
-      const script = document.createElement('script');
-      script.src = `${SCRIPT_URL}?action=addStudent&id=${encodeURIComponent(id)}&name=${encodeURIComponent(name)}&class=${encodeURIComponent(className)}&callback=addStudentResponse`;
-      document.body.appendChild(script);
-      document.body.removeChild(script);
-    });
+  const script = document.createElement('script');
+  script.src = `${SCRIPT_URL}?action=addStudent&id=${encodeURIComponent(id)}&name=${encodeURIComponent(name)}&class=${encodeURIComponent(className)}&callback=addStudentResponse`;
+  document.body.appendChild(script);
+  document.body.removeChild(script);
+});
 
-    window.addStudentResponse = function(response) {
-      Swal.close();
-      if (response.status === 'success') {
-        Swal.fire('สำเร็จ', 'เพิ่มรายชื่อเรียบร้อยแล้ว', 'success');
-        document.getElementById('add-id').value = '';
-        document.getElementById('add-name').value = '';
-        document.getElementById('add-class').value = '';
-        loadDataFromSheets(); 
-      } else {
-        Swal.fire('ล้มเหลว', response.message || 'ไม่สามารถบันทึกได้', 'error');
-      }
-    };
+  window.addStudentResponse = function(response) {
+  Swal.close();
+  if (response.status === 'success') {
+    Swal.fire('สำเร็จ', 'เพิ่มรายเรียบร้อยแล้ว', 'success');
+    // ล้างค่าในช่องกรอกหลังบันทึกสำเร็จ
+    document.getElementById('add-id').value = '';
+    document.getElementById('add-name').value = '';
+    document.getElementById('add-class').value = '';
+    loadDataFromSheets(); // สั่งให้ระบบดึงข้อมูลจากชีตใหม่เพื่ออัปเดตหน้าจอทันที
+  } else {
+    Swal.fire('ล้มเหลว', response.message || 'ไม่สามารถบันทึกได้', 'error');
+  }
+};
 
     document.getElementById('btn-back-login').addEventListener('click', () => { 
       stopCamera(); 
@@ -341,11 +362,12 @@
     });
     
     document.getElementById('btn-logout').addEventListener('click', () => { 
-      document.getElementById('global-user').value = '';
+     document.getElementById('global-user').value = '';
       document.getElementById('global-pass').value = '';
       showPage('page-login'); 
     });
 
+    // ระบบควบคุมกล้อง (คงเดิม)
     document.getElementById('btn-start-scan').addEventListener('click', async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
@@ -366,179 +388,201 @@
     }
 
     function completeAttendance() {
-      if (!currentUser) return;
-      const now = new Date();
-      const isLate = now.getHours() >= 8 && now.getMinutes() > 30;
-      const statusText = isLate ? 'มาสาย' : 'มาเรียน';
+     if (!currentUser) return;
+        const now = new Date();
+        const isLate = now.getHours() >= 8 && now.getMinutes() > 30;
+        const statusText = isLate ? 'มาสาย' : 'มาเรียน';
 
-      document.getElementById('scan-status').classList.add('hidden');
-      stopCamera();
+    document.getElementById('scan-status').classList.add('hidden');
+    stopCamera();
 
-      const studentId = currentUser.student_id || currentUser.id;
-      const studentClass = currentUser.class_name || currentUser.class;
+  // ดึง ID และ Class ที่ผูกไว้จากตอนล็อกอินมาใช้ส่ง
+    const studentId = currentUser.student_id || currentUser.id;
+    const studentClass = currentUser.class_name || currentUser.class;
 
-      const script = document.createElement('script');
-      script.src = `${SCRIPT_URL}?action=checkIn&id=${encodeURIComponent(studentId)}&name=${encodeURIComponent(currentUser.name)}&class=${encodeURIComponent(studentClass)}&status=${encodeURIComponent(statusText)}&callback=checkInResponse`;
-      document.body.appendChild(script);
-      document.body.removeChild(script);
+    const script = document.createElement('script');
+    script.src = `${SCRIPT_URL}?action=checkIn&id=${encodeURIComponent(studentId)}&name=${encodeURIComponent(currentUser.name)}&class=${encodeURIComponent(studentClass)}&status=${encodeURIComponent(statusText)}&callback=checkInResponse`;
+    document.body.appendChild(script);
+    document.body.removeChild(script);
+  }
+
+// สร้างฟังก์ชันรอรับการตอบกลับจาก Google Sheets
+  window.checkInResponse = function(response) {
+    if (response.status === 'success') {
+      showScanResult(`✅ เช็คชื่อสำเร็จ! สถานะ: ${response.attendance_status} เวลา: ${response.time}`, true);
+    } else {
+      showScanResult(`❌ บันทึกไม่สำเร็จ: ${response.message}`, false);
     }
-
-    window.checkInResponse = function(response) {
-      if (response.status === 'success') {
-        showScanResult(`✅ เช็คชื่อสำเร็จ! สถานะ: ${response.attendance_status} เวลา: ${response.time}`, true);
-      } else {
-        showScanResult(`❌ บันทึกไม่สำเร็จ: ${response.message}`, false);
-      }
-    };
+  };
 
     function showScanResult(msg, success) {
       const el = document.getElementById('scan-result');
       el.classList.remove('hidden');
       el.textContent = msg;
-      el.className = `mt-4 rounded-xl p-4 text-sm font-medium ${success ? 'bg-sky-500/10 border border-sky-400/30 text-sky-600' : 'bg-rose-500/10 border border-rose-500/30 text-rose-600'}`;
-    }
+      el.className = mt-4 rounded-xl p-4 text-sm font-medium ${success ? bg-sky-500/10 border border-sky-400/30 text-sky-600 : bg-rose-500/10 border border-rose-500/30 text-rose-600};
 
-    // แก้ไข Syntax ฟังก์ชันเปิดใบลา
-    document.getElementById('btn-open-leave').addEventListener('click', () => {
-      if (!currentUser) return;
+ // ฟังก์ชันเปิดฟอร์มแจ้งลาออนไลน์ด้วย SweetAlert2
+  document.getElementById('btn-open-leave').addEventListener(click, () => {
+    if (!currentUser) return;
       Swal.fire({
-        title: 'แบบฟอร์มแจ้งลาออนไลน์',
-        html: `
-        <div class="text-left space-y-3">
-          <div>
-            <label class="block text-xs font-semibold text-slate-500 mb-1">ประเภทการลา</label>
-            <select id="leave-type" class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
-              <option value="ลาป่วย">ลาป่วย</option>
-              <option value="ลากิจ">ลากิจ</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-500 mb-1">เหตุผลการลา</label>
-            <textarea id="leave-reason" rows="3" placeholder="ระบุเหตุผลการลา..." class="w-full px-3 py-2 border rounded-lg text-sm" maxlength="150"></textarea>
-          </div>
-        </div>`,
-        showCancelButton: true,
-        confirmButtonText: 'ส่งใบลา',
-        cancelButtonText: 'ยกเลิก',
-        confirmButtonColor: '#38bdf8', 
-        preConfirm: () => {
-          const type = document.getElementById('leave-type').value;
-          const reason = document.getElementById('leave-reason').value.trim();
-          if (!reason) {
-            Swal.showValidationMessage('กรุณากรอกเหตุผลการลา');
-          }
-          return { type, reason };
-        }
-      }).then((result) => {
-        if (result.isConfirmed) {
-          sendLeaveToSheets(result.value.type, result.value.reason);
-        }
-      });
-    });
-
-    function sendLeaveToSheets(type, reason) {
-      Swal.fire({ title: 'กำลังส่งข้อมูล...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
-      const studentId = currentUser.student_id || currentUser.id;
-      const studentClass = currentUser.class_name || currentUser.class;
-
-      const script = document.createElement('script');
-      script.src = `${SCRIPT_URL}?action=checkIn&id=${encodeURIComponent(studentId)}&name=${encodeURIComponent(currentUser.name)}&class=${encodeURIComponent(studentClass)}&status=${encodeURIComponent(type)}&reason=${encodeURIComponent(reason)}&callback=leaveResponse`;
-      document.body.appendChild(script);
-      document.body.removeChild(script);
-    }
-
-    window.leaveResponse = function(response) {
-      Swal.close();
-      if (response.status === 'success') {
-        Swal.fire('ส่งใบลาสำเร็จ', `ระบบได้บันทึกสถานะการ${response.attendance_status}เรียบร้อยแล้ว`, 'success');
-        showScanResult(`✉️ ส่งใบลาสำเร็จเป็นที่เรียบร้อย (${response.attendance_status})`, true);
-      } else {
-        Swal.fire('เกิดข้อผิดพลาด', response.message || 'ไม่สามารถส่งใบลาได้', 'error');
+      title: 'แบบฟอร์มแจ้งลาออนไลน์',
+      html: 
+      <div class=text-left space-y-3>
+        <div>
+          <label class= block text-xs font-semibold text-slate-500 mb-1 >ประเภทการลา</label>
+          <select id=leave-type class=w-full px-3 py-2 border rounded-lg text-sm bg-white>
+            <option value="ลาป่วย">ลาป่วย</option>
+            <option value="ลากิจ">ลากิจ</option>
+          </select>
+        </div>
+        <div>
+          <label class= block text-xs font-semibold text-slate-500 mb-1 > "เหตุผลการลา" </label>
+          <textarea id=leave-reason rows=3 placeholder="ระบุเหตุผลการลา..." class =w-full px-3 py-2 border rounded-lg text-sm maxlength =150></textarea>
+        </div>
+      </div>
+    ,
+    showCancelButton: true,
+    confirmButtonText: 'ส่งใบลา',
+    cancelButtonText: 'ยกเลิก',
+    confirmButtonColor: '#38bdf8', // สีฟ้า Sky
+    preConfirm: () => {
+      const type = document.getElementById('leave-type').value;
+      const reason = document.getElementById('leave-reason').value.trim();
+      if (!reason) {
+        Swal.showValidationMessage('กรุณากรอกเหตุผลการลา');
       }
-    };
+      return { type, reason };
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // สั่งส่งข้อมูลไป Google Sheets
+      sendLeaveToSheets(result.value.type, result.value.reason);
+    }
+  });
+});
 
-    function updateDashboard() {
-      const totalStudents = allRecords.length; 
-      const presentCount = attendanceHistory.filter(h => h.status === 'มาเรียน').length;
-      const lateCount = attendanceHistory.filter(h => h.status === 'มาสาย').length;
-      const leaveCount = attendanceHistory.filter(h => h.status && h.status.includes('ลา')).length; 
-      const absentCount = Math.max(0, totalStudents - (presentCount + lateCount + leaveCount));
+// ฟังก์ชันส่งข้อมูลลาไป Google Sheets หลังบ้าน
+function sendLeaveToSheets(type, reason) {
+  Swal.fire({ title: 'กำลังส่งข้อมูล...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
 
-      document.getElementById('stat-total').textContent = totalStudents;
-      document.getElementById('stat-present').textContent = presentCount;
-      document.getElementById('stat-late').textContent = lateCount;
-      document.getElementById('stat-absent').textContent = absentCount;
-      document.getElementById('stat-leave').textContent = leaveCount; // เพิ่มตัวเลขคนลาบนหน้า Dashboard
+  const studentId = currentUser.student_id || currentUser.id;
+  const studentClass = currentUser.class_name || currentUser.class;
 
-      const recentContainer = document.getElementById('recent-list');
-      if (attendanceHistory.length === 0) {
-        recentContainer.innerHTML = '<p class="text-slate-500 text-center py-6 italic">ยังไม่มีข้อมูลวันนี้</p>';
-        return;
-      }
+  // ส่ง action=checkIn แต่แนบสถานะเป็น "ลาป่วย" หรือ "ลากิจ" พร้อมเหตุผล
+  const script = document.createElement('script');
+  script.src = `${SCRIPT_URL}?action=checkIn&id=${encodeURIComponent(studentId)}&name=${encodeURIComponent(currentUser.name)}&class=${encodeURIComponent(studentClass)}&status=${encodeURIComponent(type)}&reason=${encodeURIComponent(reason)}&callback=leaveResponse`;
+  document.body.appendChild(script);
+  document.body.removeChild(script);
+}
 
-      recentContainer.innerHTML = attendanceHistory.slice(-5).reverse().map(h => {
-        let badgeColor = 'bg-green-500/10 text-green-400';
-        if (h.status === 'มาสาย') badgeColor = 'bg-amber-500/10 text-amber-400';
-        else if (h.status && h.status.includes('ลา')) badgeColor = 'bg-orange-500/10 text-orange-400';
-
-        return `
-          <div class="flex items-center justify-between bg-slate-800 p-2.5 rounded-lg border border-slate-700/40">
-            <div>
-              <span class="text-white font-medium">${h.name}</span> 
-              <span class="text-xs text-slate-400">(${h.class})</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="text-xs px-2 py-0.5 rounded ${badgeColor}">${h.status}</span>
-              <span class="text-xs text-slate-400">${h.time}</span>
-            </div>
-          </div>`;
-      }).join('');
+// ฟังก์ชันรอรับผลลัพธ์การบันทึกใบลา
+window.leaveResponse = function(response) {
+  Swal.close();
+  if (response.status === 'success') {
+    Swal.fire('ส่งใบลาสำเร็จ', `ระบบได้บันทึกสถานะการ${response.attendance_status}เรียบร้อยแล้ว`, 'success');
+    // แสดงผลลัพธ์สีเขียวบนหน้าจอหลักด้วย
+    showScanResult(`✉️ ส่งใบลาสำเร็จเป็นที่เรียบร้อย (${response.attendance_status})`, true);
+  } else {
+    Swal.fire('เกิดข้อผิดพลาด', response.message || 'ไม่สามารถส่งใบลาได้', 'error');
+  }
+};
     }
 
-    function updateStudentList() {
-      const students = allRecords.filter(r => r.type === 'student');
-      const container = document.getElementById('student-list');
-      if (students.length === 0) { container.innerHTML = '<p class="text-slate-500 text-center py-4">ยังไม่มีข้อมูลนักเรียน</p>'; return; }
-      container.innerHTML = students.map(s => `
-        <div class="flex items-center justify-between bg-slate-700/30 rounded-lg px-3 py-2">
-          <div><span class="text-sky-400 font-medium">${s.student_id}</span> <span class="text-white">${s.name}</span></div>
-          <span class="text-xs text-slate-400 bg-slate-700 px-2 py-1 rounded">${s.class_name}</span>
-        </div>`).join('');
-    }
+function updateDashboard() {
+  const totalStudents = allRecords.length; // จำนวนนักเรียนทั้งหมดในระบบ
 
-    function updateHistoryList() {
-      const container = document.getElementById('history-list');
+  // กรองนับสถานะจากประวัติวันนี้
+  const presentCount = attendanceHistory.filter(h => h.status === 'มาเรียน').length;
+  const lateCount = attendanceHistory.filter(h => h.status === 'มาสาย').length;
+  const leaveCount = attendanceHistory.filter(h => h.status.includes('ลา')).length; // นับทั้งลาป่วยและลากิจ
+  
+  // ขาดเรียนคำนวณจาก: นักเรียนทั้งหมด - (มา + สาย + ลา)
+  const absentCount = Math.max(0, totalStudents - (presentCount + lateCount + leaveCount));
+
+  // ส่งตัวเลขไปอัปเดตบนหน้าจอหน้าเว็บของอาจารย์
+  document.getElementById('stat-total').textContent = totalStudents;
+  document.getElementById('stat-present').textContent = presentCount;
+  document.getElementById('stat-late').textContent = lateCount;
+  document.getElementById('stat-absent').textContent = absentCount; // ตัวเลขขาดเรียนจะถูกต้อง ไม่รวมคนลาแล้ว
+
+  // ----------------------------------------------------
+  // แถม: ส่วนแสดงรายชื่อเช็คชื่อล่าสุดในวันนี้ (กล่องล่างของแดชบอร์ด)
+  // ----------------------------------------------------
+  const recentContainer = document.getElementById('recent-list');
+  if (attendanceHistory.length === 0) {
+    recentContainer.innerHTML = <p class = text-slate-500 text-center py-6 italic > ยังไม่มีข้อมูลวันนี้ </p>;
+    return;
+  }
+
+  // แสดงคนเช็คชื่อล่าสุด 5 คนแรก (รวมคนลาด้วย)
+  recentContainer.innerHTML = attendanceHistory.slice(-5).reverse().map(h => {
+    let badgeColor =  bg-green-500/10 text-green-400 ;
+    if (h.status === 'มาสาย') badgeColor = bg-amber-500/10 text-amber-400 ;
+    else if (h.status.includes('ลา')) badgeColor = bg-orange-500/10 text-orange-400 ;
+
+    return 
+      <div class = flex items-center justify-between bg-slate-800 p-2.5 rounded-lg border border-slate-700/40 >
+        <div>
+          <span class = text-white font-medium >${h.name}</span> 
+          <span class = text-xs text-slate-400 >(${h.class})</span>
+        </div>
+        <div class = flex items-center gap-2 >
+          <span class = text-xs px-2 py-0.5 rounded ${badgeColor} >${h.status}</span>
+          <span class = text-xs text-slate-400 >${h.time}</span>
+        </div>
+      </div>
+    ;
+  }).join('');
+}
+
+function updateStudentList() {
+  const students = allRecords.filter(r => r.type === student);
+  const container = document.getElementById( student-list );
+    if (students.length === 0) { container.innerHTML = <p class= text-slate-500 text-center py-4 >ยังไม่มีข้อมูลนักเรียน</ p>; return; }
+    container.innerHTML = students.map(s => 
+      <div class = flex items-center justify-between bg-slate-700/30 rounded-lg px-3 py-2">
+      <div><span class = text-sky-400 font-medium >${s.student_id}</span> <span class = text-white >${s.name}</span></div>
+      <span class= text-xs text-slate-400 bg-slate-700 px-2 py-1 rounded >${s.class_name}</span>
+        </div>
+      ).join('');
+    }
+    // สั่งเพิ่มฟังก์ชันใหม่เข้าไปตรงนี้เลยครับ
+function updateHistoryList() {
+      const container = document.getElementById (history-list);
       if (!attendanceHistory || attendanceHistory.length === 0) { 
-        container.innerHTML = '<p class="text-slate-500 text-center py-6 italic">ยังไม่มีประวัติการแจ้งลาหรือเช็คชื่อ</p>'; 
+        container.innerHTML = <p class = text-slate-500 text-center py-6 italic > ยังไม่มีประวัติการแจ้งลาหรือเช็คชื่อ </p>; 
         return; 
       }
       
       container.innerHTML = attendanceHistory.slice().reverse().map(h => {
-        let borderColor = 'border-green-500'; 
-        let statusColor = 'text-green-400';
+        // 1. กำหนดสีขอบตามสถานะ (รองรับ มาเรียน / มาสาย / ลาป่วย / ลากิจ)
+        let borderColor =  border-green-500 ; 
+        let statusColor =  text-green-400 ;
         
-        if (h.status === 'มาสาย') { 
-          borderColor = 'border-amber-500'; 
-          statusColor = 'text-amber-400'; 
-        } else if (h.status && h.status.includes('ลา')) { 
-          borderColor = 'border-orange-500'; 
-          statusColor = 'text-orange-400'; 
+        if (h.status ===  มาสาย ) { 
+          borderColor =  border-amber-500; 
+          statusColor = text-amber-400; 
+        } else if (h.status && h.status.includes(ลา)) { 
+          borderColor = border-orange-500; 
+          statusColor = text-orange-400; 
         }
         
-        const reasonHTML = h.reason ? `<div class="text-[11px] text-slate-400 mt-1 italic bg-slate-800 px-2 py-0.5 rounded inline-block">เหตุผล: ${h.reason}</div>` : '';
+        // 2. ตรวจสอบว่ามีเหตุผลการลาแนบมาด้วยไหม ถ้ามีให้แสดงผล
+        const reasonHTML = h.reason ? <div class = text-[11px] text-slate-400 mt-1 italic bg-slate-800 px-2 py-0.5 rounded inline-block >เหตุผล: ${h.reason}</div> : '';
 
-        return `
-          <div class="flex items-center justify-between bg-slate-700/30 rounded-lg px-3 py-2 border-l-4 ${borderColor}">
+        return 
+          <div class= flex items-center justify-between bg-slate-700/30 rounded-lg px-3 py-2 border-l-4 ${borderColor} >
             <div>
-              <div class="text-white font-medium">${h.name} <span class="text-xs text-slate-400">(${h.id || h.student_id})</span></div>
-              <div class="text-xs text-slate-400">${h.class || h.class_name}</div>
+              <div class= text-white font-medium >${h.name} <span class= text-xs text-slate-400 >(${h.id || h.student_id})</span></div>
+              <div class= text-xs text-slate-400 >${h.class || h.class_name}</div>
               ${reasonHTML}
             </div>
-            <div class="text-right">
-              <div class="font-semibold ${statusColor}">${h.status}</div>
-              <div class="text-xs text-slate-500">${h.time}</div>
+            <div class= text-right >
+              <div class= font-semibold ${statusColor} >${h.status}</div>
+              <div class= text-xs text-slate-500>${h.time}</div>
             </div>
-          </div>`;
+          </div>
+         ;
       }).join('');
     }
 
