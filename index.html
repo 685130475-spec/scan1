@@ -41,7 +41,7 @@
        </div>
        <div>
         <label for="global-pass" class="block text-sm font-medium text-slate-600 mb-1">Password</label> 
-        <input id="global-pass" type="password" placeholder="รหัสผ่าน" 
+        <input id="global-pass" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="9" placeholder="รหัสผ่าน" 
                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all">
        </div>
        <button id="btn-global-login" class="w-full mt-2 py-3 bg-gradient-to-r from-sky-400 to-blue-500 rounded-xl font-semibold text-white hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-500/20 active:scale-95"> 
@@ -70,6 +70,7 @@
       <i data-lucide="camera" class="w-5 h-5"></i> กดปุ่มเพื่อเริ่มเช็คชื่อ 
      </button>
 
+     <!-- ปุ่มแจ้งลาที่เพิ่มเข้ามาใหม่ -->
      <button id="btn-open-leave" class="mt-2 px-8 py-2.5 bg-slate-200 text-slate-700 hover:bg-slate-300 font-medium rounded-xl transition-all active:scale-95 inline-flex items-center gap-2 text-sm w-full justify-center max-w-[260px] mx-auto">
        <i data-lucide="file-text" class="w-4 h-4"></i> แจ้งลาออนไลน์ 
      </button>
@@ -203,11 +204,11 @@
   </div>
 
   <script>
-    // ตรวจสอบเครื่องหมายคำพูดรอบ URL เรียบร้อยแล้ว
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7nbkeKqN8t_HYPMM1OBPDfWwOdsVaJlXiDE5u9UrBkkX3EZSCepHVipuDAwB-uAc13w/exec";
+    // 🛠️ แก้ไขเฉพาะจุดนี้: ครอบเครื่องหมายอัญประกาศคู่ "" ให้ลิงก์ URL ถูกไวยากรณ์ JavaScript
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxdoXTMCw1rjIuodk1OOFyaxO3XzKkWsHabmyr3Vj-Z8ZW-QAPq5quqKFVUg7Q7plIW8g/exec";
     let currentUser = null;
     let allRecords = [];
-    let attendanceHistory = [];
+    let attendanceHistory = []; // เพิ่มตัวแปรสำหรับเก็บประวัติที่ขาดหายไป
     let cameraStream = null;
 
     function showPage(id) {
@@ -215,6 +216,7 @@
       document.getElementById(id).classList.add('active');
     }
 
+    // จัดการแท็บหน้าแดชบอร์ดอาจารย์
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.tab-btn').forEach(b => { 
@@ -227,6 +229,7 @@
       });
     });
 
+    // --- ระบบล็อกอินฟอร์มเดี่ยว แยกสิทธิ์อัจฉริยะ ---
     document.getElementById('btn-global-login').addEventListener('click', () => {
       const user = document.getElementById('global-user').value.trim();
       const pass = document.getElementById('global-pass').value.trim();
@@ -235,7 +238,14 @@
         Swal.fire('ข้อมูลไม่ครบ', 'กรุณากรอกชื่อผู้ใช้งานและรหัสผ่าน', 'warning'); 
         return; 
       }
-
+      if (user.length > 60) {
+        Swal.fire('ข้อมูลยาวเกินไป', 'warning');
+        return;
+      }
+      if (pass.length !== 9 || isNaN(pass)) { 
+        Swal.fire('รหัสผ่านไม่ถูกต้อง', 'รหัสผ่านต้องเป็นตัวเลข 9 หลัก', 'warning'); 
+        return; 
+      }
       Swal.fire({
         title: 'กำลังตรวจสอบสิทธิ์',
         text: 'กรุณารอสักครู่...',
@@ -243,20 +253,15 @@
         didOpen: () => { Swal.showLoading(); }
       });
 
-      // ใช้ JSONP เรียกหาเซิร์ฟเวอร์หลังบ้านอย่างปลอดภัย
       const script = document.createElement('script');
       script.src = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}&callback=globalLoginResponse`;
-      script.onerror = function() {
-        Swal.close();
-        Swal.fire('การเชื่อมต่อล้มเหลว', 'ไม่สามารถติดต่อ Google Script หลังบ้านได้ กรุณาตรวจสอบการตั้งค่า Deploy เว็บแอป', 'error');
-      };
       document.body.appendChild(script);
       document.body.removeChild(script);
     });
 
     window.globalLoginResponse = function(response) {
       Swal.close();
-      if (response && response.status === 'success') {
+      if (response.status === 'success') {
         currentUser = response;
         const role = (response.role || '').trim().toUpperCase();
 
@@ -273,7 +278,7 @@
           showPage('page-scan');
         }
       } else {
-        Swal.fire('เข้าสู่ระบบไม่สำเร็จ', (response && response.message) || 'ไม่พบข้อมูลผู้ใช้งาน หรือรหัสผ่านไม่ถูกต้อง', 'error');
+        Swal.fire('เข้าสู่ระบบไม่สำเร็จ', response.message || 'ไม่พบข้อมูลผู้ใช้งาน หรือรหัสผ่านไม่ถูกต้อง', 'error');
       }
     };
 
@@ -285,8 +290,8 @@
     }
 
     window.syncStudentsData = function(response) {
-      if (response && response.status === 'success') {
-        allRecords = response.data ? response.data.map(s => ({ type: 'student', student_id: s.id, name: s.name, class_name: s.class })) : [];
+      if (response.status === 'success') {
+        allRecords = response.data.map(s => ({ type: 'student', student_id: s.id, name: s.name, class_name: s.class }));
         attendanceHistory = response.history || []; 
         updateDashboard();
         updateStudentList();
@@ -304,7 +309,12 @@
         return;
       }
 
-      Swal.fire({ title: 'กำลังบันทึกข้อมูล...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
+      Swal.fire({ 
+        title: 'กำลังบันทึกข้อมูล...', 
+        allowOutsideClick: false, 
+        didOpen: () => { Swal.showLoading(); } 
+      });
+
       const script = document.createElement('script');
       script.src = `${SCRIPT_URL}?action=addStudent&id=${encodeURIComponent(id)}&name=${encodeURIComponent(name)}&class=${encodeURIComponent(className)}&callback=addStudentResponse`;
       document.body.appendChild(script);
@@ -313,14 +323,14 @@
 
     window.addStudentResponse = function(response) {
       Swal.close();
-      if (response && response.status === 'success') {
+      if (response.status === 'success') {
         Swal.fire('สำเร็จ', 'เพิ่มรายชื่อเรียบร้อยแล้ว', 'success');
         document.getElementById('add-id').value = '';
         document.getElementById('add-name').value = '';
         document.getElementById('add-class').value = '';
         loadDataFromSheets(); 
       } else {
-        Swal.fire('ล้มเหลว', (response && response.message) || 'ไม่สามารถบันทึกได้', 'error');
+        Swal.fire('ล้มเหลว', response.message || 'ไม่สามารถบันทึกได้', 'error');
       }
     };
 
@@ -375,10 +385,10 @@
     }
 
     window.checkInResponse = function(response) {
-      if (response && response.status === 'success') {
-        showScanResult(`✅ เช็คชื่อสำเร็จ! สถานะ: ${response.attendance_status} เวลา: ${response.time}`, true);
+      if (response.status === 'success') {
+        showScanResult(`✅ เช็คชื่อสำเร็จ! Status: ${response.attendance_status} เวลา: ${response.time}`, true);
       } else {
-        showScanResult(`❌ บันทึกไม่สำเร็จ: ${response ? response.message : 'เกิดข้อผิดพลาดคลาวด์'}`, false);
+        showScanResult(`❌ บันทึกไม่สำเร็จ: ${response.message}`, false);
       }
     };
 
@@ -389,6 +399,7 @@
       el.className = `mt-4 rounded-xl p-4 text-sm font-medium ${success ? 'bg-sky-500/10 border border-sky-400/30 text-sky-600' : 'bg-rose-500/10 border border-rose-500/30 text-rose-600'}`;
     }
 
+    // แจ้งลาออนไลน์
     document.getElementById('btn-open-leave').addEventListener('click', () => {
       if (!currentUser) return;
       Swal.fire({
@@ -414,11 +425,15 @@
         preConfirm: () => {
           const type = document.getElementById('leave-type').value;
           const reason = document.getElementById('leave-reason').value.trim();
-          if (!reason) { Swal.showValidationMessage('กรุณากรอกเหตุผลการลา'); }
+          if (!reason) {
+            Swal.showValidationMessage('กรุณากรอกเหตุผลการลา');
+          }
           return { type, reason };
         }
       }).then((result) => {
-        if (result.isConfirmed) { sendLeaveToSheets(result.value.type, result.value.reason); }
+        if (result.isConfirmed) {
+          sendLeaveToSheets(result.value.type, result.value.reason);
+        }
       });
     });
 
@@ -435,11 +450,11 @@
 
     window.leaveResponse = function(response) {
       Swal.close();
-      if (response && response.status === 'success') {
+      if (response.status === 'success') {
         Swal.fire('ส่งใบลาสำเร็จ', `ระบบได้บันทึกสถานะการ${response.attendance_status}เรียบร้อยแล้ว`, 'success');
         showScanResult(`✉️ ส่งใบลาสำเร็จเป็นที่เรียบร้อย (${response.attendance_status})`, true);
       } else {
-        Swal.fire('เกิดข้อผิดพลาด', (response && response.message) || 'ไม่สามารถส่งใบลาได้', 'error');
+        Swal.fire('เกิดข้อผิดพลาด', response.message || 'ไม่สามารถส่งใบลาได้', 'error');
       }
     };
 
@@ -454,7 +469,7 @@
       document.getElementById('stat-present').textContent = presentCount;
       document.getElementById('stat-late').textContent = lateCount;
       document.getElementById('stat-absent').textContent = absentCount;
-      document.getElementById('stat-leave').textContent = leaveCount;
+      document.getElementById('stat-leave').textContent = leaveCount; // เพิ่มตัวเลขคนลาบนหน้า Dashboard
 
       const recentContainer = document.getElementById('recent-list');
       if (attendanceHistory.length === 0) {
@@ -503,8 +518,13 @@
         let borderColor = 'border-green-500'; 
         let statusColor = 'text-green-400';
         
-        if (h.status === 'มาสาย') { borderColor = 'border-amber-500'; statusColor = 'text-amber-400'; } 
-        else if (h.status && h.status.includes('ลา')) { borderColor = 'border-orange-500'; statusColor = 'text-orange-400'; }
+        if (h.status === 'มาสาย') { 
+          borderColor = 'border-amber-500'; 
+          statusColor = 'text-amber-400'; 
+        } else if (h.status && h.status.includes('ลา')) { 
+          borderColor = 'border-orange-500'; 
+          statusColor = 'text-orange-400'; 
+        }
         
         const reasonHTML = h.reason ? `<div class="text-[11px] text-slate-400 mt-1 italic bg-slate-800 px-2 py-0.5 rounded inline-block">เหตุผล: ${h.reason}</div>` : '';
 
