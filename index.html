@@ -57,6 +57,25 @@
      <h2 class="text-xl font-bold text-slate-800 mb-2">เช็คชื่อด้วยเทคโนโลยีใบหน้า</h2>
      <p id="scan-user-info" class="text-slate-500 text-sm mb-6"></p>
      
+     <div class="space-y-2 mb-4 text-left">
+      <select id="scan-group-select" class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-sky-400/70 focus:border-transparent transition-all">
+        <option value="" class="bg-slate-800 text-slate-400">เลือกกลุ่มเรียน</option> 
+        <option class="bg-slate-800">ปวส.2/7 ก1</option>
+        <option class="bg-slate-800">ปวส.2/7 ก2</option>
+      </select>
+
+      <select id="scan-subject-select" class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-sky-400/70 focus:border-transparent transition-all">
+        <option value="" class="bg-slate-800 text-slate-400">เลือกวิชาเรียน</option> 
+        <option class="bg-slate-800">โครงงานด้านเทคโนโลยีธุรกิจดิจิทัล</option>
+        <option class="bg-slate-800">สื่อสร้างสรรค์ธุรกิจดิจิทัล</option>
+        <option class="bg-slate-800">ทักษะการเขียนและการพูดภาษาไทยในงานอาชีพ</option>
+        <option class="bg-slate-800">เครือข่ายคอมพิวเตอร์และความปลอดภัย</option>
+        <option class="bg-slate-800">ธุรกิจดิจิทัล</option>
+        <option class="bg-slate-800">วิทยาศาสตร์งานอาชีพธุรกิจและบริการ</option>
+        <option class="bg-slate-800">ระบบปัญญาประดิษฐ์เบื้องต้น</option>
+      </select>
+     </div>
+
      <div class="relative mx-auto w-80 h-80 rounded-3xl overflow-hidden border-4 border-sky-400 bg-slate-800 mb-6 shadow-xl">
       <video id="camera-feed" class="w-full h-full object-cover" autoplay playsinline muted></video>
       <div class="absolute inset-0 flex items-center justify-center" id="scan-overlay">
@@ -65,23 +84,6 @@
       </div>
       <div id="scan-status" class="absolute bottom-3 left-0 right-0 text-center text-sm font-medium text-sky-300 hidden"> กำลังสแกน... </div>
      </div>
-
-     <select id="add-class" class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-sky-400/70 focus:border-transparent transition-all">
-        <option value="" class="bg-slate-800 text-slate-400">เลือกชั้นเรียน</option> 
-        <option>ปวส.2/7 ก1</option>
-        <option>ปวส.2/7 ก2</option>
-       </select>
-
-    <select id="add-class" class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-sky-400/70 focus:border-transparent transition-all">
-        <option value="" class="bg-slate-800 text-slate-400">เลือกวิชาเรียน</option> 
-        <option>โครงงานด้านเทคโนโลยีธุรกิจดิจิทัล</option>
-        <option>สื่อสร้างสรรค์ธุรกิจดิจิทัล</option>
-        <option>ทักษะการเขียนและการพูดภาษาไทยในงานอาชีพ</option>
-        <option>เครือข่ายคอมพิวเตอร์และความปลอดภัย</option>
-        <option>ธุรกิจดิจิทัล</option>
-        <option>วิทยาศาสตร์งานอาชีพธุรกิจและบริการ</option>
-        <option>ระบบปัญญาประดิษฐ์เบื้องต้น</option>
-       </select>
 
      <button id="btn-start-scan" class="px-8 py-3 bg-gradient-to-r from-sky-400 to-blue-500 rounded-xl font-semibold text-white hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-500/20 active:scale-95 inline-flex items-center gap-2"> 
       <i data-lucide="camera" class="w-5 h-5"></i> กดปุ่มเพื่อเริ่มเช็คชื่อ 
@@ -177,8 +179,8 @@
        <input id="add-name" type="text" placeholder="ชื่อ-นามสกุล" class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-400/70 focus:border-transparent transition-all"> 
        <select id="add-class" class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-sky-400/70 focus:border-transparent transition-all">
         <option value="" class="bg-slate-800 text-slate-400">เลือกชั้นเรียน</option> 
-        <option>class="bg-slate-800">ปวส.2/7 ก1</option>
-        <option>class="bg-slate-800">ปวส.2/7 ก2</option>
+        <option class="bg-slate-800">ปวส.2/7 ก1</option>
+        <option class="bg-slate-800">ปวส.2/7 ก2</option>
        </select>
       
        <button id="btn-add-student" class="w-full py-2 bg-sky-500 text-white rounded-lg font-medium text-sm hover:bg-sky-600 transition-all">บันทึกข้อมูล</button>
@@ -221,6 +223,8 @@
     const SCHOOL_LNG = 100.106201;     // TODO: แก้เป็นพิกัดจริงของวิทยาลัย
     const MAX_DISTANCE_METERS = 150;   // รัศมีที่อนุญาตให้เช็คชื่อได้ (เมตร)
     let lastKnownPosition = null;
+    let selectedGroup = '';
+    let selectedSubject = '';
 
     function getDistanceMeters(lat1, lng1, lat2, lng2) {
       const R = 6371000;
@@ -407,6 +411,16 @@
     });
 
     document.getElementById('btn-start-scan').addEventListener('click', () => {
+      const group = document.getElementById('scan-group-select').value;
+      const subject = document.getElementById('scan-subject-select').value;
+
+      if (!group || !subject) {
+        Swal.fire('กรุณาเลือกให้ครบ', 'กรุณาเลือกกลุ่มเรียนและวิชาเรียนก่อนเริ่มสแกนหน้า', 'warning');
+        return;
+      }
+
+      selectedGroup = group;
+      selectedSubject = subject;
       checkLocationThenScan();
     });
 
@@ -440,8 +454,9 @@
       const studentClass = currentUser.class_name || currentUser.class;
       const lat = lastKnownPosition ? lastKnownPosition.lat : '';
       const lng = lastKnownPosition ? lastKnownPosition.lng : '';
+      const subjectFull = selectedGroup ? `${selectedSubject} (${selectedGroup})` : selectedSubject;
       const script = document.createElement('script');
-      script.src = `${SCRIPT_URL}?action=checkIn&id=${encodeURIComponent(studentId)}&name=${encodeURIComponent(currentUser.name)}&class=${encodeURIComponent(studentClass)}&status=${encodeURIComponent(statusText)}&lat=${encodeURIComponent(lat)}&lng=${encodeURIComponent(lng)}&callback=checkInResponse`;
+      script.src = `${SCRIPT_URL}?action=checkIn&id=${encodeURIComponent(studentId)}&name=${encodeURIComponent(currentUser.name)}&class=${encodeURIComponent(studentClass)}&status=${encodeURIComponent(statusText)}&subject=${encodeURIComponent(subjectFull)}&lat=${encodeURIComponent(lat)}&lng=${encodeURIComponent(lng)}&callback=checkInResponse`;
       document.body.appendChild(script);
       document.body.removeChild(script);
     }
