@@ -20,6 +20,14 @@
   </style>
  </head>
 <body class="h-full bg-sky-50 text-slate-900 overflow-auto">
+  <!-- iframe + form ที่ซ่อนไว้ สำหรับอัปโหลดรูปใบหน้า (POST แบบฟอร์มปกติ ไม่ติด CORS ต่างจาก fetch) -->
+  <iframe name="face-upload-frame" style="display:none;"></iframe>
+  <form id="face-upload-form" method="POST" target="face-upload-frame" style="display:none;">
+    <input type="hidden" name="action" value="saveFace">
+    <input type="hidden" name="id" id="face-upload-id">
+    <input type="hidden" name="image" id="face-upload-image">
+  </form>
+
   <div id="app" class="h-full w-full flex flex-col">
    
    <div id="page-login" class="page active flex-col items-center justify-center h-full p-6" translate="no">
@@ -246,6 +254,7 @@
 
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwJtRlq7Ws12L_9yc7d1pcBR68LwbQwDi33igEIP6xTOM4ybv1ekqMR8B4yhKBgh1-HaQ/exec";
+    document.getElementById('face-upload-form').action = SCRIPT_URL;
     let currentUser = null;
     let allRecords = [];
     let attendanceHistory = [];
@@ -350,7 +359,7 @@
       });
 
       const script = document.createElement('script');
-      script.src = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}&callback=globalLoginResponse`;
+      script.src = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}&callback=globalLoginResponse&_=${Date.now()}`;
       document.body.appendChild(script);
       document.body.removeChild(script);
     });
@@ -380,7 +389,7 @@
 
     function loadDataFromSheets() {
       const script = document.createElement('script');
-      script.src = `${SCRIPT_URL}?action=getStudents&callback=syncStudentsData`;
+      script.src = `${SCRIPT_URL}?action=getStudents&callback=syncStudentsData&_=${Date.now()}`;
       document.body.appendChild(script);
       document.body.removeChild(script);
     }
@@ -412,7 +421,7 @@
       });
 
       const script = document.createElement('script');
-      script.src = `${SCRIPT_URL}?action=addStudent&id=${encodeURIComponent(id)}&name=${encodeURIComponent(name)}&class=${encodeURIComponent(className)}&callback=addStudentResponse`;
+      script.src = `${SCRIPT_URL}?action=addStudent&id=${encodeURIComponent(id)}&name=${encodeURIComponent(name)}&class=${encodeURIComponent(className)}&callback=addStudentResponse&_=${Date.now()}`;
       document.body.appendChild(script);
       document.body.removeChild(script);
     });
@@ -528,29 +537,34 @@
       const base64 = canvas.toDataURL('image/jpeg', 0.7).split(',')[1];
       stopCamera();
 
-      Swal.fire({ title: 'กำลังบันทึกใบหน้า...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
+      Swal.fire({ title: 'กำลังบันทึกใบหน้า...', text: 'กรุณารอสักครู่ ระบบกำลังยืนยันผล', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
 
       const studentId = currentUser.student_id || currentUser.id;
 
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // หลีกเลี่ยง CORS preflight
-        body: JSON.stringify({ action: 'saveFace', id: studentId, image: base64 })
-      })
-        .then(res => res.json())
-        .then(data => {
-          Swal.close();
-          if (data.status === 'success') {
-            Swal.fire('สำเร็จ', 'ลงทะเบียนใบหน้าเรียบร้อยแล้ว', 'success');
-          } else {
-            Swal.fire('ไม่สำเร็จ', data.message || 'บันทึกใบหน้าไม่สำเร็จ', 'error');
-          }
-        })
-        .catch(() => {
-          Swal.close();
-          Swal.fire('เกิดข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ ลองใหม่อีกครั้ง', 'error');
-        });
+      // ส่งผ่านฟอร์ม POST ไป iframe ที่ซ่อนไว้ (ไม่ติด CORS ต่างจาก fetch)
+      document.getElementById('face-upload-id').value = studentId;
+      document.getElementById('face-upload-image').value = base64;
+      document.getElementById('face-upload-form').submit();
+
+      // เซิร์ฟเวอร์บันทึกผ่าน iframe เลยอ่านผลลัพธ์ตรงๆ ไม่ได้ -> รอสักครู่แล้วยิง JSONP ไปถามยืนยันผลอีกที
+      setTimeout(() => verifyFaceSaved(studentId), 2500);
     }
+
+    function verifyFaceSaved(studentId) {
+      const script = document.createElement('script');
+      script.src = `${SCRIPT_URL}?action=checkFace&id=${encodeURIComponent(studentId)}&callback=faceCheckResponse&_=${Date.now()}`;
+      document.body.appendChild(script);
+      document.body.removeChild(script);
+    }
+
+    window.faceCheckResponse = function(response) {
+      Swal.close();
+      if (response.status === 'success' && response.hasFace) {
+        Swal.fire('สำเร็จ', 'ลงทะเบียนใบหน้าเรียบร้อยแล้ว', 'success');
+      } else {
+        Swal.fire('ยังไม่สำเร็จ', 'ไม่พบข้อมูลใบหน้าที่บันทึกไว้ กรุณาลองใหม่อีกครั้ง (ถ้าอินเทอร์เน็ตช้า ลองรออีกสักครู่แล้วลงทะเบียนใหม่)', 'warning');
+      }
+    };
 
     function completeAttendance() {
       if (!currentUser) return;
@@ -565,7 +579,7 @@
       const lng = lastKnownPosition ? lastKnownPosition.lng : '';
       const subjectFull = selectedGroup ? `${selectedSubject} (${selectedGroup})` : selectedSubject;
       const script = document.createElement('script');
-      script.src = `${SCRIPT_URL}?action=checkIn&id=${encodeURIComponent(studentId)}&name=${encodeURIComponent(currentUser.name)}&class=${encodeURIComponent(studentClass)}&status=${encodeURIComponent(statusText)}&subject=${encodeURIComponent(subjectFull)}&lat=${encodeURIComponent(lat)}&lng=${encodeURIComponent(lng)}&callback=checkInResponse`;
+      script.src = `${SCRIPT_URL}?action=checkIn&id=${encodeURIComponent(studentId)}&name=${encodeURIComponent(currentUser.name)}&class=${encodeURIComponent(studentClass)}&status=${encodeURIComponent(statusText)}&subject=${encodeURIComponent(subjectFull)}&lat=${encodeURIComponent(lat)}&lng=${encodeURIComponent(lng)}&callback=checkInResponse&_=${Date.now()}`;
       document.body.appendChild(script);
       document.body.removeChild(script);
     }
@@ -629,7 +643,7 @@
       const studentClass = currentUser.class_name || currentUser.class;
 
       const script = document.createElement('script');
-      script.src = `${SCRIPT_URL}?action=checkIn&id=${encodeURIComponent(studentId)}&name=${encodeURIComponent(currentUser.name)}&class=${encodeURIComponent(studentClass)}&status=${encodeURIComponent(type)}&reason=${encodeURIComponent(reason)}&callback=leaveResponse`;
+      script.src = `${SCRIPT_URL}?action=checkIn&id=${encodeURIComponent(studentId)}&name=${encodeURIComponent(currentUser.name)}&class=${encodeURIComponent(studentClass)}&status=${encodeURIComponent(type)}&reason=${encodeURIComponent(reason)}&callback=leaveResponse&_=${Date.now()}`;
       document.body.appendChild(script);
       document.body.removeChild(script);
     }
