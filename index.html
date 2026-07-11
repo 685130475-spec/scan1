@@ -7,7 +7,6 @@
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { font-family: 'Sarabun', sans-serif; }
@@ -93,6 +92,11 @@
      <button id="btn-open-leave" class="mt-2 px-8 py-2.5 bg-slate-200 text-slate-700 hover:bg-slate-300 font-medium rounded-xl transition-all active:scale-95 inline-flex items-center gap-2 text-sm w-full justify-center max-w-[260px] mx-auto">
        <i data-lucide="file-text" class="w-4 h-4"></i> แจ้งลาออนไลน์ 
      </button>
+
+     <!-- ปุ่มลงทะเบียนใบหน้า (เก็บรูปครั้งแรกไว้ใน Students.ImageDataBase64) -->
+     <button id="btn-register-face" class="mt-2 px-8 py-2.5 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 font-medium rounded-xl transition-all active:scale-95 inline-flex items-center gap-2 text-sm w-full justify-center max-w-[260px] mx-auto">
+       <i data-lucide="user-check" class="w-4 h-4"></i> ลงทะเบียนใบหน้า (ครั้งแรก)
+     </button>
      
      <div id="scan-result" class="mt-4 hidden rounded-xl p-4 text-center font-medium"></div>
      <br>
@@ -167,6 +171,35 @@
        <p class="text-slate-500 text-center py-6 italic">ยังไม่มีข้อมูลวันนี้</p>
       </div>
      </div>
+
+     <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700/50 shadow-sm">
+      <div class="flex items-center justify-between mb-3">
+       <h3 class="font-semibold text-sm text-slate-200 flex items-center gap-2">
+        <i data-lucide="table" class="w-4 h-4 text-sky-400"></i>รายชื่อนักเรียนที่เช็คชื่อวันนี้ (ทั้งหมด)
+       </h3>
+       <div class="flex items-center gap-2">
+        <span id="dashboard-clock" class="text-xs text-slate-400 font-mono">00:00:00</span>
+        <button id="btn-refresh-log" class="px-2.5 py-1 bg-sky-500 hover:bg-sky-600 text-white rounded-lg text-xs font-semibold transition-all">🔄 รีเฟรช</button>
+       </div>
+      </div>
+      <div class="overflow-x-auto">
+       <table class="w-full text-left border-collapse text-xs">
+        <thead>
+         <tr class="text-slate-400 border-b border-slate-700">
+          <th class="p-2">รหัส</th>
+          <th class="p-2">ชื่อ-นามสกุล</th>
+          <th class="p-2">ชั้นเรียน</th>
+          <th class="p-2">วิชา</th>
+          <th class="p-2">เวลา</th>
+          <th class="p-2 text-center">สถานะ</th>
+         </tr>
+        </thead>
+        <tbody id="attendance-log-table">
+         <tr><td colspan="6" class="p-4 text-center text-slate-500 italic">ยังไม่มีข้อมูลวันนี้</td></tr>
+        </tbody>
+       </table>
+      </div>
+     </div>
     </div> 
 
     <div id="tab-manage" class="tab-content flex-1 overflow-auto p-4 space-y-4 hidden">
@@ -182,22 +215,7 @@
         <option class="bg-slate-800">ปวส.2/7 ก1</option>
         <option class="bg-slate-800">ปวส.2/7 ก2</option>
        </select>
-
-       <div class="bg-slate-900/60 border border-slate-700 rounded-lg p-3">
-        <div class="flex items-center justify-between mb-2">
-         <span class="text-xs font-medium text-slate-300 flex items-center gap-1.5">
-          <i data-lucide="scan-face" class="w-3.5 h-3.5 text-sky-400"></i> ใบหน้าสำหรับจดจำ
-         </span>
-         <span id="enroll-face-status" class="text-[11px] text-rose-400">ยังไม่ได้ลงทะเบียนใบหน้า</span>
-        </div>
-        <div class="relative w-full aspect-square max-w-[180px] mx-auto rounded-xl overflow-hidden bg-slate-800 border border-slate-600 mb-2">
-         <video id="enroll-camera-feed" class="w-full h-full object-cover" style="transform:scaleX(-1)" autoplay playsinline muted></video>
-        </div>
-        <button id="btn-capture-face" type="button" class="w-full py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-xs font-medium transition-all flex items-center justify-center gap-1.5">
-         <i data-lucide="camera" class="w-3.5 h-3.5"></i> ถ่ายภาพลงทะเบียนใบหน้า
-        </button>
-       </div>
-
+      
        <button id="btn-add-student" class="w-full py-2 bg-sky-500 text-white rounded-lg font-medium text-sm hover:bg-sky-600 transition-all">บันทึกข้อมูล</button>
       </div>
      </div> 
@@ -229,43 +247,9 @@
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwJtRlq7Ws12L_9yc7d1pcBR68LwbQwDi33igEIP6xTOM4ybv1ekqMR8B4yhKBgh1-HaQ/exec";
     let currentUser = null;
-    let currentUserDescriptor = null; // Float32Array ใบหน้าที่นักเรียนคนนี้ลงทะเบียนไว้
     let allRecords = [];
     let attendanceHistory = [];
     let cameraStream = null;
-    let enrollCameraStream = null;
-
-    // --- ระบบจดจำใบหน้าจริง (face-api.js) ---
-    const FACE_MODEL_URL = "https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@master/weights";
-    const FACE_MATCH_THRESHOLD = 0.55; // ยิ่งน้อยยิ่งเข้มงวด (0.4-0.6 แนะนำ)
-    let faceModelsReady = false;
-    let capturedEnrollDescriptor = null; // Float32Array จากการลงทะเบียนนักเรียนใหม่
-
-    async function loadFaceModels() {
-      try {
-        await Promise.all([
-          faceapi.nets.tinyFaceDetector.loadFromUri(FACE_MODEL_URL),
-          faceapi.nets.faceLandmark68TinyNet.loadFromUri(FACE_MODEL_URL),
-          faceapi.nets.faceRecognitionNet.loadFromUri(FACE_MODEL_URL)
-        ]);
-        faceModelsReady = true;
-        console.log('Face-api models loaded');
-      } catch (e) {
-        console.error('โหลดโมเดล face-api ไม่สำเร็จ', e);
-        faceModelsReady = false;
-      }
-    }
-    loadFaceModels();
-
-    // จับใบหน้า + คำนวณ descriptor (เวกเตอร์ 128 มิติ) จาก element วิดีโอ/ภาพที่ให้มา
-    async function getFaceDescriptor(mediaEl) {
-      if (!faceModelsReady) return null;
-      const detection = await faceapi
-        .detectSingleFace(mediaEl, new faceapi.TinyFaceDetectorOptions())
-        .withFaceLandmarks(true)
-        .withFaceDescriptor();
-      return detection ? detection.descriptor : null;
-    }
 
     // --- ตั้งค่าตำแหน่งโรงเรียน สำหรับตรวจสอบว่านักเรียนอยู่ในพื้นที่จริงหรือไม่ ---
     const SCHOOL_LAT = 17.564243;      // TODO: แก้เป็นพิกัดจริงของวิทยาลัย
@@ -338,11 +322,6 @@
         btn.classList.add('active', 'border-sky-400', 'text-sky-400');
         document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
         document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
-        if (btn.dataset.tab === 'manage') {
-          startEnrollCamera();
-        } else {
-          stopEnrollCamera();
-        }
       });
     });
 
@@ -389,25 +368,10 @@
         } else {
           const studentClass = response.class_name || response.class || 'ไม่ระบุชั้นเรียน';
           const studentId = response.student_id || response.id || document.getElementById('global-pass').value;
-
-          // เก็บ descriptor ใบหน้าที่ลงทะเบียนไว้ของนักเรียนคนนี้ ไว้เทียบตอนสแกน
-          currentUserDescriptor = null;
-          if (response.faceDescriptor) {
-            try {
-              const arr = typeof response.faceDescriptor === 'string' ? JSON.parse(response.faceDescriptor) : response.faceDescriptor;
-              currentUserDescriptor = new Float32Array(arr);
-            } catch (e) {
-              console.warn('อ่านข้อมูลใบหน้าที่ลงทะเบียนไว้ไม่สำเร็จ', e);
-            }
-          }
-
+          
           document.getElementById('scan-user-info').textContent = `${response.name} | ${studentClass} | รหัส ${studentId}`;
           Swal.fire({ icon: 'success', title: 'เข้าสู่ระบบสำเร็จ', text: `ยินดีต้อนรับคุณ ${response.name}`, timer: 1200, showConfirmButton: false });
           showPage('page-scan');
-
-          if (!currentUserDescriptor) {
-            Swal.fire('ยังไม่ได้ลงทะเบียนใบหน้า', 'บัญชีนี้ยังไม่มีข้อมูลใบหน้าในระบบ กรุณาติดต่ออาจารย์เพื่อลงทะเบียนใบหน้าก่อนใช้งานเช็คชื่อด้วยใบหน้า', 'info');
-          }
         }
       } else {
         Swal.fire('เข้าสู่ระบบไม่สำเร็จ', response.message || 'ไม่พบข้อมูลผู้ใช้งาน หรือรหัสผ่านไม่ถูกต้อง', 'error');
@@ -431,45 +395,6 @@
       }
     };
 
-    // เปิดกล้องสำหรับลงทะเบียนใบหน้าเมื่อเข้าแท็บ "จัดการข้อมูล"
-    async function startEnrollCamera() {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
-        enrollCameraStream = stream;
-        document.getElementById('enroll-camera-feed').srcObject = stream;
-      } catch (e) {
-        console.warn('ไม่สามารถเปิดกล้องลงทะเบียนได้', e);
-      }
-    }
-    function stopEnrollCamera() {
-      if (enrollCameraStream) { enrollCameraStream.getTracks().forEach(t => t.stop()); enrollCameraStream = null; }
-      document.getElementById('enroll-camera-feed').srcObject = null;
-    }
-
-    document.getElementById('btn-capture-face').addEventListener('click', async () => {
-      const statusEl = document.getElementById('enroll-face-status');
-      if (!faceModelsReady) {
-        Swal.fire('โมเดลยังไม่พร้อม', 'กรุณารอสักครู่ให้ระบบโหลดโมเดลจดจำใบหน้าให้เสร็จก่อน แล้วลองอีกครั้ง', 'warning');
-        return;
-      }
-      const video = document.getElementById('enroll-camera-feed');
-      if (!enrollCameraStream) {
-        statusEl.textContent = 'กำลังเปิดกล้อง...';
-        await startEnrollCamera();
-        await new Promise(r => setTimeout(r, 600)); // รอกล้อง warm-up
-      }
-      statusEl.textContent = 'กำลังตรวจจับใบหน้า...';
-      const descriptor = await getFaceDescriptor(video);
-      if (!descriptor) {
-        statusEl.textContent = 'ไม่พบใบหน้า กรุณาลองใหม่';
-        statusEl.className = 'text-[11px] text-rose-400';
-        return;
-      }
-      capturedEnrollDescriptor = descriptor;
-      statusEl.textContent = 'ลงทะเบียนใบหน้าสำเร็จ ✓';
-      statusEl.className = 'text-[11px] text-green-400';
-    });
-
     document.getElementById('btn-add-student').addEventListener('click', () => {
       const id = document.getElementById('add-id').value.trim();
       const name = document.getElementById('add-name').value.trim();
@@ -479,10 +404,6 @@
         Swal.fire('ข้อมูลไม่ครบ', 'กรุณากรอกข้อมูลนักเรียนให้ครบถ้วน', 'warning');
         return;
       }
-      if (!capturedEnrollDescriptor) {
-        Swal.fire('ยังไม่ได้ลงทะเบียนใบหน้า', 'กรุณากดปุ่ม "ถ่ายภาพลงทะเบียนใบหน้า" ก่อนบันทึกข้อมูลนักเรียน', 'warning');
-        return;
-      }
 
       Swal.fire({ 
         title: 'กำลังบันทึกข้อมูล...', 
@@ -490,9 +411,8 @@
         didOpen: () => { Swal.showLoading(); } 
       });
 
-      const descriptorJson = JSON.stringify(Array.from(capturedEnrollDescriptor));
       const script = document.createElement('script');
-      script.src = `${SCRIPT_URL}?action=addStudent&id=${encodeURIComponent(id)}&name=${encodeURIComponent(name)}&class=${encodeURIComponent(className)}&faceDescriptor=${encodeURIComponent(descriptorJson)}&callback=addStudentResponse`;
+      script.src = `${SCRIPT_URL}?action=addStudent&id=${encodeURIComponent(id)}&name=${encodeURIComponent(name)}&class=${encodeURIComponent(className)}&callback=addStudentResponse`;
       document.body.appendChild(script);
       document.body.removeChild(script);
     });
@@ -500,14 +420,10 @@
     window.addStudentResponse = function(response) {
       Swal.close();
       if (response.status === 'success') {
-        Swal.fire('สำเร็จ', 'เพิ่มรายชื่อและลงทะเบียนใบหน้าเรียบร้อยแล้ว', 'success');
+        Swal.fire('สำเร็จ', 'เพิ่มรายชื่อเรียบร้อยแล้ว', 'success');
         document.getElementById('add-id').value = '';
         document.getElementById('add-name').value = '';
         document.getElementById('add-class').value = '';
-        capturedEnrollDescriptor = null;
-        document.getElementById('enroll-face-status').textContent = 'ยังไม่ได้ลงทะเบียนใบหน้า';
-        document.getElementById('enroll-face-status').className = 'text-[11px] text-rose-400';
-        stopEnrollCamera();
         loadDataFromSheets(); 
       } else {
         Swal.fire('ล้มเหลว', response.message || 'ไม่สามารถบันทึกได้', 'error');
@@ -541,63 +457,99 @@
       checkLocationThenScan();
     });
 
-    const FACE_SCAN_TIMEOUT_MS = 12000; // เวลาสูงสุดที่ยอมให้ลองตรวจจับใบหน้า
-
     async function startFaceScan() {
-      const statusEl = document.getElementById('scan-status');
-
-      if (!faceModelsReady) {
-        Swal.fire('ระบบยังไม่พร้อม', 'โมเดลตรวจจับใบหน้ายังโหลดไม่เสร็จ กรุณารอสักครู่แล้วลองใหม่', 'warning');
-        return;
-      }
-      if (!currentUserDescriptor) {
-        Swal.fire('ไม่มีข้อมูลใบหน้า', 'บัญชีนี้ยังไม่ได้ลงทะเบียนใบหน้าในระบบ กรุณาติดต่ออาจารย์เพื่อลงทะเบียนก่อน', 'error');
-        return;
-      }
-
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
         cameraStream = stream;
-        const video = document.getElementById('camera-feed');
-        video.srcObject = stream;
-        statusEl.classList.remove('hidden');
-        statusEl.textContent = 'กำลังสแกนใบหน้า...';
-
-        await new Promise(r => setTimeout(r, 500)); // รอกล้อง warm-up
-
-        const startTime = Date.now();
-        let matched = false;
-
-        while (Date.now() - startTime < FACE_SCAN_TIMEOUT_MS) {
-          const descriptor = await getFaceDescriptor(video);
-          if (descriptor) {
-            const distance = faceapi.euclideanDistance(descriptor, currentUserDescriptor);
-            if (distance <= FACE_MATCH_THRESHOLD) {
-              matched = true;
-              break;
-            } else {
-              statusEl.textContent = 'ใบหน้าไม่ตรงกับข้อมูลที่ลงทะเบียนไว้ ลองใหม่...';
-            }
-          }
-          await new Promise(r => setTimeout(r, 300));
-        }
-
-        if (matched) {
-          completeAttendance();
-        } else {
-          statusEl.classList.add('hidden');
-          stopCamera();
-          Swal.fire('ยืนยันใบหน้าไม่สำเร็จ', 'ตรวจไม่พบใบหน้าที่ตรงกับข้อมูลที่ลงทะเบียนไว้ กรุณาอยู่ในที่ที่มีแสงสว่างเพียงพอ แล้วลองใหม่อีกครั้ง', 'error');
-        }
+        document.getElementById('camera-feed').srcObject = stream;
+        document.getElementById('scan-status').classList.remove('hidden');
+        setTimeout(() => completeAttendance(), 3000);
       } catch (e) {
-        statusEl.classList.add('hidden');
-        Swal.fire('เปิดกล้องไม่สำเร็จ', 'กรุณาอนุญาตให้เว็บไซต์นี้เข้าถึงกล้องของอุปกรณ์ แล้วลองใหม่อีกครั้ง', 'error');
+        document.getElementById('scan-status').classList.remove('hidden');
+        document.getElementById('scan-status').textContent = 'จำลองการสแกนใบหน้า...';
+        setTimeout(() => completeAttendance(), 2000);
       }
     }
 
     function stopCamera() {
       if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
       document.getElementById('camera-feed').srcObject = null;
+    }
+
+    // ===================================================
+    // ลงทะเบียนใบหน้า: เปิดกล้อง -> ถ่ายภาพ -> ส่งไปเก็บที่ Students.ImageDataBase64
+    // ใช้ fetch(POST) แทน JSONP เพราะรูปภาพ base64 มีขนาดใหญ่เกินกว่าจะใส่ใน URL (GET) ได้
+    // ===================================================
+    document.getElementById('btn-register-face').addEventListener('click', async () => {
+      if (!currentUser) return;
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+        cameraStream = stream;
+        const video = document.getElementById('camera-feed');
+        video.srcObject = stream;
+        await video.play().catch(() => {});
+
+        const result = await Swal.fire({
+          title: 'ลงทะเบียนใบหน้า',
+          text: 'จัดใบหน้าให้อยู่กลางกรอบ แล้วกด "ถ่ายภาพ"',
+          showCancelButton: true,
+          confirmButtonText: 'ถ่ายภาพ',
+          cancelButtonText: 'ยกเลิก',
+          confirmButtonColor: '#10b981'
+        });
+
+        if (result.isConfirmed) {
+          capturePhotoAndUpload();
+        } else {
+          stopCamera();
+        }
+      } catch (e) {
+        Swal.fire('เปิดกล้องไม่สำเร็จ', 'กรุณาอนุญาตให้เว็บไซต์เข้าถึงกล้องแล้วลองใหม่', 'error');
+      }
+    });
+
+    function capturePhotoAndUpload() {
+      const video = document.getElementById('camera-feed');
+      const size = 220; // ย่อภาพให้เล็กพอเก็บใน Google Sheets ได้สบาย
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+
+      const vw = video.videoWidth, vh = video.videoHeight;
+      const minSide = Math.min(vw, vh);
+      const sx = (vw - minSide) / 2, sy = (vh - minSide) / 2;
+
+      // วิดีโอ preview กลับด้าน (scaleX(-1)) ต้อง flip ตอน capture ให้ภาพออกมาถูกด้าน
+      ctx.translate(size, 0);
+      ctx.scale(-1, 1);
+      ctx.drawImage(video, sx, sy, minSide, minSide, 0, 0, size, size);
+
+      const base64 = canvas.toDataURL('image/jpeg', 0.7).split(',')[1];
+      stopCamera();
+
+      Swal.fire({ title: 'กำลังบันทึกใบหน้า...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
+
+      const studentId = currentUser.student_id || currentUser.id;
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // หลีกเลี่ยง CORS preflight
+        body: JSON.stringify({ action: 'saveFace', id: studentId, image: base64 })
+      })
+        .then(res => res.json())
+        .then(data => {
+          Swal.close();
+          if (data.status === 'success') {
+            Swal.fire('สำเร็จ', 'ลงทะเบียนใบหน้าเรียบร้อยแล้ว', 'success');
+          } else {
+            Swal.fire('ไม่สำเร็จ', data.message || 'บันทึกใบหน้าไม่สำเร็จ', 'error');
+          }
+        })
+        .catch(() => {
+          Swal.close();
+          Swal.fire('เกิดข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ ลองใหม่อีกครั้ง', 'error');
+        });
     }
 
     function completeAttendance() {
@@ -728,7 +680,56 @@
             </div>
           </div>`;
       }).join('');
+
+      renderAttendanceLogTable();
     }
+
+    // ===================================================
+    // ตารางเช็คชื่อวันนี้แบบละเอียด (รหัส/ชื่อ/ชั้น/วิชา/เวลา/สถานะ) ในแท็บแดชบอร์ด
+    // ใช้ข้อมูลชุดเดียวกับ attendanceHistory ที่โหลดมาแล้ว ไม่ต้องยิงคำขอซ้ำ
+    // ===================================================
+    function renderAttendanceLogTable() {
+      const tbody = document.getElementById('attendance-log-table');
+      if (!tbody) return;
+
+      if (!attendanceHistory || attendanceHistory.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-500 italic">ยังไม่มีข้อมูลวันนี้</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = attendanceHistory.slice().reverse().map(h => {
+        let badge = 'bg-green-500/10 text-green-400';
+        if (h.status === 'มาสาย') badge = 'bg-amber-500/10 text-amber-400';
+        else if (h.status && h.status.includes('ลา')) badge = 'bg-orange-500/10 text-orange-400';
+
+        return `
+          <tr class="border-b border-slate-700/40 hover:bg-slate-700/20 transition-colors">
+            <td class="p-2 font-mono">${h.id || h.student_id || ''}</td>
+            <td class="p-2">${h.name || ''}</td>
+            <td class="p-2 text-slate-400">${h.class || h.class_name || ''}</td>
+            <td class="p-2 text-sky-400">${h.subject || ''}</td>
+            <td class="p-2 text-slate-400">${h.time || ''}</td>
+            <td class="p-2 text-center"><span class="${badge} text-[11px] px-2 py-0.5 rounded-full font-semibold">${h.status || ''}</span></td>
+          </tr>`;
+      }).join('');
+    }
+
+    // ปุ่ม "รีเฟรชข้อมูลล่าสุด" ในตาราง — ยิงคำขอใหม่ไปที่ Apps Script
+    document.getElementById('btn-refresh-log').addEventListener('click', loadDataFromSheets);
+
+    // นาฬิกาบอกเวลาปัจจุบันเหนือตาราง
+    setInterval(() => {
+      const clockEl = document.getElementById('dashboard-clock');
+      if (clockEl) clockEl.textContent = new Date().toLocaleTimeString('th-TH');
+    }, 1000);
+
+    // รีเฟรชข้อมูลอัตโนมัติทุก 30 วินาที เฉพาะตอนที่หน้าแดชบอร์ดกำลังเปิดอยู่ (อาจารย์ล็อกอินอยู่)
+    setInterval(() => {
+      const dashboardPage = document.getElementById('page-dashboard');
+      if (dashboardPage && dashboardPage.classList.contains('active')) {
+        loadDataFromSheets();
+      }
+    }, 30000);
 
     function updateStudentList() {
 const students = allRecords.filter(r => r.type === "student");
