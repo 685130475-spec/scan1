@@ -218,9 +218,9 @@
     let cameraStream = null;
 
     // --- ตั้งค่าตำแหน่งโรงเรียน สำหรับตรวจสอบว่านักเรียนอยู่ในพื้นที่จริงหรือไม่ ---
-    const SCHOOL_LAT = 17.564189;      // TODO: แก้เป็นพิกัดจริงของวิทยาลัย
-    const SCHOOL_LNG = 99.983843;     // TODO: แก้เป็นพิกัดจริงของวิทยาลัย
-    const MAX_DISTANCE_METERS = 150;   // รัศมีที่อนุญาตให้เช็คชื่อได้ (เมตร)
+    const SCHOOL_LAT = 17.564243;      // TODO: แก้เป็นพิกัดจริงของวิทยาลัย
+    const SCHOOL_LNG = 99.983865;     // TODO: แก้เป็นพิกัดจริงของวิทยาลัย
+    const MAX_DISTANCE_METERS = 300;   // รัศมีที่อนุญาตให้เช็คชื่อได้ (เมตร)
     let lastKnownPosition = null;
     let selectedGroup = '';
     let selectedSubject = '';
@@ -256,7 +256,7 @@
           const distance = getDistanceMeters(latitude, longitude, SCHOOL_LAT, SCHOOL_LNG);
 
           if (distance > MAX_DISTANCE_METERS) {
-            Swal.fire('อยู่นอกพื้นที่วิทยาลัย', `ตำแหน่งของคุณห่างจากวิทยาลัยประมาณ ${Math.round(distance)} เมตร กรุณาอยู่ในบริเวณโรงเรียนก่อนเช็คชื่อ`, 'error');
+            Swal.fire('อยู่นอกพื้นที่วิทยาลัย', `ตำแหน่งของคุณห่างจากวิทยาลัยประมาณ ${Math.round(distance)} เมตร กรุณาอยู่ในบริเวณก่อนเช็คชื่อ`, 'error');
             return;
           }
 
