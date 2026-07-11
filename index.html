@@ -259,62 +259,8 @@
     let allRecords = [];
     let attendanceHistory = [];
     let cameraStream = null;
-
-    // --- ตั้งค่าตำแหน่งโรงเรียน สำหรับตรวจสอบว่านักเรียนอยู่ในพื้นที่จริงหรือไม่ ---
-    const SCHOOL_LAT = 17.564243;      // TODO: แก้เป็นพิกัดจริงของวิทยาลัย
-    const SCHOOL_LNG = 99.983865;     // TODO: แก้เป็นพิกัดจริงของวิทยาลัย
-    const MAX_DISTANCE_METERS = 300;   // รัศมีที่อนุญาตให้เช็คชื่อได้ (เมตร)
-    let lastKnownPosition = null;
     let selectedGroup = '';
     let selectedSubject = '';
-
-    function getDistanceMeters(lat1, lng1, lat2, lng2) {
-      const R = 6371000;
-      const toRad = (d) => d * Math.PI / 180;
-      const dLat = toRad(lat2 - lat1);
-      const dLng = toRad(lng2 - lng1);
-      const a = Math.sin(dLat / 2) ** 2 +
-                Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-                Math.sin(dLng / 2) ** 2;
-      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    }
-
-    function checkLocationThenScan() {
-      if (!navigator.geolocation) {
-        Swal.fire('อุปกรณ์ไม่รองรับ', 'เบราว์เซอร์นี้ไม่สามารถระบุตำแหน่งได้ จึงไม่สามารถเช็คชื่อได้', 'error');
-        return;
-      }
-
-      Swal.fire({
-        title: 'กำลังตรวจสอบตำแหน่ง',
-        text: 'กรุณารอสักครู่...',
-        allowOutsideClick: false,
-        didOpen: () => { Swal.showLoading(); }
-      });
-
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          Swal.close();
-          const { latitude, longitude, accuracy } = pos.coords;
-          const distance = getDistanceMeters(latitude, longitude, SCHOOL_LAT, SCHOOL_LNG);
-
-          if (distance > MAX_DISTANCE_METERS) {
-            Swal.fire('อยู่นอกพื้นที่วิทยาลัย', `ตำแหน่งของคุณห่างจากวิทยาลัยประมาณ ${Math.round(distance)} เมตร กรุณาอยู่ในบริเวณก่อนเช็คชื่อ`, 'error');
-            return;
-          }
-
-          lastKnownPosition = { lat: latitude, lng: longitude, accuracy };
-          startFaceScan();
-        },
-        (err) => {
-          Swal.close();
-          let msg = 'ไม่สามารถระบุตำแหน่งได้ กรุณาเปิดสิทธิ์การเข้าถึงตำแหน่ง (Location) แล้วลองใหม่';
-          if (err.code === err.PERMISSION_DENIED) msg = 'คุณปฏิเสธการเข้าถึงตำแหน่ง กรุณาเปิดสิทธิ์ตำแหน่งในเบราว์เซอร์เพื่อเช็คชื่อ';
-          Swal.fire('ระบุตำแหน่งไม่สำเร็จ', msg, 'warning');
-        },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-      );
-    }
 
     function showPage(id) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -463,7 +409,7 @@
 
       selectedGroup = group;
       selectedSubject = subject;
-      checkLocationThenScan();
+      startFaceScan();
     });
 
     async function startFaceScan() {
@@ -575,18 +521,17 @@
       stopCamera();
       const studentId = currentUser.student_id || currentUser.id;
       const studentClass = currentUser.class_name || currentUser.class;
-      const lat = lastKnownPosition ? lastKnownPosition.lat : '';
-      const lng = lastKnownPosition ? lastKnownPosition.lng : '';
       const subjectFull = selectedGroup ? `${selectedSubject} (${selectedGroup})` : selectedSubject;
       const script = document.createElement('script');
-      script.src = `${SCRIPT_URL}?action=checkIn&id=${encodeURIComponent(studentId)}&name=${encodeURIComponent(currentUser.name)}&class=${encodeURIComponent(studentClass)}&status=${encodeURIComponent(statusText)}&subject=${encodeURIComponent(subjectFull)}&lat=${encodeURIComponent(lat)}&lng=${encodeURIComponent(lng)}&callback=checkInResponse&_=${Date.now()}`;
+      script.src = `${SCRIPT_URL}?action=checkIn&id=${encodeURIComponent(studentId)}&name=${encodeURIComponent(currentUser.name)}&class=${encodeURIComponent(studentClass)}&status=${encodeURIComponent(statusText)}&subject=${encodeURIComponent(subjectFull)}&callback=checkInResponse&_=${Date.now()}`;
       document.body.appendChild(script);
       document.body.removeChild(script);
     }
 
     window.checkInResponse = function(response) {
       if (response.status === 'success') {
-        showScanResult(`✅ เช็คชื่อสำเร็จ! สถานะ: ${response.attendance_status} เวลา: ${response.time}`, true);
+        const lateNote = response.attendance_status === 'มาสาย' ? '' : ' (ตรงเวลา)';
+        showScanResult(`✅ เช็คชื่อสำเร็จ เวลา ${response.time} น. — สถานะ: ${response.attendance_status}${lateNote}`, true);
       } else {
         showScanResult(`❌ บันทึกไม่สำเร็จ: ${response.message}`, false);
       }
